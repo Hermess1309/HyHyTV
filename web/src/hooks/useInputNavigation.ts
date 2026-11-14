@@ -356,6 +356,11 @@ export function useInputNavigation() {
     });
 
     input.start((action) => {
+      // If Video Player is open, VideoPlayerOverlay owns all TV remote / keyboard input!
+      if (store.getState().ui.playerOverlay.open) {
+        return;
+      }
+
       // Read overlay state directly from the store every action so back-to-back
       // dispatches always see the latest values (overlayRef only updates on render).
       const ov = store.getState().ui.detailOverlay;

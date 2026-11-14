@@ -130,25 +130,28 @@ export interface KkphimDetailResponse {
 const kkDetailCache = new Map<string, KkphimDetailResponse>();
 
 export async function fetchKkphimDetail(slug: string): Promise<KkphimDetailResponse | null> {
-  if (kkDetailCache.has(slug)) {
-    return kkDetailCache.get(slug)!;
+  const cleanSlug = (slug || '').replace(/^kk-/, '').replace(/^vsmov-/, '').trim();
+  if (!cleanSlug) return null;
+  if (kkDetailCache.has(cleanSlug)) {
+    return kkDetailCache.get(cleanSlug)!;
   }
   try {
-    const res = await fetch(`${KKPHIM_API_BASE}/phim/${slug}`);
+    const res = await fetch(`${KKPHIM_API_BASE}/phim/${cleanSlug}`);
     if (!res.ok) return null;
     const data: KkphimDetailResponse = await res.json();
     if (data && data.movie) {
-      kkDetailCache.set(slug, data);
+      kkDetailCache.set(cleanSlug, data);
       return data;
     }
   } catch (err) {
-    console.warn(`Error fetching KKPhim detail for ${slug}:`, err);
+    console.warn(`Error fetching KKPhim detail for ${cleanSlug}:`, err);
   }
   return null;
 }
 
 export async function fetchKkphimEpisodes(slug: string, serverIndex = 0): Promise<Episode[]> {
-  const detail = await fetchKkphimDetail(slug);
+  const cleanSlug = (slug || '').replace(/^kk-/, '').replace(/^vsmov-/, '').trim();
+  const detail = await fetchKkphimDetail(cleanSlug);
   if (!detail || !detail.episodes || detail.episodes.length === 0) {
     return [];
   }
@@ -156,7 +159,17 @@ export async function fetchKkphimEpisodes(slug: string, serverIndex = 0): Promis
   const server = detail.episodes[serverIndex] || detail.episodes[0];
   const list = server?.server_data || [];
 
-  return list.map((item, idx) => ({
+  // Guarantee stable ascending sort by episode number (Tập 1, 2, 3...)
+  const sortedList = [...list].sort((a, b) => {
+    const numA = parseInt(a.name.replace(/\D/g, '') || '0', 10);
+    const numB = parseInt(b.name.replace(/\D/g, '') || '0', 10);
+    if (numA && numB && numA !== numB) {
+      return numA - numB;
+    }
+    return 0;
+  });
+
+  return sortedList.map((item, idx) => ({
     episodeNumber: idx + 1,
     name: item.name.startsWith('Tập') ? item.name : `Tập ${item.name}`,
     overview: item.filename || `${detail.movie?.name || 'Phim'} - ${item.name}`,

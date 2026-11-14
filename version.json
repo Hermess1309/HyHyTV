@@ -1,7 +1,7 @@
 {
-  "versionCode": 7,
-  "versionName": "1.3.3",
+  "versionCode": 8,
+  "versionName": "1.3.4",
   "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
-  "changelog": "Tối ưu hóa toàn diện Video Player theo chuẩn Netflix TV: loại bỏ hoàn toàn giật lag hub điều khiển, khung xem trước khi tua hiển thị hình ảnh phim sắc nét (không còn màn đen), và giao diện điều khiển chuẩn Netflix TV.",
+  "changelog": "Khắc phục triệt để lỗi tìm kiếm: sửa lỗi chồng lấn hình ảnh trên TV, hỗ trợ cuộn chọn chủ đề và duyệt 36+ phim hành động/thể loại; Tối ưu tua video: video nền đứng yên không giật khi tua, chỉ khung preview di chuyển mượt mà 60 FPS và phát chuẩn xác khi bấm [OK]; Ổn định danh sách tập phim: phát tập chọn mượt mà không bị reload lộn xộn.",
   "forceUpdate": false
 }

@@ -186,14 +186,14 @@ export function VideoPlayerOverlay() {
   useEffect(() => {
     if (player.episodes && player.episodes.length > 0) {
       setEpisodesList(player.episodes);
-    } else if (player.slug) {
+    } else if (player.slug && episodesList.length === 0) {
       fetchUnifiedEpisodes(player.slug, player.currentSeasonIndex || 0).then((eps: Episode[]) => {
         if (eps && eps.length > 0) {
           setEpisodesList(eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })));
         }
       });
     }
-  }, [player.episodes, player.slug, player.currentSeasonIndex]);
+  }, [player.episodes, player.slug, player.currentSeasonIndex, episodesList.length]);
 
   // Sync drawer focus with current playing episode
   useEffect(() => {
@@ -440,11 +440,11 @@ export function VideoPlayerOverlay() {
     }
     const video = videoRef.current;
     if (video) {
-      video.currentTime = currentTime;
       video.play().then(() => setIsPlaying(true)).catch(() => {});
     }
     setIsScrubbing(false);
-  }, [currentTime]);
+    resetHideTimer();
+  }, [resetHideTimer]);
 
   const updateScrub = useCallback((targetTime: number) => {
     const video = videoRef.current;
@@ -454,6 +454,16 @@ export function VideoPlayerOverlay() {
     setIsScrubbing(true);
     setControlsVisible(true);
 
+    // Pause video while scrubbing so playback doesn't run away in background,
+    // but DO NOT seek main video currentTime during scrubbing!
+    // The main background video stays paused on its current scene with zero decoder lag.
+    // Only the mini preview card moves and updates its time.
+    if (video && !video.paused) {
+      try {
+        video.pause();
+      } catch {}
+    }
+
     // 1. Immediately display cached frame if available
     const bucket = Math.floor(clamped / 5) * 5;
     const cached = frameCacheRef.current.get(bucket);
@@ -461,18 +471,10 @@ export function VideoPlayerOverlay() {
       setPreviewFrameUrl(cached);
     }
 
-    // 2. Seek active hardware video to decode frame
-    if (video) {
-      try {
-        if (!video.paused) video.pause();
-        video.currentTime = clamped;
-      } catch {}
-    }
-
     if (scrubCommitTimerRef.current) clearTimeout(scrubCommitTimerRef.current);
     scrubCommitTimerRef.current = window.setTimeout(() => {
       commitScrub();
-    }, 2500);
+    }, 3500);
   }, [duration, commitScrub]);
 
   const handleScrubStep = useCallback((deltaSeconds: number) => {
@@ -741,15 +743,15 @@ export function VideoPlayerOverlay() {
 
       // 6. MAIN CONTROLS SPATIAL NAVIGATION (Authentic Netflix TV)
       if (focusZone === 'controls') {
-        // Left / Right moves focus across bottom action buttons (0..3)
+        // Left / Right moves focus across bottom action buttons (0..3 with wrap-around)
         if (e.key === 'ArrowLeft' || e.keyCode === 37) {
           e.preventDefault();
-          setFocusedControlIndex((prev) => Math.max(0, prev - 1));
+          setFocusedControlIndex((prev) => (prev > 0 ? prev - 1 : 3));
           return;
         }
         if (e.key === 'ArrowRight' || e.keyCode === 39) {
           e.preventDefault();
-          setFocusedControlIndex((prev) => Math.min(3, prev + 1));
+          setFocusedControlIndex((prev) => (prev < 3 ? prev + 1 : 0));
           return;
         }
         // Up moves focus back up to scrubber progress bar

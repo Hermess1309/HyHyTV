@@ -57,6 +57,7 @@ export const SearchPage = memo(function SearchPage() {
 
   const focusedCardRef = useRef<HTMLDivElement | null>(null);
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
+  const tagItemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const currentTile: TileData | undefined = displayedTiles[gridIndex] || displayedTiles[0];
   const [activeSynopsis, setActiveSynopsis] = useState<string>('');
@@ -81,16 +82,26 @@ export const SearchPage = memo(function SearchPage() {
     return () => { cancelled = true; };
   }, [currentTile?.slug, currentTile?.synopsis, currentTile?.title]);
 
-  // Auto-scroll grid when focused card changes
+  // Auto-scroll grid smoothly when focused card changes
   useEffect(() => {
     if (zone === 'grid' && focusedCardRef.current) {
       focusedCardRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'nearest',
+        block: 'center',
         inline: 'nearest',
       });
     }
   }, [zone, gridIndex]);
+
+  // Auto-scroll tags list when navigating topic chips
+  useEffect(() => {
+    if (zone === 'tags' && tagItemRefs.current[tagIndex]) {
+      tagItemRefs.current[tagIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }
+  }, [zone, tagIndex]);
 
   // Execute debounced search
   const executeSearch = useCallback((searchTerm: string) => {
@@ -196,10 +207,19 @@ export const SearchPage = memo(function SearchPage() {
         if (zone === 'grid') {
           if (gridIndex >= 4) {
             setGridIndex((prev) => prev - 4);
+          } else {
+            // At top row of grid: focus top navbar search button
+            dispatch(setNavFocused(true));
+            const searchNavIdx = NAV_ITEMS.findIndex((n) => n.id === 'search');
+            dispatch(setNavIndex(searchNavIdx >= 0 ? searchNavIdx : 7));
           }
         } else if (zone === 'tags') {
-          setZone('keyboard');
-          setKbPos({ row: KEYBOARD_ROWS.length - 1, col: Math.min(2, KEYBOARD_ROWS[0].length - 1) });
+          if (tagIndex >= 2) {
+            setTagIndex((prev) => prev - 2);
+          } else {
+            setZone('keyboard');
+            setKbPos({ row: KEYBOARD_ROWS.length - 1, col: Math.min(2, KEYBOARD_ROWS[0].length - 1) });
+          }
         } else if (zone === 'keyboard') {
           if (kbPos.row > 0) {
             setKbPos((prev) => ({ ...prev, row: prev.row - 1 }));
@@ -218,6 +238,9 @@ export const SearchPage = memo(function SearchPage() {
         if (zone === 'grid') {
           if (gridIndex + 4 < displayedTiles.length) {
             setGridIndex((prev) => prev + 4);
+          } else if (Math.floor(gridIndex / 4) < Math.floor((displayedTiles.length - 1) / 4)) {
+            // There is a row below with fewer than 4 items, jump to last tile
+            setGridIndex(displayedTiles.length - 1);
           }
         } else if (zone === 'actions') {
           setZone('keyboard');
@@ -229,14 +252,26 @@ export const SearchPage = memo(function SearchPage() {
             setZone('tags');
             setTagIndex(0);
           }
+        } else if (zone === 'tags') {
+          if (tagIndex + 2 < QUICK_TAGS.length) {
+            setTagIndex((prev) => prev + 2);
+          } else if (tagIndex < QUICK_TAGS.length - 1) {
+            setTagIndex(QUICK_TAGS.length - 1);
+          }
         }
       } else if (key === 'ArrowLeft' || code === 37) {
         e.preventDefault();
         if (zone === 'grid') {
           if (gridIndex % 4 === 0) {
-            // Jump from left edge of grid back to keyboard
-            setZone('keyboard');
-            setKbPos((prev) => ({ ...prev, col: KEYBOARD_ROWS[0].length - 1 }));
+            // Jump from left edge of grid back to tags or keyboard
+            if (gridIndex >= 8) {
+              setZone('tags');
+              setTagIndex(0);
+            } else {
+              setZone('keyboard');
+              const targetRow = Math.min(KEYBOARD_ROWS.length - 1, Math.floor(gridIndex / 4) * 2);
+              setKbPos({ row: targetRow, col: KEYBOARD_ROWS[0].length - 1 });
+            }
           } else {
             setGridIndex((prev) => Math.max(0, prev - 1));
           }
@@ -262,11 +297,11 @@ export const SearchPage = memo(function SearchPage() {
           } else if (displayedTiles.length > 0) {
             // Jump from right edge of keyboard into movie grid!
             setZone('grid');
-            const targetRow = Math.min(Math.floor(displayedTiles.length / 4), Math.floor(kbPos.row / 2));
+            const targetRow = Math.min(Math.floor((displayedTiles.length - 1) / 4), Math.floor(kbPos.row / 2));
             setGridIndex(Math.min(displayedTiles.length - 1, targetRow * 4));
           }
         } else if (zone === 'tags') {
-          if (tagIndex < QUICK_TAGS.length - 1) {
+          if (tagIndex < QUICK_TAGS.length - 1 && tagIndex % 2 === 0) {
             setTagIndex((prev) => prev + 1);
           } else if (displayedTiles.length > 0) {
             setZone('grid');
@@ -282,7 +317,7 @@ export const SearchPage = memo(function SearchPage() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isTv, navFocused, zone, actionIndex, kbPos, tagIndex, gridIndex, displayedTiles, handleKeyPress, handleInputChange, handleTileClick]);
+  }, [isTv, navFocused, zone, actionIndex, kbPos, tagIndex, gridIndex, displayedTiles, handleKeyPress, handleInputChange, handleTileClick, dispatch]);
 
   // Main Container Styles
   const pageContainerStyle: CSSProperties = {
@@ -302,7 +337,10 @@ export const SearchPage = memo(function SearchPage() {
     flexShrink: 0,
     display: 'flex',
     flexDirection: 'column',
-    gap: 14,
+    gap: 12,
+    maxHeight: 'calc(100vh - 120px)',
+    overflowY: 'auto',
+    paddingRight: 6,
   };
 
   const searchBoxStyle: CSSProperties = {
@@ -331,6 +369,7 @@ export const SearchPage = memo(function SearchPage() {
     overflowY: 'auto',
     paddingRight: 8,
     paddingBottom: 40,
+    alignContent: 'start',
   };
 
   return (
@@ -445,18 +484,20 @@ export const SearchPage = memo(function SearchPage() {
             return (
               <button
                 key={tag}
+                ref={(el) => { tagItemRefs.current[tIdx] = el; }}
                 onClick={() => handleInputChange(tag)}
                 style={{
-                  padding: '5px 10px',
+                  padding: '6px 12px',
                   borderRadius: 16,
                   background: isFocused ? '#ffffff' : 'rgba(255,255,255,0.08)',
                   color: isFocused ? '#000000' : '#bbb',
                   border: isFocused ? '1.5px solid #e50914' : '1px solid rgba(255,255,255,0.15)',
-                  fontSize: 11,
+                  fontSize: 12,
                   fontWeight: 600,
                   cursor: 'pointer',
                   transform: isFocused ? 'scale(1.05)' : 'scale(1)',
                   transition: 'all 0.12s ease',
+                  boxShadow: isFocused ? '0 0 10px rgba(229,9,20,0.5)' : 'none',
                 }}
               >
                 {tag}
@@ -520,15 +561,16 @@ export const SearchPage = memo(function SearchPage() {
                 onClick={() => handleTileClick(tile)}
                 style={{
                   position: 'relative',
+                  width: '100%',
+                  paddingTop: '150%',
                   borderRadius: 8,
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  aspectRatio: '2 / 3',
                   background: '#1a1a1a',
                   outline: isFocused ? '3.5px solid #ffffff' : 'none',
                   outlineOffset: '2px',
                   boxShadow: isFocused ? '0 8px 24px rgba(0,0,0,0.85)' : 'none',
-                  transform: isFocused ? 'scale(1.06)' : 'scale(1)',
+                  transform: isFocused ? 'scale(1.05)' : 'scale(1)',
                   transition: 'transform 0.15s ease-out, outline 0.15s ease-out',
                   zIndex: isFocused ? 10 : 1,
                   willChange: isFocused ? 'transform' : 'auto',
@@ -546,6 +588,9 @@ export const SearchPage = memo(function SearchPage() {
                     }
                   }}
                   style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',

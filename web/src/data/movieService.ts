@@ -368,12 +368,62 @@ export async function fetchUnifiedHomeContentProgressive(
   return fetchUnifiedPageContentProgressive('home', onUpdate);
 }
 
+const CATEGORY_MAP: Record<string, string> = {
+  'hanh dong': '/v1/api/the-loai/hanh-dong?page=1&limit=36',
+  'hoat hinh': '/v1/api/danh-sach/hoat-hinh?page=1&limit=36',
+  'anime': '/v1/api/danh-sach/hoat-hinh?page=1&limit=36',
+  'han quoc': '/v1/api/quoc-gia/han-quoc?page=1&limit=36',
+  'kinh di': '/v1/api/the-loai/kinh-di?page=1&limit=36',
+  'tinh cam': '/v1/api/the-loai/tinh-cam?page=1&limit=36',
+  'co trang': '/v1/api/the-loai/co-trang?page=1&limit=36',
+  'hai huoc': '/v1/api/the-loai/hai-huoc?page=1&limit=36',
+  'hai': '/v1/api/the-loai/hai-huoc?page=1&limit=36',
+  'vien tuong': '/v1/api/the-loai/vien-tuong?page=1&limit=36',
+  'khoa hoc vien tuong': '/v1/api/the-loai/vien-tuong?page=1&limit=36',
+  'vo thuat': '/v1/api/the-loai/vo-thuat?page=1&limit=36',
+  'au my': '/v1/api/quoc-gia/au-my?page=1&limit=36',
+  'trung quoc': '/v1/api/quoc-gia/trung-quoc?page=1&limit=36',
+  'nhat ban': '/v1/api/quoc-gia/nhat-ban?page=1&limit=36',
+  'thai lan': '/v1/api/quoc-gia/thai-lan?page=1&limit=36',
+  'viet nam': '/v1/api/quoc-gia/viet-nam?page=1&limit=36',
+  'phim bo': '/v1/api/danh-sach/phim-bo?page=1&limit=36',
+  'phim le': '/v1/api/danh-sach/phim-le?page=1&limit=36',
+  'tv shows': '/v1/api/danh-sach/tv-shows?page=1&limit=36',
+};
+
+function normalizeKey(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim();
+}
+
 export async function searchUnifiedMovies(query: string): Promise<TileData[]> {
   const clean = query.trim();
   if (!clean) return GHIBLI_RECOMMENDED_TILES;
 
-  // Search KKPhim
-  const kkResults = await searchKkphim(clean, 24);
+  const norm = normalizeKey(clean);
+  if (norm === 'studio ghibli' || norm === 'ghibli') {
+    return GHIBLI_RECOMMENDED_TILES;
+  }
+
+  // 1. If searching for a category or country topic chip (e.g. "Hành Động", "Hàn Quốc"), fetch 36+ movies directly from the category endpoint
+  if (CATEGORY_MAP[norm]) {
+    try {
+      const catResults = await fetchKkphimList(CATEGORY_MAP[norm]);
+      if (catResults && catResults.length > 0) {
+        return catResults;
+      }
+    } catch {
+      // fallback to text search
+    }
+  }
+
+  // 2. Normal keyword search KKPhim
+  const kkResults = await searchKkphim(clean, 36);
 
   // If query is short or kkResults < 12, also fetch from VSMOV to combine
   let vsmovResults: TileData[] = [];
@@ -402,8 +452,15 @@ export async function searchUnifiedMovies(query: string): Promise<TileData[]> {
 }
 
 export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]> {
+  const cleanSlug = (slug || '').replace(/^kk-/, '').replace(/^vsmov-/, '').trim();
+  if (!cleanSlug) return [];
+
+  if (unifiedSeasonsCache.has(cleanSlug)) {
+    return unifiedSeasonsCache.get(cleanSlug)!;
+  }
+
   try {
-    const detail = await fetchKkphimDetail(slug);
+    const detail = await fetchKkphimDetail(cleanSlug);
     if (detail && detail.episodes && detail.episodes.length > 0) {
       const mapped = detail.episodes.map((s, idx) => ({
         seasonNumber: idx + 1,
@@ -411,7 +468,7 @@ export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]
         episodeCount: s.server_data.length,
         posterPath: null,
       }));
-      unifiedSeasonsCache.set(slug, mapped);
+      unifiedSeasonsCache.set(cleanSlug, mapped);
       return mapped;
     }
   } catch {
@@ -419,9 +476,9 @@ export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]
   }
 
   try {
-    const vsmovSeasons = await fetchVsmovSeasons(slug);
+    const vsmovSeasons = await fetchVsmovSeasons(cleanSlug);
     if (vsmovSeasons && vsmovSeasons.length > 0) {
-      unifiedSeasonsCache.set(slug, vsmovSeasons);
+      unifiedSeasonsCache.set(cleanSlug, vsmovSeasons);
       return vsmovSeasons;
     }
   } catch {
@@ -432,11 +489,19 @@ export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]
 }
 
 export async function fetchUnifiedEpisodes(slug: string, seasonIdx = 0): Promise<any[]> {
+  const cleanSlug = (slug || '').replace(/^kk-/, '').replace(/^vsmov-/, '').trim();
+  if (!cleanSlug) return [];
+
+  const cacheKey = `${cleanSlug}_${seasonIdx}`;
+  if (unifiedEpisodesCache.has(cacheKey)) {
+    return unifiedEpisodesCache.get(cacheKey)!;
+  }
+
   // Try KKPhim first
   try {
-    const kkEps = await fetchKkphimEpisodes(slug, seasonIdx);
+    const kkEps = await fetchKkphimEpisodes(cleanSlug, seasonIdx);
     if (kkEps && kkEps.length > 0) {
-      unifiedEpisodesCache.set(`${slug}_${seasonIdx}`, kkEps);
+      unifiedEpisodesCache.set(cacheKey, kkEps);
       return kkEps;
     }
   } catch {
@@ -445,9 +510,9 @@ export async function fetchUnifiedEpisodes(slug: string, seasonIdx = 0): Promise
 
   // Fallback to VSMOV
   try {
-    const vsmovEps = await fetchVsmovEpisodes(slug, seasonIdx);
+    const vsmovEps = await fetchVsmovEpisodes(cleanSlug, seasonIdx);
     if (vsmovEps && vsmovEps.length > 0) {
-      unifiedEpisodesCache.set(`${slug}_${seasonIdx}`, vsmovEps);
+      unifiedEpisodesCache.set(cacheKey, vsmovEps);
       return vsmovEps;
     }
   } catch {
