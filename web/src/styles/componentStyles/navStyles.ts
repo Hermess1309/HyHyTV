@@ -15,14 +15,12 @@ export const navStyles = createStyles({
     paddingLeft: theme.spacing.edgePadding,
     paddingRight: theme.spacing.edgePadding,
     background: navFocused
-      ? 'rgba(20, 20, 20, 0.98)'
+      ? '#141414'
       : isScrolled
-      ? 'rgba(20, 20, 20, 0.97)'
+      ? 'rgba(20, 20, 20, 0.98)'
       : 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)',
-    boxShadow: isScrolled ? '0 4px 20px rgba(0,0,0,0.85)' : 'none',
-    backdropFilter: isScrolled ? 'blur(16px)' : 'none',
-    WebkitBackdropFilter: isScrolled ? 'blur(16px)' : 'none',
-    transition: 'background 350ms ease-out, box-shadow 350ms ease-out, backdrop-filter 350ms ease-out',
+    boxShadow: isScrolled ? '0 4px 16px rgba(0,0,0,0.8)' : 'none',
+    transition: 'background 250ms ease-out, box-shadow 250ms ease-out',
     fontFamily: theme.typography.fontFamily,
   }),
 

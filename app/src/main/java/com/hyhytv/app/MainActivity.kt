@@ -2,6 +2,7 @@ package com.hyhytv.app
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.view.WindowManager
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -38,6 +39,10 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+            WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
+        )
 
         // Fullscreen immersive TV mode
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -202,85 +207,66 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private var lastKeyTime = 0L
+    private val KEY_THROTTLE_MS = 60L
+
+    private fun dispatchNav(key: String, code: Int) {
+        val now = System.currentTimeMillis()
+        if (now - lastKeyTime < KEY_THROTTLE_MS && (code in 37..40)) {
+            return
+        }
+        lastKeyTime = now
+        webView.evaluateJavascript(
+            "if(window.__hyhyNav){window.__hyhyNav('$key');}else{window.dispatchEvent(new KeyboardEvent('keydown',{key:'$key',code:'$key',keyCode:$code,which:$code,bubbles:true}));}",
+            null
+        )
+    }
+
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_DOWN) {
             when (event.keyCode) {
                 KeyEvent.KEYCODE_BACK -> {
-                    // Send Escape to close overlays/modals in the UI
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, which: 27, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("Escape", 27)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter', keyCode: 13, which: 13, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("Enter", 13)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_UP -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', code: 'ArrowUp', keyCode: 38, which: 38, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowUp", 38)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_DOWN -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', code: 'ArrowDown', keyCode: 40, which: 40, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowDown", 40)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37, which: 37, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowLeft", 37)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowRight", 39)
                     return true
                 }
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, which: 32, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav(" ", 32)
                     return true
                 }
                 KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'n', code: 'KeyN', keyCode: 78, which: 78, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("n", 78)
                     return true
                 }
                 KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', code: 'KeyP', keyCode: 80, which: 80, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("p", 80)
                     return true
                 }
                 KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowRight", 39)
                     return true
                 }
                 KeyEvent.KEYCODE_MEDIA_REWIND -> {
-                    webView.evaluateJavascript(
-                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37, which: 37, bubbles: true }));",
-                        null
-                    )
+                    dispatchNav("ArrowLeft", 37)
                     return true
                 }
             }

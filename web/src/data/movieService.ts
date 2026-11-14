@@ -434,3 +434,41 @@ export async function fetchUnifiedEpisodes(slug: string, seasonIdx = 0): Promise
 
   return [];
 }
+
+export interface UnifiedMovieDetail {
+  title: string;
+  synopsis: string;
+  year?: number;
+  rating?: string;
+  genre?: string;
+  actors?: string[];
+  director?: string[];
+  quality?: string;
+  time?: string;
+}
+
+export async function fetchUnifiedDetail(slug: string): Promise<UnifiedMovieDetail | null> {
+  if (!slug) return null;
+  const cleanSlug = slug.replace(/^kk-/, '').replace(/^vsmov-/, '');
+  try {
+    const detail = await fetchKkphimDetail(cleanSlug);
+    if (detail && detail.movie) {
+      const raw = detail.movie.content || '';
+      const cleanSynopsis = raw.replace(/<[^>]*>?/gm, '').trim();
+      return {
+        title: detail.movie.name,
+        synopsis: cleanSynopsis || detail.movie.origin_name || detail.movie.name,
+        year: detail.movie.year,
+        rating: detail.movie.quality || 'FHD',
+        genre: detail.movie.category?.map((c) => c.name).join(', ') || '',
+        actors: detail.movie.actor,
+        director: detail.movie.director,
+        quality: detail.movie.quality,
+        time: detail.movie.time,
+      };
+    }
+  } catch {
+    // fallback
+  }
+  return null;
+}

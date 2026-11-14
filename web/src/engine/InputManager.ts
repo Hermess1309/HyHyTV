@@ -93,6 +93,16 @@ export class InputManager {
     this.callback = callback;
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
+    (window as any).__hyhyNav = (key: string) => {
+      // 1. Dispatch DOM event for components listening directly on window (e.g., SearchPage, VideoPlayerOverlay)
+      window.dispatchEvent(new KeyboardEvent('keydown', { key, code: key, bubbles: true }));
+
+      // 2. Also pass action to FocusEngine callback for page/navbar navigation
+      const action = KEY_MAP[key];
+      if (action) {
+        this.callback?.(action);
+      }
+    };
   }
 
   setRawKeyCallback(callback: RawKeyCallback | null): void {
@@ -103,6 +113,7 @@ export class InputManager {
     this.stopRepeat();
     this.callback = null;
     this.rawKeyCallback = null;
+    delete (window as any).__hyhyNav;
     window.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('keyup', this.handleKeyUp);
   }

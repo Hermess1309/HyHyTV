@@ -1,7 +1,7 @@
 {
-  "versionCode": 3,
-  "versionName": "1.2.0",
-  "apkUrl": "https://files.catbox.moe/i4dmrq.apk",
-  "changelog": "Cập nhật Thể Loại, Quốc Gia, Top Phim, Navbar thông minh, Tìm kiếm mở rộng và giao diện Netflix mượt mà 60 FPS.",
+  "versionCode": 4,
+  "versionName": "1.3.0",
+  "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
+  "changelog": "Nâng cấp siêu mượt mà 60 FPS chuẩn Netflix TV: loại bỏ hoàn toàn hiện tượng lag/giật, hiển thị mô tả tóm tắt phim (describe) chi tiết, làm mới giao diện tìm kiếm cực kỳ tinh tế.",
   "forceUpdate": false
 }

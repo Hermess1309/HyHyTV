@@ -8,7 +8,7 @@ import { setTrailerPaused, toggleTrailerMute } from '../state/slices/trailerSlic
 import { getTileImageUrl } from '../data/mockContent';
 import { getTmdbBackdropUrl, getTmdbLogoUrl } from '../data/tmdb';
 import { fetchTrailerKey, fetchTvSeasons, fetchEpisodes } from '../data/tmdb';
-import { fetchUnifiedEpisodes } from '../data/movieService';
+import { fetchUnifiedEpisodes, fetchUnifiedDetail } from '../data/movieService';
 import { overlayStyles } from '../styles/componentStyles/overlayStyles';
 import { mergeStyles } from '../styles/styleEngine';
 import { YouTubePlayer } from './YouTubePlayer';
@@ -37,6 +37,21 @@ export const DetailOverlay = memo(function DetailOverlay() {
   const [, setVideoPlaying] = useState(false);
   // Local pause state for the detail-view trailer. We don't reuse the global
   // `trailerPaused` flag because that one suppresses tile/hero trailers and
+  const [detailSynopsis, setDetailSynopsis] = useState<string>('');
+  useEffect(() => {
+    if (!open || !tile?.slug) {
+      setDetailSynopsis('');
+      return;
+    }
+    let cancelled = false;
+    fetchUnifiedDetail(tile.slug).then((res) => {
+      if (!cancelled && res?.synopsis) {
+        setDetailSynopsis(res.synopsis);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [open, tile?.slug]);
+
   // would default this player to paused on open. Reset to false whenever a
   // new trailer key arrives so a freshly opened panel auto-plays.
   const [detailPaused, setDetailPaused] = useState(false);
@@ -125,15 +140,15 @@ export const DetailOverlay = memo(function DetailOverlay() {
     dispatch(toggleLike({ profileId: currentProfileId, tileId: tile.id }));
   }, [dispatch, isWeb, tile, currentProfileId]);
 
-  // Web mode: close on Escape
+  // Close on Escape / Back
   useEffect(() => {
-    if (!isWeb || !open) return;
+    if (!open) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleClose();
+      if (e.key === 'Escape' || e.keyCode === 27) handleClose();
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [isWeb, open, handleClose]);
+  }, [open, handleClose]);
 
   if (!open || !tile) return null;
 
@@ -221,8 +236,8 @@ export const DetailOverlay = memo(function DetailOverlay() {
               <span style={{ color: theme.colors.textSecondary }}>{tile.year}</span>
               <span style={{ border: '1px solid rgba(255,255,255,0.4)', padding: '1px 6px', fontSize: 12, color: theme.colors.textSecondary, borderRadius: 3 }}>{tile.rating}</span>
             </div>
-            <div style={{ color: '#fff', fontSize: 14, lineHeight: 1.5, opacity: 0.9, marginBottom: 20, fontFamily: theme.typography.fontFamily }}>
-              {tile.synopsis}
+            <div style={{ color: '#fff', fontSize: 14, lineHeight: 1.6, opacity: 0.92, marginBottom: 20, fontFamily: theme.typography.fontFamily }}>
+              {detailSynopsis || tile.synopsis}
             </div>
             {/* Action buttons — only highlight when the buttons zone has focus */}
             <div style={{ display: 'flex', gap: 12 }}>
@@ -358,7 +373,7 @@ export const DetailOverlay = memo(function DetailOverlay() {
               <span style={overlayStyles.yearText}>{tile.year}</span>
               <span style={overlayStyles.ratingBadge}>{tile.rating}</span>
             </div>
-            <div style={overlayStyles.synopsis}>{tile.synopsis}</div>
+            <div style={overlayStyles.synopsis}>{detailSynopsis || tile.synopsis}</div>
           </div>
           <div style={overlayStyles.infoRight}>
             <div style={overlayStyles.genreLabel}>Genres:</div>

@@ -2,10 +2,11 @@ import { type CSSProperties, memo, useState, useRef, useCallback, useEffect } fr
 import { useSelector, useDispatch } from 'react-redux';
 import { theme } from '../styles/theme';
 import { selectSearchQuery, selectSearchResults, selectNavFocused } from '../state/selectors';
-import { openDetail, setSearchQuery, clearSearchQuery } from '../state/slices/uiSlice';
+import { openDetail, setSearchQuery, clearSearchQuery, setActivePage, setNavFocused, setNavIndex } from '../state/slices/uiSlice';
 import { setSearchResults, type TileData } from '../state/slices/contentSlice';
 import { setTrailerPaused } from '../state/slices/trailerSlice';
-import { searchUnifiedMovies, GHIBLI_RECOMMENDED_TILES } from '../data/movieService';
+import { searchUnifiedMovies, fetchUnifiedDetail, GHIBLI_RECOMMENDED_TILES } from '../data/movieService';
+import { NAV_ITEMS } from '../data/pageConfigs';
 import { useIsTvMode } from '../hooks/useMode';
 
 // TV Keyboard layout: Action row + 6-column letters & numbers
@@ -56,6 +57,29 @@ export const SearchPage = memo(function SearchPage() {
 
   const focusedCardRef = useRef<HTMLDivElement | null>(null);
   const gridContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const currentTile: TileData | undefined = displayedTiles[gridIndex] || displayedTiles[0];
+  const [activeSynopsis, setActiveSynopsis] = useState<string>('');
+
+  useEffect(() => {
+    if (!currentTile) {
+      setActiveSynopsis('');
+      return;
+    }
+    if (currentTile.synopsis && currentTile.synopsis !== currentTile.title) {
+      setActiveSynopsis(currentTile.synopsis);
+      return;
+    }
+    let cancelled = false;
+    if (currentTile.slug) {
+      fetchUnifiedDetail(currentTile.slug).then((res) => {
+        if (!cancelled && res?.synopsis) {
+          setActiveSynopsis(res.synopsis);
+        }
+      });
+    }
+    return () => { cancelled = true; };
+  }, [currentTile?.slug, currentTile?.synopsis, currentTile?.title]);
 
   // Auto-scroll grid when focused card changes
   useEffect(() => {
@@ -146,6 +170,17 @@ export const SearchPage = memo(function SearchPage() {
         return;
       }
 
+      // Back / Escape key
+      if (key === 'Escape' || code === 27) {
+        e.preventDefault();
+        if (zone === 'grid') {
+          setZone('keyboard');
+        } else {
+          dispatch(setActivePage('home'));
+        }
+        return;
+      }
+
       // Backspace key
       if (key === 'Backspace' || code === 8) {
         if (zone !== 'grid') {
@@ -173,7 +208,10 @@ export const SearchPage = memo(function SearchPage() {
             setActionIndex(Math.min(actionIndex, ACTION_KEYS.length - 1));
           }
         } else if (zone === 'actions') {
-          // At top of actions -> let user reach top nav
+          // At top of actions -> move focus up to top nav
+          dispatch(setNavFocused(true));
+          const searchNavIdx = NAV_ITEMS.findIndex((n) => n.id === 'search');
+          dispatch(setNavIndex(searchNavIdx >= 0 ? searchNavIdx : 7));
         }
       } else if (key === 'ArrowDown' || code === 40) {
         e.preventDefault();
@@ -428,34 +466,47 @@ export const SearchPage = memo(function SearchPage() {
         </div>
       </div>
 
-      {/* RIGHT PANE: 4-Column Poster Grid (Matches User's Photo) */}
+      {/* RIGHT PANE: Header info with Describe/Overview + 4-Column Poster Grid */}
       <div style={rightPaneStyle}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          paddingBottom: 8,
-        }}>
-          <h2 style={{
-            fontSize: 18,
-            fontWeight: 700,
-            color: '#fff',
-            fontFamily: theme.typography.fontFamily,
-            margin: 0,
+        {/* Focused Movie Info & Description Banner (Matches Netflix TV) */}
+        {currentTile && (
+          <div style={{
             display: 'flex',
-            alignItems: 'center',
-            gap: 8,
+            flexDirection: 'column',
+            gap: 6,
+            padding: '12px 18px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            borderRadius: 10,
+            border: '1px solid rgba(255, 255, 255, 0.1)',
           }}>
-            <span>{query.trim() ? `Kết quả tìm kiếm: "${query}"` : 'Studio Ghibli & Đề Xuất Cho Bạn'}</span>
-            <span style={{ fontSize: 13, color: '#888', fontWeight: 500 }}>
-              ({displayedTiles.length} phim)
-            </span>
-          </h2>
-          <span style={{ fontSize: 12, color: '#666' }}>
-            {zone === 'grid' ? 'Bấm ◄ để quay lại bàn phím' : 'Bấm ► để duyệt phim'}
-          </span>
-        </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: theme.typography.fontFamily }}>
+                  {currentTile.title}
+                </span>
+                <span style={{ color: '#46d369', fontWeight: 700, fontSize: 13 }}>{currentTile.rating || 'HD'}</span>
+                <span style={{ color: '#aaa', fontSize: 13 }}>{currentTile.year}</span>
+                <span style={{ color: '#aaa', fontSize: 13 }}>•</span>
+                <span style={{ color: '#ccc', fontSize: 13 }}>{currentTile.genre}</span>
+              </div>
+              <span style={{ fontSize: 12, color: '#888' }}>
+                {zone === 'grid' ? 'Bấm [Enter] để xem phim' : 'Bấm ► để sang duyệt phim'}
+              </span>
+            </div>
+            <div style={{
+              fontSize: 13,
+              color: 'rgba(255, 255, 255, 0.85)',
+              lineHeight: 1.45,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              fontFamily: theme.typography.fontFamily,
+            }}>
+              {activeSynopsis || currentTile.synopsis || 'Phim có chất lượng cao, phụ đề tiếng Việt chuẩn, bấm Enter để mở chi tiết hoặc xem ngay.'}
+            </div>
+          </div>
+        )}
 
         <div ref={gridContainerRef} style={gridStyle}>
           {displayedTiles.map((tile, idx) => {
@@ -473,20 +524,21 @@ export const SearchPage = memo(function SearchPage() {
                   overflow: 'hidden',
                   cursor: 'pointer',
                   aspectRatio: '2 / 3',
-                  background: '#222',
+                  background: '#1a1a1a',
                   outline: isFocused ? '3.5px solid #ffffff' : 'none',
-                  boxShadow: isFocused
-                    ? '0 0 20px rgba(255, 255, 255, 0.75), 0 8px 24px rgba(0,0,0,0.8)'
-                    : '0 4px 12px rgba(0,0,0,0.4)',
-                  transform: isFocused ? 'scale(1.05)' : 'scale(1)',
-                  transition: 'transform 0.16s ease, outline 0.16s ease, box-shadow 0.16s ease',
+                  outlineOffset: '2px',
+                  boxShadow: isFocused ? '0 8px 24px rgba(0,0,0,0.85)' : 'none',
+                  transform: isFocused ? 'scale(1.06)' : 'scale(1)',
+                  transition: 'transform 0.15s ease-out, outline 0.15s ease-out',
                   zIndex: isFocused ? 10 : 1,
+                  willChange: isFocused ? 'transform' : 'auto',
                 }}
               >
                 <img
                   src={poster}
                   alt={tile.title}
                   loading="lazy"
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',
@@ -494,56 +546,6 @@ export const SearchPage = memo(function SearchPage() {
                     display: 'block',
                   }}
                 />
-
-                {/* Badge Rating */}
-                <div style={{
-                  position: 'absolute',
-                  top: 6,
-                  right: 6,
-                  background: 'rgba(0,0,0,0.75)',
-                  backdropFilter: 'blur(4px)',
-                  color: '#46d369',
-                  fontSize: 10,
-                  fontWeight: 700,
-                  padding: '2px 6px',
-                  borderRadius: 3,
-                }}>
-                  {tile.rating || 'FHD'}
-                </div>
-
-                {/* Bottom title gradient */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: '24px 8px 8px',
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 70%, transparent 100%)',
-                }}>
-                  <div style={{
-                    color: '#fff',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    fontFamily: theme.typography.fontFamily,
-                  }}>
-                    {tile.title}
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 6,
-                    fontSize: 10,
-                    color: '#bbb',
-                    marginTop: 2,
-                  }}>
-                    <span>{tile.year}</span>
-                    <span>•</span>
-                    <span>{tile.genre}</span>
-                  </div>
-                </div>
               </div>
             );
           })}

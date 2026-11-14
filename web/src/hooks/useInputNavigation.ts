@@ -459,15 +459,21 @@ export function useInputNavigation() {
         }
       }
 
+      // Read UI focus state directly from store so rapid back-to-back inputs never use stale render refs
+      const uiState = store.getState().ui;
+      const isHeroFocused = uiState.heroFocused;
+      const heroButtonIndex = uiState.heroButtonIndex;
+      const activePage = uiState.activePage;
+      const isNavFocused = uiState.navFocused;
+
       // Hero focused — handle navigation between hero buttons
-      if (heroFocusedRef.current) {
-        const page = activePageRef.current;
-        const isContentPage = page !== 'search' && page !== 'myList';
+      if (isHeroFocused) {
+        const isContentPage = activePage !== 'search' && activePage !== 'myList';
         if (isContentPage) {
           if (action === 'LEFT') {
-            dispatch(setHeroButtonIndex(Math.max(0, heroButtonIndexRef.current - 1)));
+            dispatch(setHeroButtonIndex(Math.max(0, heroButtonIndex - 1)));
           } else if (action === 'RIGHT') {
-            dispatch(setHeroButtonIndex(Math.min(HERO_BUTTON_COUNT - 1, heroButtonIndexRef.current + 1)));
+            dispatch(setHeroButtonIndex(Math.min(HERO_BUTTON_COUNT - 1, heroButtonIndex + 1)));
           } else if (action === 'DOWN') {
             // Leave hero → go to first content row
             dispatch(setHeroFocused(false));
@@ -477,14 +483,14 @@ export function useInputNavigation() {
             // Leave hero → go to nav
             dispatch(setHeroFocused(false));
             dispatch(setNavFocused(true));
-            dispatch(setNavIndex(engine.getPosition().rowIndex === -1 ? engine.getPosition().tileIndex : 0));
-            const navIdx = NAV_ITEMS.findIndex((n) => n.id === activePageRef.current);
-            dispatch(setNavIndex(navIdx >= 0 ? navIdx : 0));
-            engine.setPosition({ rowIndex: -1, tileIndex: navIdx >= 0 ? navIdx : 0 });
+            const navIdx = NAV_ITEMS.findIndex((n) => n.id === activePage);
+            const targetNav = navIdx >= 0 ? navIdx : 0;
+            dispatch(setNavIndex(targetNav));
+            engine.setPosition({ rowIndex: -1, tileIndex: targetNav });
           } else if (action === 'SELECT') {
             const currentRows = store.getState().content.rows;
             const currentTile = currentRows[0]?.tiles[0] || rowsRef.current[0]?.tiles[0];
-            if (heroButtonIndexRef.current === 0 && currentTile?.slug) {
+            if (heroButtonIndex === 0 && currentTile?.slug) {
               fetchUnifiedEpisodes(currentTile.slug, 0).then((eps) => {
                 if (eps.length > 0 && eps[0].linkEmbed) {
                   dispatch(openPlayer({
@@ -507,15 +513,16 @@ export function useInputNavigation() {
             // Leave hero → go to nav
             dispatch(setHeroFocused(false));
             dispatch(setNavFocused(true));
-            const navIdx = NAV_ITEMS.findIndex((n) => n.id === activePageRef.current);
-            dispatch(setNavIndex(navIdx >= 0 ? navIdx : 0));
-            engine.setPosition({ rowIndex: -1, tileIndex: navIdx >= 0 ? navIdx : 0 });
+            const navIdx = NAV_ITEMS.findIndex((n) => n.id === activePage);
+            const targetNav = navIdx >= 0 ? navIdx : 0;
+            dispatch(setNavIndex(targetNav));
+            engine.setPosition({ rowIndex: -1, tileIndex: targetNav });
           }
           return;
         }
       }
 
-      if (activePageRef.current === 'search' && !navFocusedRef.current) {
+      if (activePage === 'search' && !isNavFocused) {
         if (action === 'BACK') {
           dispatch(setActivePage('home'));
           loadPage('home');

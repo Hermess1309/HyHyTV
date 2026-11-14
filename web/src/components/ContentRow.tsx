@@ -4,7 +4,8 @@ import { theme } from '../styles/theme';
 import { rowStyles } from '../styles/componentStyles/rowStyles';
 import { ContentTile } from './ContentTile';
 import { RowTitle } from './RowTitle';
-import { selectFocus, selectHeroFocused, selectNavFocused, selectLastNavAction } from '../state/selectors';
+import type { RootState } from '../state/store';
+import { selectLastNavAction } from '../state/selectors';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { easeOutQuart } from '../engine/easing';
 import { TILE_BUFFER, VISIBLE_TILES, TILE_STEP } from '../utils/constants';
@@ -21,13 +22,16 @@ export const ContentRow = memo(function ContentRow({
   row,
   rowIndex,
 }: ContentRowProps) {
-  const focus = useSelector(selectFocus);
-  const heroFocused = useSelector(selectHeroFocused);
-  const navFocused = useSelector(selectNavFocused);
+  const isRowFocused = useSelector((state: RootState) => {
+    const isTvMode = state.ui.interactionMode === 'tv';
+    return isTvMode && state.focus.rowIndex === rowIndex && !state.ui.heroFocused && !state.ui.navFocused;
+  });
+  const activeTileIndex = useSelector((state: RootState) => {
+    return state.focus.rowIndex === rowIndex ? state.focus.tileIndex : -1;
+  });
   const lastNavAction = useSelector(selectLastNavAction);
   const isTv = useIsTvMode();
   const { isMobile } = useResponsive();
-  const isRowFocused = isTv && focus.rowIndex === rowIndex && !heroFocused && !navFocused;
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   // Both default to false; useLayoutEffect computes the truth from DOM on mount.
   const [showLeftChevron, setShowLeftChevron] = useState(false);
@@ -40,7 +44,7 @@ export const ContentRow = memo(function ContentRow({
   const prevTargetRef = useRef(0);
 
   if (isTv && isRowFocused) {
-    const currTile = focus.tileIndex;
+    const currTile = activeTileIndex >= 0 ? activeTileIndex : 0;
     const isHorizontalMove = lastNavAction === 'LEFT' || lastNavAction === 'RIGHT';
 
     if (isHorizontalMove && currTile !== lastTileIndexRef.current) {
@@ -154,9 +158,9 @@ export const ContentRow = memo(function ContentRow({
     const maxOffset = Math.max(prevTargetRef.current, targetOffsetRef.current);
     startTile = Math.max(0, Math.floor(minOffset / TILE_STEP) - TILE_BUFFER);
     endTile = Math.min(tileCount - 1, Math.ceil((maxOffset + window.innerWidth) / TILE_STEP) + TILE_BUFFER);
-    if (isRowFocused) {
-      startTile = Math.min(startTile, focus.tileIndex);
-      endTile = Math.max(endTile, focus.tileIndex);
+    if (isRowFocused && activeTileIndex >= 0) {
+      startTile = Math.min(startTile, activeTileIndex);
+      endTile = Math.max(endTile, activeTileIndex);
     }
   }
 
@@ -176,7 +180,7 @@ export const ContentRow = memo(function ContentRow({
                 key={tile.id}
                 tile={tile}
                 tileIndex={tileIndex}
-                isFocused={isRowFocused && focus.tileIndex === tileIndex}
+                isFocused={isRowFocused && activeTileIndex === tileIndex}
                 isRowFocused={isRowFocused}
               />
             );

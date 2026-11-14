@@ -131,9 +131,8 @@ export const ContentTile = memo(function ContentTile({
   const trailerMuted = useSelector(selectTrailerMuted);
   const trailerPaused = useSelector(selectTrailerPaused);
 
-  // In TV mode, use focus-based trailer preview. In web mode, use hover.
-  // Disabled if user opted out of autoplay in settings.
-  const effectiveFocused = !settings.disableAutoplay && (isTv ? isFocused : false);
+  // In TV mode, shelf tiles remain clean and super-fast (trailers only in Hero/Detail)
+  const effectiveFocused = !settings.disableAutoplay && !isTv && hovered;
   const { showTrailer, trailerKey } = useTrailerPreview(tile, effectiveFocused, trailerPaused);
   const [videoPlaying, setVideoPlaying] = useState(false);
 
@@ -364,8 +363,7 @@ export const ContentTile = memo(function ContentTile({
             position: 'absolute',
             top: 6,
             right: 6,
-            background: 'rgba(0,0,0,0.7)',
-            backdropFilter: 'blur(4px)',
+            background: 'rgba(0,0,0,0.85)',
             color: '#46d369',
             fontSize: 9,
             fontWeight: 700,

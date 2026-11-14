@@ -10,8 +10,8 @@ export const focusRingStyles = createStyles({
     position: 'relative' as const,
     outline: isFocused ? '3.5px solid #ffffff' : 'none',
     outlineOffset: '2px',
-    boxShadow: isFocused ? '0 8px 24px rgba(0,0,0,0.85)' : 'none',
+    boxShadow: isFocused ? '0 6px 18px rgba(0,0,0,0.8)' : 'none',
     borderRadius: theme.tile.borderRadius,
-    willChange: 'transform' as const,
+    willChange: isFocused ? ('transform' as const) : ('auto' as const),
   }),
 });

@@ -10,7 +10,7 @@ import {
 } from '../state/selectors';
 import { setActiveTrailer } from '../state/slices/trailerSlice';
 import { openDetail, openPlayer } from '../state/slices/uiSlice';
-import { fetchUnifiedEpisodes } from '../data/movieService';
+import { fetchUnifiedEpisodes, fetchUnifiedDetail } from '../data/movieService';
 import { toggleWatchlist } from '../state/slices/watchlistSlice';
 import { setTrailerPaused } from '../state/slices/trailerSlice';
 import { selectCurrentProfileId } from '../state/selectors';
@@ -38,8 +38,23 @@ export const HeroBanner = memo(function HeroBanner() {
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
   const [videoPlaying, setVideoPlaying] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [heroSynopsis, setHeroSynopsis] = useState<string>('');
   const delayTimerRef = useRef<number | null>(null);
   const tileIdRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!firstTile?.slug) {
+      setHeroSynopsis('');
+      return;
+    }
+    let cancelled = false;
+    fetchUnifiedDetail(firstTile.slug).then((res) => {
+      if (!cancelled && res?.synopsis) {
+        setHeroSynopsis(res.synopsis);
+      }
+    });
+    return () => { cancelled = true; };
+  }, [firstTile?.slug]);
 
   // Should the hero trailer be active?
   // TV: when hero is focused. Web: autoplay after delay.
@@ -163,7 +178,7 @@ export const HeroBanner = memo(function HeroBanner() {
           <span style={{ color: '#ccc', fontSize: 13 }}>{firstTile.genre}</span>
         </div>
 
-        <div style={heroStyles.synopsis}>{firstTile.synopsis}</div>
+        <div style={heroStyles.synopsis}>{heroSynopsis || firstTile.synopsis}</div>
 
         <div style={heroStyles.buttonsRow(isTv ? heroFocused : true)}>
           {HERO_BUTTONS.map((label, i) => {

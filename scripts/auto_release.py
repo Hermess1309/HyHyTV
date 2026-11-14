@@ -74,29 +74,34 @@ def main():
     deliv_apk = os.path.join(ROOT_DIR, "deliverables", "HyHyTv-1.0.0-release.apk")
     shutil.copyfile(out_apk, deliv_apk)
 
-    # 6. Upload to Catbox
-    print("\n6. Uploading APK to Catbox...")
-    with open(deliv_apk, "rb") as f:
-        apk_bytes = f.read()
+    # 6. Set APK URL (Raw GitHub is 100% reliable permanent CDN, Catbox as optional mirror)
+    print("\n6. Configuring permanent APK Download CDN...")
+    apk_url = "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk"
+    try:
+        boundary = "----WebKitFormBoundary" + uuid.uuid4().hex
+        body = bytearray()
+        body.extend(f'--{boundary}\r\nContent-Disposition: form-data; name="reqtype"\r\n\r\nfileupload\r\n'.encode('utf-8'))
+        body.extend(f'--{boundary}\r\nContent-Disposition: form-data; name="fileToUpload"; filename="HyHyTv-v{new_name}.apk"\r\nContent-Type: application/vnd.android.package-archive\r\n\r\n'.encode('utf-8'))
+        with open(deliv_apk, "rb") as f:
+            body.extend(f.read())
+        body.extend(f'\r\n--{boundary}--\r\n'.encode('utf-8'))
 
-    boundary = "----WebKitFormBoundary" + uuid.uuid4().hex
-    body = bytearray()
-    body.extend(f'--{boundary}\r\nContent-Disposition: form-data; name="reqtype"\r\n\r\nfileupload\r\n'.encode('utf-8'))
-    body.extend(f'--{boundary}\r\nContent-Disposition: form-data; name="fileToUpload"; filename="HyHyTv-v{new_name}.apk"\r\nContent-Type: application/vnd.android.package-archive\r\n\r\n'.encode('utf-8'))
-    body.extend(apk_bytes)
-    body.extend(f'\r\n--{boundary}--\r\n'.encode('utf-8'))
+        req = urllib.request.Request(
+            "https://catbox.moe/user/api.php",
+            data=bytes(body),
+            headers={
+                "Content-Type": f"multipart/form-data; boundary={boundary}",
+                "User-Agent": "Mozilla/5.0"
+            }
+        )
+        with urllib.request.urlopen(req, timeout=30) as res:
+            catbox_res = res.read().decode("utf-8").strip()
+            if catbox_res.startswith("http"):
+                print(f"-> Catbox mirror: {catbox_res}")
+    except Exception as e:
+        print(f"-> Notice: Catbox upload skipped ({e}), using raw GitHub CDN.")
 
-    req = urllib.request.Request(
-        "https://catbox.moe/user/api.php",
-        data=bytes(body),
-        headers={
-            "Content-Type": f"multipart/form-data; boundary={boundary}",
-            "User-Agent": "Mozilla/5.0"
-        }
-    )
-    with urllib.request.urlopen(req, timeout=90) as res:
-        apk_url = res.read().decode("utf-8").strip()
-    print(f"-> Uploaded! APK URL: {apk_url}")
+    print(f"-> Main APK CDN URL: {apk_url}")
 
     # 7. Update version.json
     print("\n7. Updating version.json...")
