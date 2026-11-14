@@ -458,4 +458,10 @@ export const ContentTile = memo(function ContentTile({
       </FocusRing>
     </div>
   );
-});
+}, (prev, next) => (
+  prev.isFocused === next.isFocused &&
+  prev.isRowFocused === next.isRowFocused &&
+  prev.tileIndex === next.tileIndex &&
+  prev.tile.id === next.tile.id &&
+  prev.tile.progress === next.tile.progress
+));

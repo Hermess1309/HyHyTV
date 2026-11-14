@@ -127,12 +127,19 @@ export function VideoPlayerOverlay() {
   const [centerIcon, setCenterIcon] = useState<'play' | 'pause' | 'fwd' | 'rwd' | null>(null);
 
   // TV Remote Focus Management
-  // Zones: 'controls' (bottom action buttons), 'scrubber' (progress bar), 'back' (top-left exit), 'drawer' (episodes), 'subtitle' (tracks)
-  const [focusZone, setFocusZone] = useState<PlayerFocusZone>('controls');
+  // Zones: 'scrubber' (progress bar / seeking), 'controls' (bottom action buttons), 'back' (top-left exit), 'drawer' (episodes), 'subtitle' (tracks)
+  const [focusZone, setFocusZone] = useState<PlayerFocusZone>('scrubber');
   // 0: Rewind 10s, 1: Prev Ep, 2: Play/Pause, 3: Next Ep (Chuyển tập), 4: Fwd 10s, 5: Episodes Drawer, 6: Subtitles
   const [focusedControlIndex, setFocusedControlIndex] = useState<number>(3); // Default to "Tập tiếp ⏭" or Play
   const [focusedDrawerIndex, setFocusedDrawerIndex] = useState<number>(0);
   const [focusedSubIndex, setFocusedSubIndex] = useState<number>(0);
+
+  // Seek thumbnail preview state (YouTube/Netflix style)
+  const [isScrubbing, setIsScrubbing] = useState(false);
+  const [scrubTime, setScrubTime] = useState(0);
+  const scrubCommitTimerRef = useRef<number | null>(null);
+  const previewVideoRef = useRef<HTMLVideoElement>(null);
+  const secondaryHlsRef = useRef<Hls | null>(null);
 
   // Auto-next episode countdown state (Netflix style)
   const [autoNextCountdown, setAutoNextCountdown] = useState<number | null>(null);
@@ -148,6 +155,39 @@ export function VideoPlayerOverlay() {
   const hlsUrl = player.embedUrl ? extractHlsUrl(player.embedUrl) : null;
   const hasPrev = currentIndex > 0 && episodesList.length > 1;
   const hasNext = currentIndex < episodesList.length - 1 && episodesList.length > 1;
+
+  // Setup secondary preview HLS stream for thumbnail seeking
+  useEffect(() => {
+    if (!player.open || !hlsUrl) return;
+    const prevVid = previewVideoRef.current;
+    if (!prevVid) return;
+
+    if (secondaryHlsRef.current) {
+      secondaryHlsRef.current.destroy();
+      secondaryHlsRef.current = null;
+    }
+
+    if (Hls.isSupported()) {
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: false,
+        backBufferLength: 30,
+        maxBufferLength: 10,
+      });
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(prevVid);
+      secondaryHlsRef.current = hls;
+    } else if (prevVid.canPlayType('application/vnd.apple.mpegurl')) {
+      prevVid.src = hlsUrl;
+    }
+
+    return () => {
+      if (secondaryHlsRef.current) {
+        secondaryHlsRef.current.destroy();
+        secondaryHlsRef.current = null;
+      }
+    };
+  }, [player.open, hlsUrl]);
 
   // Sync or fetch episodes if not already populated
   useEffect(() => {
@@ -375,13 +415,59 @@ export function VideoPlayerOverlay() {
     resetHideTimer();
   }, [resetHideTimer, triggerCenterIcon]);
 
-  const seekBy = useCallback((seconds: number) => {
+  const commitScrub = useCallback(() => {
+    if (scrubCommitTimerRef.current) {
+      clearTimeout(scrubCommitTimerRef.current);
+      scrubCommitTimerRef.current = null;
+    }
     const video = videoRef.current;
-    if (!video) return;
-    video.currentTime = Math.max(0, Math.min(video.duration || 0, video.currentTime + seconds));
-    triggerCenterIcon(seconds > 0 ? 'fwd' : 'rwd');
+    if (video) {
+      video.currentTime = scrubTime;
+      setCurrentTime(scrubTime);
+    }
+    setIsScrubbing(false);
     resetHideTimer();
-  }, [resetHideTimer, triggerCenterIcon]);
+  }, [scrubTime, resetHideTimer]);
+
+  const cancelScrub = useCallback(() => {
+    if (scrubCommitTimerRef.current) {
+      clearTimeout(scrubCommitTimerRef.current);
+      scrubCommitTimerRef.current = null;
+    }
+    setIsScrubbing(false);
+  }, []);
+
+  const updateScrub = useCallback((targetTime: number) => {
+    const video = videoRef.current;
+    const dur = duration || video?.duration || 0;
+    const clamped = Math.max(0, Math.min(dur, targetTime));
+    setScrubTime(clamped);
+    setIsScrubbing(true);
+    setControlsVisible(true);
+
+    if (previewVideoRef.current) {
+      try {
+        previewVideoRef.current.currentTime = clamped;
+      } catch {}
+    }
+
+    if (scrubCommitTimerRef.current) clearTimeout(scrubCommitTimerRef.current);
+    scrubCommitTimerRef.current = window.setTimeout(() => {
+      commitScrub();
+    }, 3000);
+  }, [duration, commitScrub]);
+
+  const handleScrubStep = useCallback((deltaSeconds: number) => {
+    const video = videoRef.current;
+    const baseTime = isScrubbing ? scrubTime : (video?.currentTime || 0);
+    setFocusZone('scrubber');
+    updateScrub(baseTime + deltaSeconds);
+    triggerCenterIcon(deltaSeconds > 0 ? 'fwd' : 'rwd');
+  }, [isScrubbing, scrubTime, updateScrub, triggerCenterIcon]);
+
+  const seekBy = useCallback((seconds: number) => {
+    handleScrubStep(seconds);
+  }, [handleScrubStep]);
 
   const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const bar = progressBarRef.current;
@@ -390,8 +476,18 @@ export function VideoPlayerOverlay() {
 
     const rect = bar.getBoundingClientRect();
     const pos = (e.clientX - rect.left) / rect.width;
-    video.currentTime = Math.max(0, Math.min(duration, pos * duration));
+    const target = Math.max(0, Math.min(duration, pos * duration));
+    updateScrub(target);
     resetHideTimer();
+  };
+
+  const handleProgressBarMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const bar = progressBarRef.current;
+    if (!bar || !duration) return;
+    const rect = bar.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    const target = Math.max(0, Math.min(duration, pos * duration));
+    updateScrub(target);
   };
 
   // Episode Navigation
@@ -481,6 +577,11 @@ export function VideoPlayerOverlay() {
         e.preventDefault();
         e.stopPropagation();
 
+        if (isScrubbing) {
+          cancelScrub();
+          return;
+        }
+
         if (autoNextCountdown !== null) {
           setAutoNextCountdown(null);
           setFocusZone('controls');
@@ -507,17 +608,19 @@ export function VideoPlayerOverlay() {
       // If controls are hidden, any arrow or enter wakes them up
       if (!controlsVisible && !drawerOpen && !subtitleModalOpen && autoNextCountdown === null) {
         setControlsVisible(true);
-        setFocusZone('controls');
         if (e.key === 'ArrowLeft' || e.keyCode === 37) {
           e.preventDefault();
-          seekBy(-10);
+          setFocusZone('scrubber');
+          handleScrubStep(-10);
           return;
         }
         if (e.key === 'ArrowRight' || e.keyCode === 39) {
           e.preventDefault();
-          seekBy(10);
+          setFocusZone('scrubber');
+          handleScrubStep(10);
           return;
         }
+        setFocusZone('controls');
         if (e.key === ' ' || e.key === 'Enter' || e.keyCode === 13) {
           e.preventDefault();
           togglePlay();
@@ -692,27 +795,33 @@ export function VideoPlayerOverlay() {
       if (focusZone === 'scrubber') {
         if (e.key === 'ArrowLeft' || e.keyCode === 37) {
           e.preventDefault();
-          seekBy(-10);
+          handleScrubStep(-10);
           return;
         }
         if (e.key === 'ArrowRight' || e.keyCode === 39) {
           e.preventDefault();
-          seekBy(10);
+          handleScrubStep(10);
           return;
         }
         if (e.key === 'ArrowDown' || e.keyCode === 40) {
           e.preventDefault();
+          if (isScrubbing) commitScrub();
           setFocusZone('controls');
           return;
         }
         if (e.key === 'ArrowUp' || e.keyCode === 38) {
           e.preventDefault();
+          if (isScrubbing) commitScrub();
           setFocusZone('back');
           return;
         }
         if (e.key === 'Enter' || e.key === ' ' || e.keyCode === 13) {
           e.preventDefault();
-          togglePlay();
+          if (isScrubbing) {
+            commitScrub();
+          } else {
+            togglePlay();
+          }
           return;
         }
       }
@@ -749,6 +858,10 @@ export function VideoPlayerOverlay() {
     episodesList,
     togglePlay,
     seekBy,
+    handleScrubStep,
+    commitScrub,
+    cancelScrub,
+    isScrubbing,
     handleNextEpisode,
     handlePrevEpisode,
     playEpisodeAt,
@@ -758,9 +871,10 @@ export function VideoPlayerOverlay() {
 
   if (!player.open || !player.embedUrl) return null;
 
-  const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
+  const displayTime = isScrubbing ? scrubTime : currentTime;
+  const progressPercent = duration > 0 ? (displayTime / duration) * 100 : 0;
   const bufferedPercent = duration > 0 ? (buffered / duration) * 100 : 0;
-  const remainingTime = duration > currentTime ? duration - currentTime : 0;
+  const remainingTime = duration > displayTime ? duration - displayTime : 0;
 
   const overlayContainerStyle: CSSProperties = {
     position: 'fixed',
@@ -981,6 +1095,8 @@ export function VideoPlayerOverlay() {
       <div style={topBarStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
           <button
+            tabIndex={-1}
+            onFocus={(e) => e.currentTarget.blur()}
             style={{
               background: focusZone === 'back' ? '#ffffff' : 'rgba(255,255,255,0.18)',
               border: focusZone === 'back' ? '2px solid #ffffff' : 'none',
@@ -1048,10 +1164,10 @@ export function VideoPlayerOverlay() {
       {/* 5. Bottom Netflix Hub Controls */}
       <div style={bottomBarStyle}>
         {/* Scrubber Bar Row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, position: 'relative' }}>
           {/* Current elapsed time */}
           <span style={{ color: '#eee', fontSize: 14, fontWeight: 700, minWidth: 48, textAlign: 'right', fontFamily: theme.typography.fontFamily }}>
-            {formatTime(currentTime)}
+            {formatTime(displayTime)}
           </span>
 
           {/* Progress Bar (Scrubber) */}
@@ -1069,7 +1185,106 @@ export function VideoPlayerOverlay() {
               boxShadow: focusZone === 'scrubber' ? '0 0 12px rgba(229,9,20,0.8)' : 'none',
             }}
             onClick={handleProgressBarClick}
+            onMouseMove={handleProgressBarMouseMove}
           >
+            {/* Floating Seek Thumbnail Preview (Matches User's Photo / YouTube TV / Netflix) */}
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 24,
+                left: `${Math.max(6, Math.min(94, progressPercent))}%`,
+                transform: 'translateX(-50%)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 6,
+                pointerEvents: 'none',
+                zIndex: 200,
+                opacity: isScrubbing ? 1 : 0,
+                visibility: isScrubbing ? 'visible' : 'hidden',
+                transition: 'opacity 0.15s ease, transform 0.15s ease',
+              }}
+            >
+              {/* Mini Video Screen (Màn hình nhỏ xem trước khi tua) */}
+              <div
+                style={{
+                  width: 178,
+                  height: 100,
+                  borderRadius: 8,
+                  overflow: 'hidden',
+                  background: '#0a0a0a',
+                  border: '2.5px solid #ffffff',
+                  boxShadow: '0 8px 28px rgba(0,0,0,0.9), 0 0 16px rgba(229,9,20,0.5)',
+                  position: 'relative',
+                }}
+              >
+                {/* Backdrop / poster fallback */}
+                <img
+                  src={player.backdropPath || player.posterPath}
+                  alt=""
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    opacity: 0.85,
+                    filter: 'brightness(0.95)',
+                  }}
+                />
+                {/* Secondary preview video syncing to scrubTime */}
+                <video
+                  ref={previewVideoRef}
+                  muted
+                  playsInline
+                  preload="auto"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+                {/* Bottom time badge */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 4,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(0, 0, 0, 0.85)',
+                    color: '#fff',
+                    padding: '2px 8px',
+                    borderRadius: 4,
+                    fontSize: 12,
+                    fontWeight: 800,
+                    letterSpacing: 0.5,
+                    fontFamily: theme.typography.fontFamily,
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                  }}
+                >
+                  {formatTime(scrubTime)}
+                </div>
+              </div>
+
+              {/* Hint pill matching user's photo caption */}
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: 'rgba(255, 255, 255, 0.95)',
+                  background: 'rgba(20, 20, 20, 0.85)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  padding: '3px 10px',
+                  borderRadius: 12,
+                  whiteSpace: 'nowrap',
+                  fontFamily: theme.typography.fontFamily,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.7)',
+                }}
+              >
+                Bấm [OK] để phát từ đây
+              </div>
+            </div>
+
             {/* Buffered bar */}
             <div style={{
               position: 'absolute',
@@ -1117,6 +1332,8 @@ export function VideoPlayerOverlay() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             {/* 0: Rewind 10s */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={getBtnStyle(0)}
               onClick={() => seekBy(-10)}
               title="Tua lại 10s (Mũi tên Trái)"
@@ -1126,6 +1343,8 @@ export function VideoPlayerOverlay() {
 
             {/* 1: Prev Episode */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={getBtnStyle(1, false, !hasPrev)}
               disabled={!hasPrev}
               onClick={handlePrevEpisode}
@@ -1136,6 +1355,8 @@ export function VideoPlayerOverlay() {
 
             {/* 2: Center Play / Pause Button (Prominent 54px circle) */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={{
                 width: 54,
                 height: 54,
@@ -1170,6 +1391,8 @@ export function VideoPlayerOverlay() {
 
             {/* 3: NEXT EPISODE BUTTON (Nút Chuyển Tập - Prominent Netflix Button) */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={{
                 ...getBtnStyle(3, true, !hasNext),
                 padding: '10px 20px',
@@ -1184,6 +1407,8 @@ export function VideoPlayerOverlay() {
 
             {/* 4: Forward 10s */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={getBtnStyle(4)}
               onClick={() => seekBy(10)}
               title="Tua tới 10s (Mũi tên Phải)"
@@ -1196,6 +1421,8 @@ export function VideoPlayerOverlay() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {/* 5: Episodes Drawer Button */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={getBtnStyle(5)}
               onClick={() => {
                 setDrawerOpen((prev) => !prev);
@@ -1209,6 +1436,8 @@ export function VideoPlayerOverlay() {
 
             {/* 6: Audio & Subtitles button */}
             <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
               style={getBtnStyle(6)}
               onClick={() => {
                 setSubtitleModalOpen((prev) => !prev);

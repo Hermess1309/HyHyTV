@@ -13,13 +13,14 @@ export const rowStyles = createStyles({
     marginBottom: -40,
   },
 
-  // Hardware compositor accelerated 3D transform
+  // Hardware compositor accelerated 3D transform with 60 FPS GPU transition
   tilesWrapper: (scrollOffset: number) => ({
     display: 'flex' as const,
     gap: theme.spacing.tileGap,
     paddingLeft: theme.spacing.edgePadding,
     paddingRight: theme.spacing.edgePadding,
     transform: `translate3d(-${scrollOffset}px, 0, 0)`,
+    transition: 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
     willChange: 'transform' as const,
   }),
 

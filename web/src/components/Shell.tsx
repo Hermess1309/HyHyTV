@@ -13,8 +13,6 @@ import { MyListPage } from './MyListPage';
 import { SettingsPage } from './settings/SettingsPage';
 import { PerformanceHUD } from './PerformanceHUD';
 import { WelcomeModal } from './WelcomeModal';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { easeOutQuint } from '../engine/easing';
 import { useResponsive } from '../hooks/useResponsive';
 import { ROW_BUFFER } from '../utils/constants';
 import { useIsTvMode } from '../hooks/useMode';
@@ -47,54 +45,11 @@ export function Shell() {
     }
   }, [isMyList, settings.disableMyList, dispatch]);
 
-  // ScrollEngine-driven vertical scroll (TV mode only)
-  const contentScroll = useScrollAnimation('vertical-content', 0);
-  const searchScroll = useScrollAnimation('vertical-search', 0);
-
-  useEffect(() => {
-    if (!isSearch && shellRef.current) {
-      shellRef.current.scrollTop = 0;
-    }
-  }, [isSearch]);
-
-  // --- Vertical virtualization: deferred unmount (TV mode) ---
-  const prevRangeRef = useRef<{ start: number; end: number }>({ start: 0, end: ROW_BUFFER + 2 });
-  const [deferredRange, setDeferredRange] = useState<{ start: number; end: number } | null>(null);
-
-  const anchorRow = (!isSearch && !isMyList && (heroFocused || navFocused)) ? 0 : focus.rowIndex;
-  useEffect(() => {
-    if (!isTv || isSearch || isMyList) return;
-    const newStart = Math.max(0, anchorRow - ROW_BUFFER);
-    const newEnd = Math.min(rows.length - 1, anchorRow + ROW_BUFFER + ((heroFocused || navFocused) ? 2 : 0));
-    const prev = prevRangeRef.current;
-
-    if (newStart !== prev.start || newEnd !== prev.end) {
-      setDeferredRange(prev);
-      prevRangeRef.current = { start: newStart, end: newEnd };
-    }
-  }, [anchorRow, heroFocused, navFocused, rows.length, isSearch, isMyList, isTv]);
-
   // Vertical scroll offset (TV mode only)
   const rowHeight = theme.tile.height + 40 + theme.spacing.rowGap;
-  let targetOffset = 0;
-
-  if (isTv) {
-    if (!isSearch && !isMyList && !heroFocused && focus.rowIndex >= 0) {
-      targetOffset = Math.max(0, focus.rowIndex) * rowHeight;
-    }
-  }
-
-  const prevTargetRef = useRef(targetOffset);
-  useEffect(() => {
-    if (!isTv) return;
-    if (prevTargetRef.current !== targetOffset) {
-      prevTargetRef.current = targetOffset;
-      const scroll = isSearch ? searchScroll : contentScroll;
-      scroll.animate(targetOffset, 450, easeOutQuint, () => {
-        setDeferredRange(null);
-      });
-    }
-  }, [targetOffset, isSearch, contentScroll, searchScroll, isTv]);
+  const targetOffset = (isTv && !isSearch && !isMyList && !heroFocused && focus.rowIndex >= 0)
+    ? Math.max(0, focus.rowIndex) * rowHeight
+    : 0;
 
   const [webScrolled, setWebScrolled] = useState(false);
   useEffect(() => {
@@ -106,7 +61,7 @@ export function Shell() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isTv]);
 
-  const isScrolledTv = !navFocused && !heroFocused && (focus.rowIndex > 0 || Math.abs(contentScroll.value) > 20);
+  const isScrolledTv = !navFocused && !heroFocused && focus.rowIndex > 0;
   const isScrolled = isTv ? isScrolledTv : webScrolled;
 
   // --- Web mode: simple layout ---
@@ -171,14 +126,12 @@ export function Shell() {
               <div style={{ height: HERO_SLOT_HEIGHT, overflow: 'hidden', flexShrink: 0 }}>
                 <HeroBanner />
               </div>
-              <div style={shellStyles.scrollContainer(contentScroll.value)}>
+              <div style={shellStyles.scrollContainer(targetOffset)}>
                 <div style={shellStyles.rowsContainer(rows.length * rowHeight)}>
                   {(() => {
                     const anchorRow = (heroFocused || navFocused) ? 0 : focus.rowIndex;
-                    const newStart = Math.max(0, anchorRow - ROW_BUFFER);
-                    const newEnd = Math.min(rows.length - 1, anchorRow + ROW_BUFFER + ((heroFocused || navFocused) ? 2 : 0));
-                    const startRow = deferredRange ? Math.min(newStart, deferredRange.start) : newStart;
-                    const endRow = deferredRange ? Math.max(newEnd, deferredRange.end) : newEnd;
+                    const startRow = Math.max(0, anchorRow - ROW_BUFFER);
+                    const endRow = Math.min(rows.length - 1, anchorRow + ROW_BUFFER + ((heroFocused || navFocused) ? 2 : 0));
 
                     return rows.slice(startRow, endRow + 1).map((row, i) => {
                       const idx = startRow + i;

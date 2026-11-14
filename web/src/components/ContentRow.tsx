@@ -5,9 +5,6 @@ import { rowStyles } from '../styles/componentStyles/rowStyles';
 import { ContentTile } from './ContentTile';
 import { RowTitle } from './RowTitle';
 import type { RootState } from '../state/store';
-import { selectLastNavAction } from '../state/selectors';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { easeOutQuart } from '../engine/easing';
 import { TILE_BUFFER, VISIBLE_TILES, TILE_STEP } from '../utils/constants';
 import { useIsTvMode } from '../hooks/useMode';
 import { useResponsive } from '../hooks/useResponsive';
@@ -29,34 +26,12 @@ export const ContentRow = memo(function ContentRow({
   const activeTileIndex = useSelector((state: RootState) => {
     return state.focus.rowIndex === rowIndex ? state.focus.tileIndex : -1;
   });
-  const lastNavAction = useSelector(selectLastNavAction);
   const isTv = useIsTvMode();
   const { isMobile } = useResponsive();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   // Both default to false; useLayoutEffect computes the truth from DOM on mount.
   const [showLeftChevron, setShowLeftChevron] = useState(false);
   const [showRightChevron, setShowRightChevron] = useState(false);
-
-  // ScrollEngine-driven horizontal scroll (TV mode)
-  const scroll = useScrollAnimation(`row-${rowIndex}-scroll`, 0);
-  const lastTileIndexRef = useRef(0);
-  const targetOffsetRef = useRef(0);
-  const prevTargetRef = useRef(0);
-
-  if (isTv && isRowFocused) {
-    const currTile = activeTileIndex >= 0 ? activeTileIndex : 0;
-    const isHorizontalMove = lastNavAction === 'LEFT' || lastNavAction === 'RIGHT';
-
-    if (isHorizontalMove && currTile !== lastTileIndexRef.current) {
-      prevTargetRef.current = targetOffsetRef.current;
-      const newTarget = Math.max(0, currTile - 1) * (theme.tile.width + theme.spacing.tileGap);
-      targetOffsetRef.current = newTarget;
-      scroll.animate(newTarget, 350, easeOutQuart, () => {
-        prevTargetRef.current = targetOffsetRef.current;
-      });
-    }
-    lastTileIndexRef.current = currTile;
-  }
 
   // Web mode: chevron scroll
   const scrollBy = (direction: 'left' | 'right') => {
@@ -144,8 +119,9 @@ export const ContentRow = memo(function ContentRow({
     );
   }
 
-  // TV mode: engine-driven horizontal scroll with virtualization
-  const scrollOffset = scroll.value;
+  // TV mode: GPU-accelerated horizontal scroll with CSS transform
+  const currTile = isRowFocused && activeTileIndex >= 0 ? activeTileIndex : 0;
+  const targetOffset = Math.max(0, currTile - 1) * (theme.tile.width + theme.spacing.tileGap);
   const tileCount = row.tiles.length;
   const minTilesForVirtualization = VISIBLE_TILES + TILE_BUFFER * 2 + 2;
   const shouldVirtualize = tileCount > minTilesForVirtualization;
@@ -154,10 +130,8 @@ export const ContentRow = memo(function ContentRow({
   let endTile = tileCount - 1;
 
   if (shouldVirtualize) {
-    const minOffset = Math.min(prevTargetRef.current, targetOffsetRef.current);
-    const maxOffset = Math.max(prevTargetRef.current, targetOffsetRef.current);
-    startTile = Math.max(0, Math.floor(minOffset / TILE_STEP) - TILE_BUFFER);
-    endTile = Math.min(tileCount - 1, Math.ceil((maxOffset + window.innerWidth) / TILE_STEP) + TILE_BUFFER);
+    startTile = Math.max(0, Math.floor(targetOffset / TILE_STEP) - TILE_BUFFER);
+    endTile = Math.min(tileCount - 1, Math.ceil((targetOffset + window.innerWidth) / TILE_STEP) + TILE_BUFFER);
     if (isRowFocused && activeTileIndex >= 0) {
       startTile = Math.min(startTile, activeTileIndex);
       endTile = Math.max(endTile, activeTileIndex);
@@ -171,7 +145,7 @@ export const ContentRow = memo(function ContentRow({
     <div style={rowStyles.container} role="row" aria-label={row.title}>
       <RowTitle title={row.title} isRowFocused={isRowFocused} />
       <div style={rowStyles.overflowWrapper}>
-        <div style={rowStyles.tilesWrapper(scrollOffset)}>
+        <div style={rowStyles.tilesWrapper(targetOffset)}>
           {leftSpacer > 0 && <div style={rowStyles.leftSpacer(leftSpacer)} />}
           {visibleTiles.map((tile, i) => {
             const tileIndex = startTile + i;

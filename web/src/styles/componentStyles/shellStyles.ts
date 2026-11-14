@@ -37,9 +37,10 @@ export const shellStyles = createStyles({
     paddingBottom: 80,
   },
 
-  // TV mode scroll — hardware compositor accelerated
+  // TV mode scroll — hardware compositor accelerated with 60 FPS GPU transition
   scrollContainer: (offset: number) => ({
     transform: `translate3d(0, -${offset}px, 0)`,
+    transition: 'transform 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
     willChange: 'transform' as const,
   }),
 
