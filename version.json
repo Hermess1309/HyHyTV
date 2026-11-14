@@ -1,7 +1,7 @@
 {
-  "versionCode": 6,
-  "versionName": "1.3.2",
+  "versionCode": 7,
+  "versionName": "1.3.3",
   "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
-  "changelog": "Cập nhật tính năng Màn hình nhỏ xem trước khi tua video (Seek Thumbnail Preview chuẩn YouTube/Netflix TV) và tối ưu hóa 60 FPS phần cứng: loại bỏ triệt để giật lag khi chuyển qua lại giữa các phim bằng Pure CSS GPU Compositor.",
+  "changelog": "Tối ưu hóa toàn diện Video Player theo chuẩn Netflix TV: loại bỏ hoàn toàn giật lag hub điều khiển, khung xem trước khi tua hiển thị hình ảnh phim sắc nét (không còn màn đen), và giao diện điều khiển chuẩn Netflix TV.",
   "forceUpdate": false
 }
