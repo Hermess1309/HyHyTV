@@ -330,21 +330,36 @@ export async function fetchUnifiedPageContentProgressive(
     console.warn(`Error fetching first shelf for ${pageId}`, err);
   }
 
-  // Progressively fetch remaining shelves in background
+  // Fetch remaining shelves concurrently in one clean batch to eliminate 10 consecutive re-renders
   const remaining = configs.slice(1);
-  for (let i = 0; i < remaining.length; i++) {
-    try {
-      const row = await fetchUnifiedRow(remaining[i], i + 1);
-      if (row) {
-        currentRows.push(row);
-        onUpdate([...currentRows]);
+  try {
+    const results = await Promise.allSettled(
+      remaining.map((cfg, idx) => fetchUnifiedRow(cfg, idx + 1))
+    );
+    for (const res of results) {
+      if (res.status === 'fulfilled' && res.value) {
+        currentRows.push(res.value);
       }
-    } catch {
-      // Continue next row
     }
+    onUpdate([...currentRows]);
+  } catch {
+    // Keep already loaded rows
   }
 
   return currentRows;
+}
+
+export const unifiedSeasonsCache = new Map<string, SeasonSummary[]>();
+export const unifiedEpisodesCache = new Map<string, any[]>();
+
+export function getCachedUnifiedSeasons(slug?: string): SeasonSummary[] {
+  if (!slug) return [];
+  return unifiedSeasonsCache.get(slug) || [];
+}
+
+export function getCachedUnifiedEpisodes(slug?: string, seasonIdx = 0): any[] {
+  if (!slug) return [];
+  return unifiedEpisodesCache.get(`${slug}_${seasonIdx}`) || [];
 }
 
 export async function fetchUnifiedHomeContentProgressive(
@@ -390,12 +405,14 @@ export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]
   try {
     const detail = await fetchKkphimDetail(slug);
     if (detail && detail.episodes && detail.episodes.length > 0) {
-      return detail.episodes.map((s, idx) => ({
+      const mapped = detail.episodes.map((s, idx) => ({
         seasonNumber: idx + 1,
         name: s.server_name || `Server ${idx + 1}`,
         episodeCount: s.server_data.length,
         posterPath: null,
       }));
+      unifiedSeasonsCache.set(slug, mapped);
+      return mapped;
     }
   } catch {
     // fallback
@@ -403,7 +420,10 @@ export async function fetchUnifiedSeasons(slug: string): Promise<SeasonSummary[]
 
   try {
     const vsmovSeasons = await fetchVsmovSeasons(slug);
-    if (vsmovSeasons && vsmovSeasons.length > 0) return vsmovSeasons;
+    if (vsmovSeasons && vsmovSeasons.length > 0) {
+      unifiedSeasonsCache.set(slug, vsmovSeasons);
+      return vsmovSeasons;
+    }
   } catch {
     // fallback
   }
@@ -416,6 +436,7 @@ export async function fetchUnifiedEpisodes(slug: string, seasonIdx = 0): Promise
   try {
     const kkEps = await fetchKkphimEpisodes(slug, seasonIdx);
     if (kkEps && kkEps.length > 0) {
+      unifiedEpisodesCache.set(`${slug}_${seasonIdx}`, kkEps);
       return kkEps;
     }
   } catch {
@@ -426,6 +447,7 @@ export async function fetchUnifiedEpisodes(slug: string, seasonIdx = 0): Promise
   try {
     const vsmovEps = await fetchVsmovEpisodes(slug, seasonIdx);
     if (vsmovEps && vsmovEps.length > 0) {
+      unifiedEpisodesCache.set(`${slug}_${seasonIdx}`, vsmovEps);
       return vsmovEps;
     }
   } catch {

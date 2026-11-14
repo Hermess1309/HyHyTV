@@ -74,10 +74,10 @@ export function EpisodeBrowser({
   useLayoutEffect(() => {
     if (!isTv) return;
     if (focusedZone === 'episodes' && focusedEpisodeRef.current) {
-      focusedEpisodeRef.current.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      focusedEpisodeRef.current.scrollIntoView({ block: 'center', behavior: 'smooth' });
     } else if (focusedZone === 'seasons') {
-      seasonTabsRef.current?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
-      focusedSeasonTabRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
+      seasonTabsRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      focusedSeasonTabRef.current?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
     }
   }, [isTv, focusedZone, focusedEpisode, focusedSeason]);
 

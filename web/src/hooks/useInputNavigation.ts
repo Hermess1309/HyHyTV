@@ -46,7 +46,12 @@ import {
 import { DETAIL_BUTTON_COUNT, HERO_BUTTON_COUNT, KEYBOARD_GRID, KEYBOARD_COLS } from '../utils/constants';
 import { NAV_ITEMS } from '../data/pageConfigs';
 import { searchVsmov } from '../data/vsmov';
-import { fetchUnifiedEpisodes, fetchUnifiedPageContentProgressive } from '../data/movieService';
+import {
+  fetchUnifiedEpisodes,
+  fetchUnifiedPageContentProgressive,
+  getCachedUnifiedSeasons,
+  getCachedUnifiedEpisodes,
+} from '../data/movieService';
 import { getCachedSeasons, getCachedEpisodes } from '../data/tmdb';
 import type { PageId } from '../state/slices/uiSlice';
 
@@ -248,33 +253,26 @@ export function useInputNavigation() {
           if (navItem.id === 'search') {
             dispatch(setSearchResults([]));
             dispatch(clearSearchQuery());
-          }
-          dispatch(setNavFocused(false));
-          dispatch(setHeroFocused(false));
-
-          // Content pages: land on hero. Other pages: land on row 0.
-          const isContentPage = navItem.id !== 'search' && navItem.id !== 'myList';
-          if (isContentPage) {
-            dispatch(setHeroFocused(true));
-            // Keep engine at row 0 so DOWN from hero moves to row 0
-            engine.setPosition({ rowIndex: 0, tileIndex: 0 });
-          } else {
-            dispatch(setFocus({ rowIndex: 0, tileIndex: 0 }));
-            engine.setPosition({ rowIndex: 0, tileIndex: 0 });
-          }
-
-          if (navItem.id === 'search') {
-            input.setRawKeyCallback(null);
-          } else if (navItem.id === 'myList') {
-            engine.setRows(buildMyListRows(), true);
-            engine.setRowMemoryEnabled(true);
+            dispatch(setNavFocused(false));
+            dispatch(setHeroFocused(false));
             input.setRawKeyCallback(null);
           } else {
-            // Read row shape directly from the store (never from render-stale refs)
-            // so the engine has correct row counts immediately after page switch.
-            engine.setRows(buildContentRowsForPage(navItem.id), true);
-            engine.setRowMemoryEnabled(true);
-            input.setRawKeyCallback(null);
+            // Keep focus on the selected navbar tab!
+            // The user stays on the navbar and can press Down when ready to browse content.
+            dispatch(setNavFocused(true));
+            dispatch(setNavIndex(pos.tileIndex));
+            dispatch(setHeroFocused(false));
+            engine.setPosition({ rowIndex: -1, tileIndex: pos.tileIndex });
+
+            if (navItem.id === 'myList') {
+              engine.setRows(buildMyListRows(), true);
+              engine.setRowMemoryEnabled(true);
+              input.setRawKeyCallback(null);
+            } else {
+              engine.setRows(buildContentRowsForPage(navItem.id), true);
+              engine.setRowMemoryEnabled(true);
+              input.setRawKeyCallback(null);
+            }
           }
         }
         return;
@@ -364,13 +362,24 @@ export function useInputNavigation() {
       if (ov.open) {
         const isTvShow = ov.tile?.mediaType === 'tv';
         const tvId = ov.tile?.tmdbId;
-        const seasons = isTvShow && tvId ? getCachedSeasons(tvId) : [];
-        const episodes = isTvShow && tvId ? getCachedEpisodes(tvId, seasons[ov.seasonIndex]?.seasonNumber ?? 1) : [];
+        const slug = ov.tile?.slug;
+
+        const unifiedSeasons = slug ? getCachedUnifiedSeasons(slug) : [];
+        const seasons = unifiedSeasons.length > 0
+          ? unifiedSeasons
+          : (isTvShow && tvId ? getCachedSeasons(tvId) : []);
+
+        const unifiedEps = slug ? getCachedUnifiedEpisodes(slug, ov.seasonIndex) : [];
+        const episodes = unifiedEps.length > 0
+          ? unifiedEps
+          : (isTvShow && tvId ? getCachedEpisodes(tvId, seasons[ov.seasonIndex]?.seasonNumber ?? 1) : []);
+
         const hasSeasons = seasons.length > 0;
         const hasEpisodes = episodes.length > 0;
 
         if (action === 'BACK') {
-          dispatch(closeDetail()); dispatch(setTrailerPaused(false));
+          dispatch(closeDetail());
+          dispatch(setTrailerPaused(false));
           return;
         }
 
@@ -380,8 +389,15 @@ export function useInputNavigation() {
             dispatch(setDetailButtonIndex(Math.max(0, ov.buttonIndex - 1)));
           } else if (action === 'RIGHT') {
             dispatch(setDetailButtonIndex(Math.min(DETAIL_BUTTON_COUNT - 1, ov.buttonIndex + 1)));
-          } else if (action === 'DOWN' && hasSeasons) {
-            dispatch(setDetailZone('seasons'));
+          } else if (action === 'DOWN') {
+            // Scroll down into seasons or episodes!
+            if (hasSeasons && seasons.length > 1) {
+              dispatch(setDetailZone('seasons'));
+              dispatch(setDetailSeasonIndex(0));
+            } else if (hasEpisodes || slug) {
+              dispatch(setDetailZone('episodes'));
+              dispatch(setDetailEpisodeIndex(0));
+            }
           } else if (action === 'SELECT') {
             if (ov.buttonIndex === 0 && ov.tile?.slug) {
               fetchUnifiedEpisodes(ov.tile.slug, 0).then((eps) => {
@@ -412,13 +428,10 @@ export function useInputNavigation() {
           if (action === 'LEFT') {
             dispatch(setDetailSeasonIndex(Math.max(0, ov.seasonIndex - 1)));
           } else if (action === 'RIGHT') {
-            dispatch(setDetailSeasonIndex(Math.min(seasons.length - 1, ov.seasonIndex + 1)));
+            dispatch(setDetailSeasonIndex(Math.min(Math.max(0, seasons.length - 1), ov.seasonIndex + 1)));
           } else if (action === 'UP') {
             dispatch(setDetailZone('buttons'));
-          } else if (action === 'DOWN' && hasEpisodes) {
-            dispatch(setDetailZone('episodes'));
-            dispatch(setDetailEpisodeIndex(0));
-          } else if (action === 'SELECT' && hasEpisodes) {
+          } else if (action === 'DOWN' || action === 'SELECT') {
             dispatch(setDetailZone('episodes'));
             dispatch(setDetailEpisodeIndex(0));
           }
@@ -428,22 +441,40 @@ export function useInputNavigation() {
         // --- ZONE: EPISODES (vertical list) ---
         if (ov.zone === 'episodes') {
           if (action === 'UP') {
-            if (ov.episodeIndex === 0) {
-              dispatch(setDetailZone('seasons'));
+            if (ov.episodeIndex <= 0) {
+              if (hasSeasons && seasons.length > 1) {
+                dispatch(setDetailZone('seasons'));
+              } else {
+                dispatch(setDetailZone('buttons'));
+              }
             } else {
               dispatch(setDetailEpisodeIndex(ov.episodeIndex - 1));
             }
           } else if (action === 'DOWN') {
-            dispatch(setDetailEpisodeIndex(Math.min(episodes.length - 1, ov.episodeIndex + 1)));
+            const maxIdx = Math.max(0, episodes.length > 0 ? episodes.length - 1 : 100);
+            dispatch(setDetailEpisodeIndex(Math.min(maxIdx, ov.episodeIndex + 1)));
           } else if (action === 'SELECT') {
-            if (ov.tile?.slug) {
+            const ep = episodes[ov.episodeIndex];
+            if (ep && ep.linkEmbed) {
+              dispatch(openPlayer({
+                embedUrl: ep.linkEmbed,
+                title: ov.tile!.title,
+                episodeName: ep.name,
+                slug: ov.tile!.slug,
+                currentEpisodeIndex: ov.episodeIndex,
+                currentSeasonIndex: ov.seasonIndex,
+                episodes: episodes.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+                posterPath: ov.tile!.posterPath || ov.tile!.backdropPath,
+                backdropPath: ov.tile!.backdropPath || ov.tile!.posterPath,
+              }));
+            } else if (ov.tile?.slug) {
               fetchUnifiedEpisodes(ov.tile.slug, ov.seasonIndex).then((eps) => {
-                const ep = eps[ov.episodeIndex];
-                if (ep && ep.linkEmbed) {
+                const targetEp = eps[ov.episodeIndex] || eps[0];
+                if (targetEp && targetEp.linkEmbed) {
                   dispatch(openPlayer({
-                    embedUrl: ep.linkEmbed,
+                    embedUrl: targetEp.linkEmbed,
                     title: ov.tile!.title,
-                    episodeName: ep.name,
+                    episodeName: targetEp.name,
                     slug: ov.tile!.slug,
                     currentEpisodeIndex: ov.episodeIndex,
                     currentSeasonIndex: ov.seasonIndex,

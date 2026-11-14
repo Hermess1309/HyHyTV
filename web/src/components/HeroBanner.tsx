@@ -6,7 +6,7 @@ import { getTmdbBackdropUrl, getTmdbLogoUrl, fetchTrailerKey } from '../data/tmd
 import { heroStyles } from '../styles/componentStyles/heroStyles';
 import {
   selectFocus, selectRows, selectTrailerMuted, selectTrailerPaused,
-  selectHeroFocused, selectHeroButtonIndex, selectTileTrailerPlaying, selectNavFocused,
+  selectHeroFocused, selectHeroButtonIndex, selectNavFocused,
 } from '../state/selectors';
 import { setActiveTrailer } from '../state/slices/trailerSlice';
 import { openDetail, openPlayer } from '../state/slices/uiSlice';
@@ -31,7 +31,6 @@ export const HeroBanner = memo(function HeroBanner() {
   const trailerPaused = useSelector(selectTrailerPaused);
   const heroFocused = useSelector(selectHeroFocused);
   const heroButtonIndex = useSelector(selectHeroButtonIndex);
-  const tileTrailerPlaying = useSelector(selectTileTrailerPlaying);
   const navFocused = useSelector(selectNavFocused);
   const firstTile = rows[0]?.tiles[0];
 
@@ -57,12 +56,9 @@ export const HeroBanner = memo(function HeroBanner() {
   }, [firstTile?.slug]);
 
   // Should the hero trailer be active?
-  // TV: when hero is focused. Web: autoplay after delay.
-  // Disabled entirely if user opted out of autoplay in settings.
+  // On Android TV mode, background YouTube iframe trailer is disabled to eliminate lag, GPU stalls and 100% CPU spikes.
   const autoplayAllowed = !settings.disableAutoplay;
-  const shouldPlayTrailer = autoplayAllowed && (isTv
-    ? (heroFocused && !tileTrailerPlaying && !trailerPaused)
-    : !trailerPaused);
+  const shouldPlayTrailer = !isTv && autoplayAllowed && !trailerPaused;
 
   // Fetch trailer key when hero becomes focused (with delay)
   useEffect(() => {

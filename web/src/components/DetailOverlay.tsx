@@ -8,7 +8,7 @@ import { setTrailerPaused, toggleTrailerMute } from '../state/slices/trailerSlic
 import { getTileImageUrl } from '../data/mockContent';
 import { getTmdbBackdropUrl, getTmdbLogoUrl } from '../data/tmdb';
 import { fetchTrailerKey, fetchTvSeasons, fetchEpisodes } from '../data/tmdb';
-import { fetchUnifiedEpisodes, fetchUnifiedDetail } from '../data/movieService';
+import { fetchUnifiedEpisodes, fetchUnifiedDetail, fetchUnifiedSeasons } from '../data/movieService';
 import { overlayStyles } from '../styles/componentStyles/overlayStyles';
 import { mergeStyles } from '../styles/styleEngine';
 import { YouTubePlayer } from './YouTubePlayer';
@@ -84,19 +84,23 @@ export const DetailOverlay = memo(function DetailOverlay() {
     return () => { cancelled = true; };
   }, [open, tile?.tmdbId, tile?.mediaType, settings.disableAutoplay]);
 
-  // Pre-warm season + first season's episode caches when opening a TV show overlay,
-  // so the input navigation handler can synchronously read counts and switch zones.
+  // Pre-warm season/server and episode caches when opening overlay
   useEffect(() => {
-    if (!open || !tile?.tmdbId || tile.mediaType !== 'tv') return;
+    if (!open || !tile) return;
     let cancelled = false;
-    const tvId = tile.tmdbId;
-    fetchTvSeasons(tvId).then((seasons) => {
-      if (cancelled || seasons.length === 0) return;
-      // Also pre-fetch the first season's episodes
-      fetchEpisodes(tvId, seasons[0].seasonNumber);
-    });
+    if (tile.slug) {
+      fetchUnifiedSeasons(tile.slug).then(() => {
+        if (!cancelled && tile.slug) fetchUnifiedEpisodes(tile.slug, 0);
+      });
+    } else if (tile.tmdbId && tile.mediaType === 'tv') {
+      const tvId = tile.tmdbId;
+      fetchTvSeasons(tvId).then((seasons) => {
+        if (cancelled || seasons.length === 0) return;
+        fetchEpisodes(tvId, seasons[0].seasonNumber);
+      });
+    }
     return () => { cancelled = true; };
-  }, [open, tile?.tmdbId, tile?.mediaType]);
+  }, [open, tile?.slug, tile?.tmdbId, tile?.mediaType]);
 
   const handleClose = useCallback(() => {
     dispatch(closeDetail());

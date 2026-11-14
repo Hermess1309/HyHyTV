@@ -539,6 +539,12 @@ export const SearchPage = memo(function SearchPage() {
                   alt={tile.title}
                   loading="lazy"
                   decoding="async"
+                  onError={(e) => {
+                    const fallback = tile.backdropPath || '';
+                    if (fallback && e.currentTarget.src !== fallback) {
+                      e.currentTarget.src = fallback;
+                    }
+                  }}
                   style={{
                     width: '100%',
                     height: '100%',

@@ -91,12 +91,26 @@ class MainActivity : ComponentActivity() {
                     request: WebResourceRequest
                 ): WebResourceResponse? {
                     val urlString = request.url.toString()
+
+                    // Never intercept images, fonts, or media assets - let Chromium load them directly with HW acceleration & disk cache
+                    val isImage = urlString.endsWith(".jpg", ignoreCase = true) ||
+                                  urlString.endsWith(".jpeg", ignoreCase = true) ||
+                                  urlString.endsWith(".png", ignoreCase = true) ||
+                                  urlString.endsWith(".webp", ignoreCase = true) ||
+                                  urlString.endsWith(".gif", ignoreCase = true) ||
+                                  urlString.endsWith(".svg", ignoreCase = true) ||
+                                  urlString.contains("phimimg.com") ||
+                                  urlString.contains("/upload/vod/") ||
+                                  urlString.contains("/uploads/movies/")
+                    if (isImage) {
+                        return null
+                    }
+
                     // Proxy VSMOV stream, KKPhim stream & API, GitHub updates, and Catbox requests to attach clean CORS headers
                     if (urlString.contains("streamvsmov.com") || urlString.contains("vsmov.com") ||
                         urlString.contains("catbox.moe") || urlString.contains("phimapi.com") ||
-                        urlString.contains("kkphim") || urlString.contains("phimimg.com") ||
-                        urlString.contains("kkphimplayer") || urlString.contains("githubusercontent.com") ||
-                        urlString.contains("github.com")) {
+                        urlString.contains("kkphim") || urlString.contains("kkphimplayer") ||
+                        urlString.contains("githubusercontent.com") || urlString.contains("github.com")) {
                         val proxyResp = handleCorsProxyRequest(request)
                         if (proxyResp != null) return proxyResp
                     }
@@ -188,15 +202,25 @@ class MainActivity : ComponentActivity() {
                 "application/vnd.apple.mpegurl"
             } else if (requestUrl.contains(".vtt")) {
                 "text/vtt"
+            } else if (requestUrl.endsWith(".jpg", ignoreCase = true) || requestUrl.endsWith(".jpeg", ignoreCase = true)) {
+                "image/jpeg"
+            } else if (requestUrl.endsWith(".png", ignoreCase = true)) {
+                "image/png"
+            } else if (requestUrl.endsWith(".webp", ignoreCase = true)) {
+                "image/webp"
             } else {
                 "video/mp2t"
             }
 
             val mimeType = rawContentType.substringBefore(";").trim()
-            val encoding = if (rawContentType.contains("charset=")) {
-                rawContentType.substringAfter("charset=").trim()
+            val encoding = if (mimeType.startsWith("text/") || mimeType.contains("json") || mimeType.contains("javascript")) {
+                if (rawContentType.contains("charset=")) {
+                    rawContentType.substringAfter("charset=").trim()
+                } else {
+                    "UTF-8"
+                }
             } else {
-                "UTF-8"
+                null // Android WebResourceResponse requires encoding = null for binary streams (video, audio, images)
             }
 
             val stream = if (statusCode in 200..299) conn.inputStream else conn.errorStream

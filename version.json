@@ -1,7 +1,7 @@
 {
-  "versionCode": 4,
-  "versionName": "1.3.0",
+  "versionCode": 5,
+  "versionName": "1.3.1",
   "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
-  "changelog": "Nâng cấp siêu mượt mà 60 FPS chuẩn Netflix TV: loại bỏ hoàn toàn hiện tượng lag/giật, hiển thị mô tả tóm tắt phim (describe) chi tiết, làm mới giao diện tìm kiếm cực kỳ tinh tế.",
+  "changelog": "Tối ưu siêu mượt 60 FPS chuẩn Netflix TV: giải phóng bộ đệm ảnh phần cứng trực tiếp, khắc phục triệt để lag trang chủ, sửa dứt điểm lỗi tự click phim khi chuyển tab Phim Lẻ, điều hướng D-pad chọn tập phim mượt mà và giao diện tìm kiếm poster Ghibli chuẩn Netflix.",
   "forceUpdate": false
 }

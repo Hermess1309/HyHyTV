@@ -94,14 +94,10 @@ export class InputManager {
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('keyup', this.handleKeyUp);
     (window as any).__hyhyNav = (key: string) => {
-      // 1. Dispatch DOM event for components listening directly on window (e.g., SearchPage, VideoPlayerOverlay)
+      // Dispatches the single DOM KeyboardEvent to window.
+      // InputManager's handleKeyDown listener will receive it and call this.callback?.(action) cleanly once.
+      // Other window listeners (SearchPage, VideoPlayerOverlay, DetailOverlay) also receive it once.
       window.dispatchEvent(new KeyboardEvent('keydown', { key, code: key, bubbles: true }));
-
-      // 2. Also pass action to FocusEngine callback for page/navbar navigation
-      const action = KEY_MAP[key];
-      if (action) {
-        this.callback?.(action);
-      }
     };
   }
 
