@@ -49,6 +49,57 @@ function formatTime(seconds: number): string {
   return `${pad(m)}:${pad(s)}`;
 }
 
+// Vector SVG icons for 100% authentic Netflix TV 4K UI
+const SvgBack = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
+  </svg>
+);
+
+const SvgPlay = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 3 19 12 5 21 5 3" />
+  </svg>
+);
+
+const SvgPause = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <rect x="6" y="4" width="4" height="16" rx="1" />
+    <rect x="14" y="4" width="4" height="16" rx="1" />
+  </svg>
+);
+
+const SvgNext = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="5 4 15 12 5 20 5 4" />
+    <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+  </svg>
+);
+
+const SvgEpisodes = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+    <rect x="3" y="4" width="18" height="3.5" rx="1.5" fill="currentColor" fillOpacity="0.2" />
+    <rect x="3" y="10.2" width="18" height="3.5" rx="1.5" fill="currentColor" fillOpacity="0.2" />
+    <rect x="3" y="16.5" width="18" height="3.5" rx="1.5" fill="currentColor" fillOpacity="0.2" />
+  </svg>
+);
+
+const SvgSubtitles = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    <line x1="8" y1="9" x2="16" y2="9" />
+    <line x1="8" y1="13" x2="13" y2="13" />
+  </svg>
+);
+
+const SvgRestart = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="1 4 1 10 7 10" />
+    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+  </svg>
+);
+
 export interface SubtitleTrack {
   name: string;
   url: string;
@@ -894,13 +945,13 @@ export function VideoPlayerOverlay() {
     top: 0,
     left: 0,
     right: 0,
-    height: 88,
+    height: 110,
     zIndex: 10001,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 40px',
-    background: 'linear-gradient(180deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 65%, transparent 100%)',
+    padding: '0 48px',
+    background: 'linear-gradient(180deg, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.6) 55%, transparent 100%)',
     transition: 'opacity 0.25s ease, transform 0.25s ease',
     opacity: controlsVisible || drawerOpen || subtitleModalOpen ? 1 : 0,
     transform: controlsVisible || drawerOpen || subtitleModalOpen ? 'translateY(0)' : 'translateY(-20px)',
@@ -913,8 +964,8 @@ export function VideoPlayerOverlay() {
     left: 0,
     right: 0,
     zIndex: 10001,
-    padding: '0 40px 32px',
-    background: 'linear-gradient(0deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.75) 55%, transparent 100%)',
+    padding: '0 48px 36px',
+    background: 'linear-gradient(0deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.78) 45%, rgba(0,0,0,0.2) 80%, transparent 100%)',
     display: 'flex',
     flexDirection: 'column',
     gap: 16,
@@ -924,32 +975,38 @@ export function VideoPlayerOverlay() {
     pointerEvents: controlsVisible && !drawerOpen && !subtitleModalOpen ? 'auto' : 'none',
   };
 
-  // Dynamic helper for Netflix control buttons with remote focus glow
+  // Dynamic helper for authentic Netflix TV pill buttons with glowing remote focus
   const getBtnStyle = (index: number, isAccent = false, isDisabled = false): CSSProperties => {
     const isFocused = focusZone === 'controls' && focusedControlIndex === index;
     return {
       display: 'flex',
       alignItems: 'center',
-      gap: 8,
+      gap: 10,
       background: isFocused
         ? '#ffffff'
         : isAccent
-        ? '#e50914'
-        : 'rgba(255, 255, 255, 0.14)',
-      border: isFocused ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.08)',
+        ? 'rgba(229, 9, 20, 0.88)'
+        : 'rgba(255, 255, 255, 0.12)',
+      border: isFocused
+        ? '2px solid #ffffff'
+        : isAccent
+        ? '1.5px solid rgba(255, 255, 255, 0.25)'
+        : '1.5px solid rgba(255, 255, 255, 0.15)',
       color: isFocused ? '#000000' : '#ffffff',
       fontSize: 14,
       fontWeight: 700,
       cursor: isDisabled ? 'not-allowed' : 'pointer',
-      padding: '10px 18px',
-      borderRadius: 8,
+      padding: '10px 22px',
+      borderRadius: 24,
       fontFamily: theme.typography.fontFamily,
       opacity: isDisabled ? 0.35 : 1,
       transform: isFocused ? 'scale(1.08)' : 'scale(1)',
       boxShadow: isFocused
-        ? '0 0 20px rgba(255, 255, 255, 0.8), 0 4px 16px rgba(0,0,0,0.8)'
+        ? '0 0 24px rgba(255, 255, 255, 0.85), 0 6px 20px rgba(0,0,0,0.95)'
         : 'none',
       transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+      willChange: 'transform, box-shadow',
+      backdropFilter: 'blur(10px)',
     };
   };
 
@@ -1073,93 +1130,135 @@ export function VideoPlayerOverlay() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 72,
-          height: 72,
+          width: 84,
+          height: 84,
           borderRadius: '50%',
-          background: 'rgba(18, 18, 18, 0.85)',
+          background: 'rgba(12, 12, 12, 0.8)',
+          backdropFilter: 'blur(16px)',
           border: '1.5px solid rgba(255, 255, 255, 0.25)',
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           color: '#ffffff',
-          fontSize: 30,
           zIndex: 10000,
           pointerEvents: 'none',
-          boxShadow: '0 8px 30px rgba(0,0,0,0.85)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.9), 0 0 24px rgba(229,9,20,0.3)',
         }}>
-          {centerIcon === 'play' && '▶'}
-          {centerIcon === 'pause' && '⏸'}
-          {centerIcon === 'fwd' && '↻ 10s'}
-          {centerIcon === 'rwd' && '↺ 10s'}
+          {centerIcon === 'play' && <SvgPlay />}
+          {centerIcon === 'pause' && <SvgPause />}
+          {centerIcon === 'fwd' && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <span style={{ fontSize: 20 }}>↻</span>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.5px' }}>+10s</span>
+            </div>
+          )}
+          {centerIcon === 'rwd' && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+              <span style={{ fontSize: 20 }}>↺</span>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.5px' }}>-10s</span>
+            </div>
+          )}
         </div>
       )}
 
       {/* 4. Top Header Bar (Authentic Netflix Header) */}
       <div style={topBarStyle}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, maxWidth: '75vw' }}>
           <button
             tabIndex={-1}
             onFocus={(e) => e.currentTarget.blur()}
             style={{
-              background: focusZone === 'back' ? '#ffffff' : 'rgba(255,255,255,0.18)',
-              border: focusZone === 'back' ? '2px solid #ffffff' : 'none',
+              background: focusZone === 'back' ? '#ffffff' : 'rgba(255,255,255,0.14)',
+              border: focusZone === 'back' ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.18)',
               color: focusZone === 'back' ? '#000000' : '#ffffff',
-              fontSize: 22,
-              width: 46,
-              height: 46,
+              width: 48,
+              height: 48,
               borderRadius: '50%',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transform: focusZone === 'back' ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: focusZone === 'back' ? '0 0 16px rgba(255,255,255,0.8)' : 'none',
-              transition: 'all 0.15s ease',
+              transform: focusZone === 'back' ? 'scale(1.12)' : 'scale(1)',
+              boxShadow: focusZone === 'back' ? '0 0 20px rgba(255,255,255,0.85), 0 4px 16px rgba(0,0,0,0.8)' : 'none',
+              transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+              backdropFilter: 'blur(10px)',
+              flexShrink: 0,
             }}
             onClick={handleClosePlayer}
             title="Quay lại (Esc/Back)"
           >
-            ←
+            <SvgBack />
           </button>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ color: '#fff', fontSize: 20, fontWeight: 700, fontFamily: theme.typography.fontFamily }}>
-                {player.title}
-              </span>
+          <div style={{ minWidth: 0 }}>
+            <div style={{
+              color: '#ffffff',
+              fontSize: 22,
+              fontWeight: 800,
+              fontFamily: theme.typography.fontFamily,
+              letterSpacing: '-0.3px',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+            }}>
+              {player.title}
+            </div>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              marginTop: 4,
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: 13,
+              fontWeight: 600,
+              fontFamily: theme.typography.fontFamily,
+            }}>
               {player.episodeName && (
                 <span style={{
-                  color: '#fff',
-                  background: '#e50914',
-                  borderRadius: 4,
-                  padding: '3px 10px',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  fontFamily: theme.typography.fontFamily,
-                  letterSpacing: '0.3px',
+                  color: '#e50914',
+                  fontWeight: 800,
                 }}>
                   {player.episodeName}
                 </span>
               )}
-            </div>
-            <div style={{ color: '#aaa', fontSize: 13, marginTop: 4, fontFamily: theme.typography.fontFamily }}>
-              Tập {currentIndex + 1} / {episodesList.length || 1} • Vietsub Full HD • HyHyTV
+              {player.episodeName && <span>•</span>}
+              <span>Tập {currentIndex + 1} / {episodesList.length || 1}</span>
+              <span>•</span>
+              <span>Full HD 1080p</span>
+              <span>•</span>
+              <span style={{ color: '#ffffff', background: 'rgba(255,255,255,0.15)', padding: '1px 6px', borderRadius: 3, fontSize: 11, fontWeight: 700 }}>
+                VIETSUB
+              </span>
             </div>
           </div>
         </div>
 
         {/* Top Right Quick Badges */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            background: 'rgba(229, 9, 20, 0.88)',
+            padding: '5px 12px',
+            borderRadius: 4,
+            color: '#fff',
+            fontSize: 11,
+            fontWeight: 900,
+            letterSpacing: '1px',
+            boxShadow: '0 2px 8px rgba(229, 9, 20, 0.4)',
+          }}>
+            NETFLIX
+          </div>
           <div style={{
             background: 'rgba(255, 255, 255, 0.12)',
             border: '1px solid rgba(255,255,255,0.18)',
-            padding: '6px 12px',
+            padding: '5px 12px',
             borderRadius: 6,
-            color: '#fff',
-            fontSize: 13,
-            fontWeight: 600,
-            fontFamily: theme.typography.fontFamily,
+            color: 'rgba(255,255,255,0.9)',
+            fontSize: 12,
+            fontWeight: 700,
+            backdropFilter: 'blur(8px)',
           }}>
-            💬 {activeSubtitleIndex >= 0 && subtitles[activeSubtitleIndex] ? subtitles[activeSubtitleIndex].name : 'Vietsub'}
+            1080p FHD
           </div>
         </div>
       </div>
@@ -1167,9 +1266,18 @@ export function VideoPlayerOverlay() {
       {/* 5. Bottom Netflix Hub Controls */}
       <div style={bottomBarStyle}>
         {/* Scrubber Bar Row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, position: 'relative' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18, position: 'relative' }}>
           {/* Current elapsed time */}
-          <span style={{ color: '#eee', fontSize: 14, fontWeight: 700, minWidth: 48, textAlign: 'right', fontFamily: theme.typography.fontFamily }}>
+          <span style={{
+            color: '#ffffff',
+            fontSize: 15,
+            fontWeight: 700,
+            minWidth: 54,
+            textAlign: 'right',
+            fontFamily: theme.typography.fontFamily,
+            fontVariantNumeric: 'tabular-nums',
+            textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+          }}>
             {formatTime(displayTime)}
           </span>
 
@@ -1179,48 +1287,46 @@ export function VideoPlayerOverlay() {
             style={{
               position: 'relative',
               flex: 1,
-              height: focusZone === 'scrubber' ? 10 : 7,
-              background: 'rgba(255,255,255,0.25)',
-              borderRadius: 5,
+              height: focusZone === 'scrubber' ? 8 : 5,
+              background: 'rgba(255,255,255,0.28)',
+              borderRadius: 4,
               cursor: 'pointer',
               overflow: 'visible',
-              transition: 'height 0.15s ease',
-              boxShadow: focusZone === 'scrubber' ? '0 0 12px rgba(229,9,20,0.8)' : 'none',
+              transition: 'height 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
             onClick={handleProgressBarClick}
             onMouseMove={handleProgressBarMouseMove}
           >
-            {/* Floating Seek Thumbnail Preview (Matches YouTube/Netflix TV) */}
+            {/* Floating Seek Thumbnail Preview (Matches authentic Netflix TV) */}
             {isScrubbing && (
               <div
                 style={{
                   position: 'absolute',
-                  bottom: 24,
+                  bottom: 26,
                   left: `${Math.max(6, Math.min(94, progressPercent))}%`,
                   transform: 'translateX(-50%)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 6,
+                  gap: 8,
                   pointerEvents: 'none',
                   zIndex: 200,
                   transition: 'left 0.1s linear',
                 }}
               >
-                {/* Mini Video Screen (Màn hình nhỏ xem trước khi tua) */}
+                {/* Mini Video Screen (Màn hình nhỏ xem trước khi tua 16:9) */}
                 <div
                   style={{
-                    width: 200,
-                    height: 112,
-                    borderRadius: 8,
+                    width: 216,
+                    height: 122,
+                    borderRadius: 10,
                     overflow: 'hidden',
                     background: '#0a0a0a',
                     border: '2.5px solid #ffffff',
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.95), 0 0 16px rgba(229,9,20,0.6)',
+                    boxShadow: '0 12px 35px rgba(0,0,0,0.95), 0 0 20px rgba(229,9,20,0.5)',
                     position: 'relative',
                   }}
                 >
-                  {/* Real video frame if captured, else movie poster/backdrop fallback */}
                   <img
                     src={previewFrameUrl || player.backdropPath || player.posterPath}
                     alt=""
@@ -1237,7 +1343,7 @@ export function VideoPlayerOverlay() {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)',
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)',
                       pointerEvents: 'none',
                     }}
                   />
@@ -1249,12 +1355,12 @@ export function VideoPlayerOverlay() {
                         position: 'absolute',
                         top: 6,
                         left: 8,
-                        background: 'rgba(229,9,20,0.88)',
+                        background: '#e50914',
                         color: '#fff',
-                        padding: '1px 6px',
+                        padding: '2px 7px',
                         borderRadius: 3,
                         fontSize: 10,
-                        fontWeight: 700,
+                        fontWeight: 800,
                         letterSpacing: 0.3,
                       }}
                     >
@@ -1266,19 +1372,21 @@ export function VideoPlayerOverlay() {
                   <div
                     style={{
                       position: 'absolute',
-                      bottom: 5,
+                      bottom: 6,
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      background: 'rgba(0, 0, 0, 0.9)',
+                      background: 'rgba(0, 0, 0, 0.88)',
+                      backdropFilter: 'blur(8px)',
                       border: '1px solid rgba(255,255,255,0.2)',
-                      color: '#fff',
-                      padding: '2px 8px',
+                      color: '#ffffff',
+                      padding: '2px 10px',
                       borderRadius: 4,
                       fontSize: 13,
                       fontWeight: 800,
+                      fontVariantNumeric: 'tabular-nums',
                       letterSpacing: 0.5,
                       fontFamily: theme.typography.fontFamily,
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.8)',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.8)',
                     }}
                   >
                     {formatTime(scrubTime)}
@@ -1289,15 +1397,16 @@ export function VideoPlayerOverlay() {
                 <div
                   style={{
                     fontSize: 11,
-                    fontWeight: 600,
-                    color: 'rgba(255, 255, 255, 0.95)',
-                    background: 'rgba(20, 20, 20, 0.88)',
+                    fontWeight: 700,
+                    color: '#ffffff',
+                    background: 'rgba(15, 15, 15, 0.92)',
+                    backdropFilter: 'blur(10px)',
                     border: '1px solid rgba(255, 255, 255, 0.25)',
-                    padding: '3px 12px',
-                    borderRadius: 12,
+                    padding: '4px 14px',
+                    borderRadius: 16,
                     whiteSpace: 'nowrap',
                     fontFamily: theme.typography.fontFamily,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.7)',
+                    boxShadow: '0 4px 14px rgba(0,0,0,0.8)',
                   }}
                 >
                   Bấm [OK] để phát từ đây
@@ -1313,7 +1422,7 @@ export function VideoPlayerOverlay() {
               height: '100%',
               width: `${bufferedPercent}%`,
               background: 'rgba(255,255,255,0.45)',
-              borderRadius: 5,
+              borderRadius: 4,
             }} />
             {/* Played progress bar (Netflix Red) */}
             <div style={{
@@ -1323,42 +1432,48 @@ export function VideoPlayerOverlay() {
               height: '100%',
               width: `${progressPercent}%`,
               background: '#e50914',
-              borderRadius: 5,
+              borderRadius: 4,
             }} />
             {/* Scrubber thumb */}
             <div style={{
               position: 'absolute',
               top: '50%',
               left: `${progressPercent}%`,
-              transform: 'translate(-50%, -50%)',
-              width: focusZone === 'scrubber' ? 20 : 16,
-              height: focusZone === 'scrubber' ? 20 : 16,
+              transform: focusZone === 'scrubber' ? 'translate(-50%, -50%) scale(1.15)' : 'translate(-50%, -50%)',
+              width: focusZone === 'scrubber' ? 20 : 14,
+              height: focusZone === 'scrubber' ? 20 : 14,
               borderRadius: '50%',
-              background: '#fff',
-              boxShadow: '0 0 12px rgba(229,9,20,0.95)',
-              transition: 'width 0.15s, height 0.15s',
+              background: focusZone === 'scrubber' ? '#ffffff' : '#e50914',
+              boxShadow: focusZone === 'scrubber'
+                ? '0 0 16px rgba(229,9,20,1), 0 0 8px #ffffff'
+                : '0 0 8px rgba(229,9,20,0.8)',
+              transition: 'transform 0.15s ease, width 0.15s ease, height 0.15s ease, background 0.15s ease',
             }} />
           </div>
 
           {/* Countdown remaining time */}
-          <span style={{ color: '#aaa', fontSize: 14, fontWeight: 700, minWidth: 54, fontFamily: theme.typography.fontFamily }}>
+          <span style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: 15,
+            fontWeight: 700,
+            minWidth: 58,
+            fontFamily: theme.typography.fontFamily,
+            fontVariantNumeric: 'tabular-nums',
+            textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+          }}>
             -{formatTime(remainingTime)}
           </span>
         </div>
 
         {/* Netflix TV Action Controls Row: Primary Action, Episodes, Subtitles, Restart */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
           {/* Left Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             {/* 0: Primary Action - Next Episode (if series) or Play/Pause */}
             <button
               tabIndex={-1}
               onFocus={(e) => e.currentTarget.blur()}
-              style={{
-                ...getBtnStyle(0, hasNext),
-                padding: '10px 22px',
-                borderRadius: 8,
-              }}
+              style={getBtnStyle(0, hasNext)}
               onClick={() => {
                 if (hasNext) {
                   handleNextEpisode();
@@ -1370,12 +1485,13 @@ export function VideoPlayerOverlay() {
             >
               {hasNext ? (
                 <>
+                  <SvgNext />
                   <span>Tập tiếp theo ({episodesList[currentIndex + 1]?.name || `Tập ${currentIndex + 2}`})</span>
-                  <span>⏭</span>
                 </>
               ) : (
                 <>
-                  <span>{isPlaying ? '⏸ Tạm dừng' : '▶ Tiếp tục phát'}</span>
+                  {isPlaying ? <SvgPause /> : <SvgPlay />}
+                  <span>{isPlaying ? 'Tạm dừng' : 'Tiếp tục phát'}</span>
                 </>
               )}
             </button>
@@ -1391,7 +1507,7 @@ export function VideoPlayerOverlay() {
               }}
               title="Danh sách tập (Phím E / Mũi tên Xuống)"
             >
-              <span>📑</span>
+              <SvgEpisodes />
               <span>Tập phim</span>
             </button>
 
@@ -1406,7 +1522,7 @@ export function VideoPlayerOverlay() {
               }}
               title="Âm thanh & Phụ đề (Phím S)"
             >
-              <span>💬</span>
+              <SvgSubtitles />
               <span>Âm thanh & Phụ đề</span>
             </button>
 
@@ -1421,20 +1537,48 @@ export function VideoPlayerOverlay() {
               }}
               title="Xem lại từ đầu"
             >
-              <span>↺</span>
+              <SvgRestart />
               <span>Xem từ đầu</span>
             </button>
           </div>
 
-          {/* Right Info: Subtle Title & Episode Info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {/* Right Info: TV Remote quick navigation guide */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255, 255, 255, 0.55)', fontSize: 13, fontWeight: 600 }}>
             <span style={{
-              color: 'rgba(255, 255, 255, 0.65)',
-              fontSize: 14,
-              fontWeight: 600,
-              fontFamily: theme.typography.fontFamily,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(255, 255, 255, 0.08)',
+              padding: '5px 12px',
+              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(8px)',
             }}>
-              {player.episodeName ? `${player.title} • ${player.episodeName}` : player.title}
+              <span style={{ color: '#ffffff', fontWeight: 800 }}>◄ / ►</span> Tua
+            </span>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(255, 255, 255, 0.08)',
+              padding: '5px 12px',
+              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(8px)',
+            }}>
+              <span style={{ color: '#ffffff', fontWeight: 800 }}>▲</span> Lên thanh tua
+            </span>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(255, 255, 255, 0.08)',
+              padding: '5px 12px',
+              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(8px)',
+            }}>
+              <span style={{ color: '#ffffff', fontWeight: 800 }}>▼</span> Ẩn
             </span>
           </div>
         </div>

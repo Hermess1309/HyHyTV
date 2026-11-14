@@ -1,7 +1,7 @@
 {
-  "versionCode": 8,
-  "versionName": "1.3.4",
+  "versionCode": 9,
+  "versionName": "1.3.5",
   "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
-  "changelog": "Khắc phục triệt để lỗi tìm kiếm: sửa lỗi chồng lấn hình ảnh trên TV, hỗ trợ cuộn chọn chủ đề và duyệt 36+ phim hành động/thể loại; Tối ưu tua video: video nền đứng yên không giật khi tua, chỉ khung preview di chuyển mượt mà 60 FPS và phát chuẩn xác khi bấm [OK]; Ổn định danh sách tập phim: phát tập chọn mượt mà không bị reload lộn xộn.",
+  "changelog": "Nâng cấp giao diện trình phát HUD chuẩn Netflix Smart TV 100%: Nút bấm dạng bo tròn viền sáng (pill buttons) với hiệu ứng Focus rực rỡ; Thay thế icon vector sắc nét 4K; Thanh tua mượt mà với hiệu ứng phát sáng; Hiển thị nhãn thời gian chuyên nghiệp và hướng dẫn phím điều khiển từ xa; Bỏ văn bản lặp thừa, tối ưu phần cứng 60 FPS.",
   "forceUpdate": false
 }
