@@ -8,7 +8,7 @@ import { setTrailerPaused, toggleTrailerMute } from '../state/slices/trailerSlic
 import { getTileImageUrl } from '../data/mockContent';
 import { getTmdbBackdropUrl, getTmdbLogoUrl } from '../data/tmdb';
 import { fetchTrailerKey, fetchTvSeasons, fetchEpisodes } from '../data/tmdb';
-import { fetchVsmovEpisodes } from '../data/vsmov';
+import { fetchUnifiedEpisodes } from '../data/movieService';
 import { overlayStyles } from '../styles/componentStyles/overlayStyles';
 import { mergeStyles } from '../styles/styleEngine';
 import { YouTubePlayer } from './YouTubePlayer';
@@ -91,7 +91,7 @@ export const DetailOverlay = memo(function DetailOverlay() {
   const handlePlay = useCallback(async () => {
     if (!tile) return;
     if (tile.slug) {
-      const eps = await fetchVsmovEpisodes(tile.slug, 0);
+      const eps = await fetchUnifiedEpisodes(tile.slug, 0);
       if (eps.length > 0 && eps[0].linkEmbed) {
         dispatch(openPlayer({
           embedUrl: eps[0].linkEmbed,
@@ -101,6 +101,8 @@ export const DetailOverlay = memo(function DetailOverlay() {
           currentEpisodeIndex: 0,
           currentSeasonIndex: 0,
           episodes: eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+          posterPath: tile.posterPath || tile.backdropPath,
+          backdropPath: tile.backdropPath || tile.posterPath,
         }));
         return;
       }

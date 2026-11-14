@@ -14,6 +14,9 @@ export interface TileData {
   tmdbId?: number;
   mediaType?: 'movie' | 'tv';
   slug?: string;
+  progress?: number;
+  episodeName?: string;
+  source?: string;
 }
 
 export interface RowData {

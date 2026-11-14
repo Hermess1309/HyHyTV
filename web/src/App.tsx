@@ -14,7 +14,7 @@ import { useCursorHide } from './hooks/useCursorHide';
 import { useIsAuthenticated } from './hooks/useAuth';
 import { useCurrentProfile } from './hooks/useProfile';
 import { setContent, setPageContent } from './state/slices/contentSlice';
-import { fetchVsmovContentProgressive } from './data/vsmov';
+import { fetchUnifiedHomeContentProgressive } from './data/movieService';
 import { VideoPlayerOverlay } from './components/VideoPlayerOverlay';
 import type { RootState } from './state/store';
 
@@ -43,7 +43,7 @@ export default function App() {
   useEffect(() => {
     if (!isAuthed || !currentProfile) return;
 
-    fetchVsmovContentProgressive((rows) => {
+    fetchUnifiedHomeContentProgressive((rows) => {
       if (rows && rows.length > 0) {
         dispatch(setContent(rows));
         dispatch(setPageContent({ page: 'home', rows }));

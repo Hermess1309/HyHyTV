@@ -5,6 +5,7 @@ import { setContent, setPageContent, switchPage, setSearchResults } from '../sta
 import { selectPageCache } from '../state/selectors';
 import { PAGE_CONFIGS } from '../data/pageConfigs';
 import { fetchRowsFromConfigsProgressive } from '../data/vsmov';
+import { fetchUnifiedHomeContentProgressive } from '../data/movieService';
 
 export function usePageLoader() {
   const dispatch = useDispatch();
@@ -20,6 +21,20 @@ export function usePageLoader() {
       return;
     }
     if (pageId === 'myList' || pageId === 'settings') return;
+
+    if (pageId === 'home') {
+      try {
+        await fetchUnifiedHomeContentProgressive((fetchedRows) => {
+          if (fetchedRows.length > 0 && activePageRef.current === 'home') {
+            dispatch(setPageContent({ page: 'home', rows: fetchedRows }));
+            dispatch(setContent(fetchedRows));
+          }
+        });
+      } catch {
+        // Keep existing
+      }
+      return;
+    }
 
     if (pageCache[pageId]) {
       dispatch(switchPage(pageId));

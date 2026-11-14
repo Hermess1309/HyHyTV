@@ -46,7 +46,8 @@ import {
 import { DETAIL_BUTTON_COUNT, HERO_BUTTON_COUNT, KEYBOARD_GRID, KEYBOARD_COLS } from '../utils/constants';
 import { NAV_ITEMS } from '../data/pageConfigs';
 import { PAGE_CONFIGS } from '../data/pageConfigs';
-import { fetchRowsFromConfigs, searchVsmov, fetchVsmovEpisodes } from '../data/vsmov';
+import { fetchRowsFromConfigs, searchVsmov } from '../data/vsmov';
+import { fetchUnifiedEpisodes } from '../data/movieService';
 import { getCachedSeasons, getCachedEpisodes } from '../data/tmdb';
 import type { PageId } from '../state/slices/uiSlice';
 
@@ -266,19 +267,7 @@ export function useInputNavigation() {
           }
 
           if (navItem.id === 'search') {
-            engine.setRows(buildKeyboardRows(), true);
-            engine.setRowMemoryEnabled(false);
-            input.setRawKeyCallback((key: string) => {
-              if (key === 'Backspace') {
-                dispatch(deleteSearchChar());
-                const newQuery = searchQueryRef.current.slice(0, -1);
-                triggerSearch(newQuery);
-              } else {
-                dispatch(appendSearchChar(key.toLowerCase()));
-                const newQuery = searchQueryRef.current + key.toLowerCase();
-                triggerSearch(newQuery);
-              }
-            });
+            input.setRawKeyCallback(null);
           } else if (navItem.id === 'myList') {
             engine.setRows(buildMyListRows(), true);
             engine.setRowMemoryEnabled(true);
@@ -398,7 +387,7 @@ export function useInputNavigation() {
             dispatch(setDetailZone('seasons'));
           } else if (action === 'SELECT') {
             if (ov.buttonIndex === 0 && ov.tile?.slug) {
-              fetchVsmovEpisodes(ov.tile.slug, 0).then((eps) => {
+              fetchUnifiedEpisodes(ov.tile.slug, 0).then((eps) => {
                 if (eps.length > 0 && eps[0].linkEmbed) {
                   dispatch(openPlayer({
                     embedUrl: eps[0].linkEmbed,
@@ -408,6 +397,8 @@ export function useInputNavigation() {
                     currentEpisodeIndex: 0,
                     currentSeasonIndex: 0,
                     episodes: eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+                    posterPath: ov.tile!.posterPath || ov.tile!.backdropPath,
+                    backdropPath: ov.tile!.backdropPath || ov.tile!.posterPath,
                   }));
                 }
               });
@@ -449,7 +440,7 @@ export function useInputNavigation() {
             dispatch(setDetailEpisodeIndex(Math.min(episodes.length - 1, ov.episodeIndex + 1)));
           } else if (action === 'SELECT') {
             if (ov.tile?.slug) {
-              fetchVsmovEpisodes(ov.tile.slug, ov.seasonIndex).then((eps) => {
+              fetchUnifiedEpisodes(ov.tile.slug, ov.seasonIndex).then((eps) => {
                 const ep = eps[ov.episodeIndex];
                 if (ep && ep.linkEmbed) {
                   dispatch(openPlayer({
@@ -460,6 +451,8 @@ export function useInputNavigation() {
                     currentEpisodeIndex: ov.episodeIndex,
                     currentSeasonIndex: ov.seasonIndex,
                     episodes: eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+                    posterPath: ov.tile!.posterPath || ov.tile!.backdropPath,
+                    backdropPath: ov.tile!.backdropPath || ov.tile!.posterPath,
                   }));
                 }
               });
@@ -495,7 +488,7 @@ export function useInputNavigation() {
             const currentRows = store.getState().content.rows;
             const currentTile = currentRows[0]?.tiles[0] || rowsRef.current[0]?.tiles[0];
             if (heroButtonIndexRef.current === 0 && currentTile?.slug) {
-              fetchVsmovEpisodes(currentTile.slug, 0).then((eps) => {
+              fetchUnifiedEpisodes(currentTile.slug, 0).then((eps) => {
                 if (eps.length > 0 && eps[0].linkEmbed) {
                   dispatch(openPlayer({
                     embedUrl: eps[0].linkEmbed,
@@ -505,6 +498,8 @@ export function useInputNavigation() {
                     currentEpisodeIndex: 0,
                     currentSeasonIndex: 0,
                     episodes: eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+                    posterPath: currentTile.posterPath || currentTile.backdropPath,
+                    backdropPath: currentTile.backdropPath || currentTile.posterPath,
                   }));
                 }
               });
@@ -521,6 +516,14 @@ export function useInputNavigation() {
           }
           return;
         }
+      }
+
+      if (activePageRef.current === 'search' && !navFocusedRef.current) {
+        if (action === 'BACK') {
+          dispatch(setActivePage('home'));
+          loadPage('home');
+        }
+        return;
       }
 
       engine.navigate(action);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { theme } from '../styles/theme';
-import { fetchVsmovSeasons, fetchVsmovEpisodes } from '../data/vsmov';
+import { fetchUnifiedSeasons, fetchUnifiedEpisodes } from '../data/movieService';
 import { fetchTvSeasons, fetchEpisodes, getTmdbStillUrl } from '../data/tmdb';
 import type { SeasonSummary, Episode } from '../data/vsmov';
 import { openPlayer } from '../state/slices/uiSlice';
@@ -40,7 +40,7 @@ export function EpisodeBrowser({
   useEffect(() => {
     let cancelled = false;
     const fetchFunc = slug
-      ? fetchVsmovSeasons(slug)
+      ? fetchUnifiedSeasons(slug)
       : fetchTvSeasons(tvId);
 
     fetchFunc.then((s) => {
@@ -61,7 +61,7 @@ export function EpisodeBrowser({
     let cancelled = false;
 
     const fetchEpFunc = slug
-      ? fetchVsmovEpisodes(slug, activeSeason)
+      ? fetchUnifiedEpisodes(slug, activeSeason)
       : fetchEpisodes(tvId, season.seasonNumber);
 
     fetchEpFunc.then((eps) => {

@@ -18,6 +18,8 @@ export interface PlayerOverlayState {
   currentEpisodeIndex: number;
   currentSeasonIndex: number;
   episodes: PlayerEpisodeItem[];
+  posterPath?: string;
+  backdropPath?: string;
 }
 
 interface UIState {
@@ -158,6 +160,8 @@ export const uiSlice = createSlice({
       currentEpisodeIndex?: number;
       currentSeasonIndex?: number;
       episodes?: PlayerEpisodeItem[];
+      posterPath?: string;
+      backdropPath?: string;
     }>) {
       state.playerOverlay.open = true;
       state.playerOverlay.embedUrl = action.payload.embedUrl;
@@ -167,6 +171,8 @@ export const uiSlice = createSlice({
       state.playerOverlay.currentEpisodeIndex = action.payload.currentEpisodeIndex ?? 0;
       state.playerOverlay.currentSeasonIndex = action.payload.currentSeasonIndex ?? 0;
       state.playerOverlay.episodes = action.payload.episodes || [];
+      state.playerOverlay.posterPath = action.payload.posterPath || '';
+      state.playerOverlay.backdropPath = action.payload.backdropPath || '';
     },
     switchPlayerEpisode(state, action: PayloadAction<{ episodeIndex: number; embedUrl: string; episodeName: string }>) {
       state.playerOverlay.currentEpisodeIndex = action.payload.episodeIndex;

@@ -86,8 +86,12 @@ class MainActivity : ComponentActivity() {
                     request: WebResourceRequest
                 ): WebResourceResponse? {
                     val urlString = request.url.toString()
-                    // Proxy VSMOV stream, media, and Catbox update requests to attach clean CORS headers
-                    if (urlString.contains("streamvsmov.com") || urlString.contains("vsmov.com") || urlString.contains("catbox.moe")) {
+                    // Proxy VSMOV stream, KKPhim stream & API, GitHub updates, and Catbox requests to attach clean CORS headers
+                    if (urlString.contains("streamvsmov.com") || urlString.contains("vsmov.com") ||
+                        urlString.contains("catbox.moe") || urlString.contains("phimapi.com") ||
+                        urlString.contains("kkphim") || urlString.contains("phimimg.com") ||
+                        urlString.contains("kkphimplayer") || urlString.contains("githubusercontent.com") ||
+                        urlString.contains("github.com")) {
                         val proxyResp = handleCorsProxyRequest(request)
                         if (proxyResp != null) return proxyResp
                     }
@@ -151,7 +155,11 @@ class MainActivity : ComponentActivity() {
                 "User-Agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             )
-            conn.setRequestProperty("Referer", "https://vsmov.com/")
+            if (requestUrl.contains("phimapi.com") || requestUrl.contains("kkphim") || requestUrl.contains("phimimg.com")) {
+                conn.setRequestProperty("Referer", "https://kkphim2.com/")
+            } else {
+                conn.setRequestProperty("Referer", "https://vsmov.com/")
+            }
             conn.connectTimeout = 8000
             conn.readTimeout = 12000
 
@@ -240,6 +248,41 @@ class MainActivity : ComponentActivity() {
                     )
                     return true
                 }
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', code: 'Space', keyCode: 32, which: 32, bubbles: true }));",
+                        null
+                    )
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'n', code: 'KeyN', keyCode: 78, which: 78, bubbles: true }));",
+                        null
+                    )
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', code: 'KeyP', keyCode: 80, which: 80, bubbles: true }));",
+                        null
+                    )
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39, which: 39, bubbles: true }));",
+                        null
+                    )
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_REWIND -> {
+                    webView.evaluateJavascript(
+                        "window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37, which: 37, bubbles: true }));",
+                        null
+                    )
+                    return true
+                }
             }
         }
         return super.dispatchKeyEvent(event)
@@ -294,7 +337,11 @@ class MainActivity : ComponentActivity() {
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "GET"
                 conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
-                conn.setRequestProperty("Referer", "https://vsmov.com/")
+                if (embedUrl.contains("phimapi.com") || embedUrl.contains("kkphim") || embedUrl.contains("phimimg.com")) {
+                    conn.setRequestProperty("Referer", "https://kkphim2.com/")
+                } else {
+                    conn.setRequestProperty("Referer", "https://vsmov.com/")
+                }
                 conn.connectTimeout = 8000
                 conn.readTimeout = 8000
                 val html = conn.inputStream.bufferedReader().use { it.readText() }

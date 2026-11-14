@@ -293,6 +293,23 @@ export const ContentTile = memo(function ContentTile({
               </div>
             )}
             <WebTileInfo tile={tile} visible={hovered} />
+            {tile.progress !== undefined && tile.progress > 0 && (
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 3,
+                background: 'rgba(255, 255, 255, 0.3)',
+                zIndex: 5,
+              }}>
+                <div style={{
+                  width: `${Math.min(100, Math.max(0, tile.progress))}%`,
+                  height: '100%',
+                  background: '#e50914',
+                }} />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -420,6 +437,23 @@ export const ContentTile = memo(function ContentTile({
                 fontSize: 9, fontWeight: 600,
               }}>P</span>
               <span style={{ fontFamily: theme.typography.fontFamily }}>to pause</span>
+            </div>
+          )}
+          {tile.progress !== undefined && tile.progress > 0 && (
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 4,
+              background: 'rgba(255, 255, 255, 0.3)',
+              zIndex: 5,
+            }}>
+              <div style={{
+                width: `${Math.min(100, Math.max(0, tile.progress))}%`,
+                height: '100%',
+                background: '#e50914',
+              }} />
             </div>
           )}
         </div>

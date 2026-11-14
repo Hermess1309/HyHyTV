@@ -16,13 +16,12 @@ import { WelcomeModal } from './WelcomeModal';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { easeOutQuint } from '../engine/easing';
 import { useResponsive } from '../hooks/useResponsive';
-import { KEYBOARD_GRID, KEYBOARD_COLS, ROW_BUFFER } from '../utils/constants';
+import { ROW_BUFFER } from '../utils/constants';
 import { useIsTvMode } from '../hooks/useMode';
 import { useSettings } from '../hooks/useSettings';
 import { useDispatch } from 'react-redux';
 import { setActivePage } from '../state/slices/uiSlice';
 
-const KEYBOARD_ROW_COUNT = Math.ceil(KEYBOARD_GRID.length / KEYBOARD_COLS);
 const HERO_SLOT_HEIGHT = '60vh';
 
 export function Shell() {
@@ -80,18 +79,7 @@ export function Shell() {
   let targetOffset = 0;
 
   if (isTv) {
-    if (isSearch && !navFocused) {
-      const isInResults = focus.rowIndex >= KEYBOARD_ROW_COUNT;
-      if (isInResults) {
-        const resultIdx = focus.rowIndex - KEYBOARD_ROW_COUNT;
-        const keyboardHeight = KEYBOARD_ROW_COUNT * (48 + 4) + 40;
-        const searchBarHeight = 80;
-        const headerPad = theme.spacing.headerHeight + 20;
-        const resultsTop = headerPad + searchBarHeight + keyboardHeight;
-        targetOffset = resultsTop - (rowHeight * 1.5) + Math.max(0, resultIdx) * rowHeight;
-        targetOffset = Math.max(0, targetOffset);
-      }
-    } else if (!isSearch && !isMyList && !heroFocused && focus.rowIndex >= 0) {
+    if (!isSearch && !isMyList && !heroFocused && focus.rowIndex >= 0) {
       targetOffset = Math.max(0, focus.rowIndex) * rowHeight;
     }
   }
@@ -128,7 +116,7 @@ export function Shell() {
             {rows.length === 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', color: '#aaa', gap: 16 }}>
                 <div style={{ width: 44, height: 44, border: '3px solid rgba(255,255,255,0.2)', borderTopColor: '#e50914', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                <span style={{ fontSize: 16, fontFamily: theme.typography.fontFamily }}>Đang tải danh sách phim từ VSMOV...</span>
+                <span style={{ fontSize: 16, fontFamily: theme.typography.fontFamily }}>Đang tải danh sách phim...</span>
               </div>
             ) : (
               <div style={isMobile ? shellStyles.mobileRowsContainer : shellStyles.webRowsContainer}>
@@ -153,9 +141,7 @@ export function Shell() {
     <div ref={shellRef} style={shellStyles.shell} role="grid" aria-label="Content browser">
       <NavBar />
       {isSearch ? (
-        <div style={shellStyles.scrollContainer(searchScroll.value)}>
-          <SearchPage />
-        </div>
+        <SearchPage />
       ) : isMyList ? (
         <MyListPage />
       ) : isSettings ? (
@@ -165,7 +151,7 @@ export function Shell() {
           {rows.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh', color: '#aaa', gap: 16 }}>
               <div style={{ width: 44, height: 44, border: '3px solid rgba(255,255,255,0.2)', borderTopColor: '#e50914', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-              <span style={{ fontSize: 16, fontFamily: theme.typography.fontFamily }}>Đang tải danh sách phim từ VSMOV...</span>
+              <span style={{ fontSize: 16, fontFamily: theme.typography.fontFamily }}>Đang tải danh sách phim...</span>
             </div>
           ) : (
             <>

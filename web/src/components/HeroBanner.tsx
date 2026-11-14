@@ -10,7 +10,7 @@ import {
 } from '../state/selectors';
 import { setActiveTrailer } from '../state/slices/trailerSlice';
 import { openDetail, openPlayer } from '../state/slices/uiSlice';
-import { fetchVsmovEpisodes } from '../data/vsmov';
+import { fetchUnifiedEpisodes } from '../data/movieService';
 import { toggleWatchlist } from '../state/slices/watchlistSlice';
 import { setTrailerPaused } from '../state/slices/trailerSlice';
 import { selectCurrentProfileId } from '../state/selectors';
@@ -201,7 +201,7 @@ export const HeroBanner = memo(function HeroBanner() {
                   if (firstTile) {
                     if (i === 0) {
                       if (firstTile.slug) {
-                        fetchVsmovEpisodes(firstTile.slug, 0).then((eps) => {
+                        fetchUnifiedEpisodes(firstTile.slug, 0).then((eps) => {
                           if (eps.length > 0 && eps[0].linkEmbed) {
                             dispatch(openPlayer({
                               embedUrl: eps[0].linkEmbed,
@@ -211,6 +211,8 @@ export const HeroBanner = memo(function HeroBanner() {
                               currentEpisodeIndex: 0,
                               currentSeasonIndex: 0,
                               episodes: eps.map((e) => ({ name: e.name, linkEmbed: e.linkEmbed || '' })),
+                              posterPath: firstTile.posterPath || firstTile.backdropPath,
+                              backdropPath: firstTile.backdropPath || firstTile.posterPath,
                             }));
                           } else {
                             dispatch(openDetail(firstTile));
