@@ -1,7 +1,7 @@
 {
-  "versionCode": 2,
-  "versionName": "1.1.0",
-  "apkUrl": "https://files.catbox.moe/5rp34a.apk",
-  "changelog": "Cập nhật trình phát Netflix chuẩn TV, hỗ trợ phụ đề tiếng Việt, tối ưu mượt mà 60 FPS.",
+  "versionCode": 3,
+  "versionName": "1.2.0",
+  "apkUrl": "https://files.catbox.moe/susm0j.apk",
+  "changelog": "Cập nhật Thể Loại, Quốc Gia, Top Phim, Navbar thông minh, Tìm kiếm mở rộng và giao diện Netflix mượt mà 60 FPS.",
   "forceUpdate": false
 }

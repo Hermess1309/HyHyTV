@@ -74,6 +74,185 @@ export const UNIFIED_HOME_ROW_CONFIGS: RowConfigItem[] = [
   },
 ];
 
+export const GENRES_ROW_CONFIGS: RowConfigItem[] = [
+  {
+    title: 'Phim Hành Động & Phiêu Lưu',
+    kkphimUrl: '/v1/api/the-loai/hanh-dong?page=1&limit=24',
+    vsmovUrl: '/the-loai/hanh-dong?page=1',
+  },
+  {
+    title: 'Tình Cảm & Lãng Mạn',
+    kkphimUrl: '/v1/api/the-loai/tinh-cam?page=1&limit=24',
+    vsmovUrl: '/the-loai/tinh-cam?page=1',
+  },
+  {
+    title: 'Phim Kinh Dị & Rùng Rợn',
+    kkphimUrl: '/v1/api/the-loai/kinh-di?page=1&limit=24',
+    vsmovUrl: '/the-loai/kinh-di?page=1',
+  },
+  {
+    title: 'Hài Hước & Vui Nhộn',
+    kkphimUrl: '/v1/api/the-loai/hai-huoc?page=1&limit=24',
+    vsmovUrl: '/the-loai/hai?page=1',
+  },
+  {
+    title: 'Anime & Hoạt Hình Tuyển Chọn',
+    kkphimUrl: '/v1/api/danh-sach/hoat-hinh?page=1&limit=24',
+    vsmovUrl: '/the-loai/hoat-hinh?page=1',
+  },
+  {
+    title: 'Khoa Học Viễn Tưởng (Sci-Fi)',
+    kkphimUrl: '/v1/api/the-loai/vien-tuong?page=1&limit=24',
+    vsmovUrl: '/the-loai/khoa-hoc-vien-tuong?page=1',
+  },
+  {
+    title: 'Cổ Trang & Tiên Hiệp',
+    kkphimUrl: '/v1/api/the-loai/co-trang?page=1&limit=24',
+    vsmovUrl: '/the-loai/co-trang?page=1',
+  },
+  {
+    title: 'Tâm Lý & Chính Kịch',
+    kkphimUrl: '/v1/api/the-loai/tam-ly?page=1&limit=24',
+    vsmovUrl: '/the-loai/tam-ly?page=1',
+  },
+  {
+    title: 'Võ Thuật & Kiếm Đạo',
+    kkphimUrl: '/v1/api/the-loai/vo-thuat?page=1&limit=24',
+    vsmovUrl: '/the-loai/vo-thuat?page=1',
+  },
+  {
+    title: 'Hình Sự & Trinh Thám',
+    kkphimUrl: '/v1/api/the-loai/hinh-su?page=1&limit=24',
+    vsmovUrl: '/the-loai/hinh-su?page=1',
+  },
+];
+
+export const COUNTRIES_ROW_CONFIGS: RowConfigItem[] = [
+  {
+    title: 'Phim Hàn Quốc Đặc Sắc',
+    kkphimUrl: '/v1/api/quoc-gia/han-quoc?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/han-quoc?page=1',
+  },
+  {
+    title: 'Phim Trung Quốc Tuyển Chọn',
+    kkphimUrl: '/v1/api/quoc-gia/trung-quoc?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/trung-quoc?page=1',
+  },
+  {
+    title: 'Phim Nhật Bản Được Yêu Thích',
+    kkphimUrl: '/v1/api/quoc-gia/nhat-ban?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/nhat-ban?page=1',
+  },
+  {
+    title: 'Phim Âu Mỹ & Hollywood Bom Tấn',
+    kkphimUrl: '/v1/api/quoc-gia/au-my?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/au-my?page=1',
+  },
+  {
+    title: 'Phim Thái Lan Đình Đám',
+    kkphimUrl: '/v1/api/quoc-gia/thai-lan?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/thai-lan?page=1',
+  },
+  {
+    title: 'Phim Việt Nam',
+    kkphimUrl: '/v1/api/quoc-gia/viet-nam?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/viet-nam?page=1',
+  },
+  {
+    title: 'Phim Đài Loan',
+    kkphimUrl: '/v1/api/quoc-gia/dai-loan?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/dai-loan?page=1',
+  },
+  {
+    title: 'Phim Ấn Độ / Bollywood',
+    kkphimUrl: '/v1/api/quoc-gia/an-do?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/an-do?page=1',
+  },
+  {
+    title: 'Phim Hồng Kông',
+    kkphimUrl: '/v1/api/quoc-gia/hong-kong?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/hong-kong?page=1',
+  },
+];
+
+export const TOP_MOVIES_ROW_CONFIGS: RowConfigItem[] = [
+  {
+    title: 'Top 10 Phim Thịnh Hành Hôm Nay',
+    kkphimUrl: '/danh-sach/phim-moi-cap-nhat?page=1',
+    vsmovUrl: '/danh-sach/phim-moi-cap-nhat?page=1',
+  },
+  {
+    title: 'Top Phim Bộ Được Xem Nhiều Nhất',
+    kkphimUrl: '/v1/api/danh-sach/phim-bo?page=1&limit=24',
+    vsmovUrl: '/danh-sach/phim-bo?page=1',
+  },
+  {
+    title: 'Top Phim Lẻ Đỉnh Cao 2026',
+    kkphimUrl: '/v1/api/danh-sach/phim-le?page=1&limit=24',
+    vsmovUrl: '/danh-sach/phim-le?page=1',
+  },
+  {
+    title: 'Top Anime & Hoạt Hình Hot',
+    kkphimUrl: '/v1/api/danh-sach/hoat-hinh?page=1&limit=24',
+    vsmovUrl: '/the-loai/hoat-hinh?page=1',
+  },
+  {
+    title: 'Top TV Shows Truyền Hình',
+    kkphimUrl: '/v1/api/danh-sach/tv-shows?page=1&limit=24',
+  },
+];
+
+export const TV_SHOWS_ROW_CONFIGS: RowConfigItem[] = [
+  {
+    title: 'Phim Bộ Mới Cập Nhật',
+    kkphimUrl: '/v1/api/danh-sach/phim-bo?page=1&limit=24',
+    vsmovUrl: '/danh-sach/phim-bo?page=1',
+  },
+  {
+    title: 'Phim Bộ Hàn Quốc',
+    kkphimUrl: '/v1/api/quoc-gia/han-quoc?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/han-quoc?page=1',
+  },
+  {
+    title: 'Phim Bộ Trung Quốc',
+    kkphimUrl: '/v1/api/quoc-gia/trung-quoc?page=1&limit=24',
+    vsmovUrl: '/quoc-gia/trung-quoc?page=1',
+  },
+  {
+    title: 'Phim Bộ Âu Mỹ',
+    kkphimUrl: '/v1/api/quoc-gia/au-my?page=1&limit=24',
+  },
+  {
+    title: 'Phim Bộ Cổ Trang',
+    kkphimUrl: '/v1/api/the-loai/co-trang?page=1&limit=24',
+  },
+];
+
+export const MOVIES_ROW_CONFIGS: RowConfigItem[] = [
+  {
+    title: 'Phim Lẻ Mới Nhất',
+    kkphimUrl: '/v1/api/danh-sach/phim-le?page=1&limit=24',
+    vsmovUrl: '/danh-sach/phim-le?page=1',
+  },
+  {
+    title: 'Phim Chiếu Rạp Bom Tấn',
+    kkphimUrl: '/v1/api/the-loai/hanh-dong?page=1&limit=24',
+    vsmovUrl: '/the-loai/hanh-dong?page=1',
+  },
+  {
+    title: 'Khoa Học Viễn Tưởng',
+    kkphimUrl: '/v1/api/the-loai/vien-tuong?page=1&limit=24',
+  },
+  {
+    title: 'Phim Kinh Dị & Rùng Rợn',
+    kkphimUrl: '/v1/api/the-loai/kinh-di?page=1&limit=24',
+  },
+  {
+    title: 'Phim Hài Hước',
+    kkphimUrl: '/v1/api/the-loai/hai-huoc?page=1&limit=24',
+  },
+];
+
 export function getContinueWatchingRow(): RowData | null {
   const list = getContinueWatching();
   if (!list || list.length === 0) return null;
@@ -118,31 +297,41 @@ export async function fetchUnifiedRow(config: RowConfigItem, idx: number): Promi
   };
 }
 
-export async function fetchUnifiedHomeContentProgressive(
+export async function fetchUnifiedPageContentProgressive(
+  pageId: string,
   onUpdate: (rows: RowData[]) => void
 ): Promise<RowData[]> {
+  let configs: RowConfigItem[] = UNIFIED_HOME_ROW_CONFIGS;
+  if (pageId === 'genres') configs = GENRES_ROW_CONFIGS;
+  else if (pageId === 'countries') configs = COUNTRIES_ROW_CONFIGS;
+  else if (pageId === 'topMovies') configs = TOP_MOVIES_ROW_CONFIGS;
+  else if (pageId === 'tvShows') configs = TV_SHOWS_ROW_CONFIGS;
+  else if (pageId === 'movies') configs = MOVIES_ROW_CONFIGS;
+
   const currentRows: RowData[] = [];
 
-  // 1. If continue watching items exist, add them first!
-  const cwRow = getContinueWatchingRow();
-  if (cwRow) {
-    currentRows.push(cwRow);
-    onUpdate([...currentRows]);
+  // If home page and continue watching items exist, add them first!
+  if (pageId === 'home') {
+    const cwRow = getContinueWatchingRow();
+    if (cwRow) {
+      currentRows.push(cwRow);
+      onUpdate([...currentRows]);
+    }
   }
 
-  // 2. Fetch first shelf immediately for instant hero & top row
+  // Fetch first shelf immediately for instant hero & top row
   try {
-    const firstRow = await fetchUnifiedRow(UNIFIED_HOME_ROW_CONFIGS[0], 0);
+    const firstRow = await fetchUnifiedRow(configs[0], 0);
     if (firstRow) {
       currentRows.push(firstRow);
       onUpdate([...currentRows]);
     }
   } catch (err) {
-    console.warn('Error fetching first shelf', err);
+    console.warn(`Error fetching first shelf for ${pageId}`, err);
   }
 
-  // 3. Progressively fetch remaining shelves in background
-  const remaining = UNIFIED_HOME_ROW_CONFIGS.slice(1);
+  // Progressively fetch remaining shelves in background
+  const remaining = configs.slice(1);
   for (let i = 0; i < remaining.length; i++) {
     try {
       const row = await fetchUnifiedRow(remaining[i], i + 1);
@@ -156,6 +345,12 @@ export async function fetchUnifiedHomeContentProgressive(
   }
 
   return currentRows;
+}
+
+export async function fetchUnifiedHomeContentProgressive(
+  onUpdate: (rows: RowData[]) => void
+): Promise<RowData[]> {
+  return fetchUnifiedPageContentProgressive('home', onUpdate);
 }
 
 export async function searchUnifiedMovies(query: string): Promise<TileData[]> {

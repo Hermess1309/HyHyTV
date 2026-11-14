@@ -45,9 +45,8 @@ import {
 } from '../state/selectors';
 import { DETAIL_BUTTON_COUNT, HERO_BUTTON_COUNT, KEYBOARD_GRID, KEYBOARD_COLS } from '../utils/constants';
 import { NAV_ITEMS } from '../data/pageConfigs';
-import { PAGE_CONFIGS } from '../data/pageConfigs';
-import { fetchRowsFromConfigs, searchVsmov } from '../data/vsmov';
-import { fetchUnifiedEpisodes } from '../data/movieService';
+import { searchVsmov } from '../data/vsmov';
+import { fetchUnifiedEpisodes, fetchUnifiedPageContentProgressive } from '../data/movieService';
 import { getCachedSeasons, getCachedEpisodes } from '../data/tmdb';
 import type { PageId } from '../state/slices/uiSlice';
 
@@ -136,17 +135,15 @@ export function useInputNavigation() {
 
     if (pageId === 'myList' || pageId === 'search' || pageId === 'settings') return;
 
-    const configs = PAGE_CONFIGS[pageId];
-    if (!configs) return;
-
     try {
-      const fetchedRows = await fetchRowsFromConfigs(configs);
-      if (fetchedRows.length > 0) {
-        dispatch(setPageContent({ page: pageId, rows: fetchedRows }));
-        dispatch(setContent(fetchedRows));
-      }
+      await fetchUnifiedPageContentProgressive(pageId, (fetchedRows) => {
+        if (fetchedRows.length > 0) {
+          dispatch(setPageContent({ page: pageId, rows: fetchedRows }));
+          dispatch(setContent(fetchedRows));
+        }
+      });
     } catch (err) {
-      console.error('Error loading page configs:', err);
+      console.error(`Error loading page ${pageId}:`, err);
     }
   }, [dispatch]);
 

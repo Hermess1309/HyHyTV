@@ -11,7 +11,11 @@ import { useSettings } from '../hooks/useSettings';
 import { AvatarDropdown } from './profile/AvatarDropdown';
 import type { PageId, InteractionMode } from '../state/slices/uiSlice';
 
-export const NavBar = memo(function NavBar() {
+interface NavBarProps {
+  isScrolled?: boolean;
+}
+
+export const NavBar = memo(function NavBar({ isScrolled = false }: NavBarProps) {
   const dispatch = useDispatch();
   const activePage = useSelector(selectActivePage);
   const navFocused = useSelector(selectNavFocused);
@@ -37,7 +41,7 @@ export const NavBar = memo(function NavBar() {
   if (isMobile) return null;
 
   return (
-    <nav style={navStyles.container(isTv && navFocused)} role="navigation" aria-label="Main navigation">
+    <nav style={navStyles.container(isTv && navFocused, isScrolled)} role="navigation" aria-label="Main navigation">
       <div style={navStyles.logo}>J</div>
       <ul style={navStyles.navList}>
         {NAV_ITEMS.filter((item) => !(item.id === 'myList' && settings.disableMyList)).map((item, i) => {

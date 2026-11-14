@@ -3,9 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActivePage, type PageId } from '../state/slices/uiSlice';
 import { setContent, setPageContent, switchPage, setSearchResults } from '../state/slices/contentSlice';
 import { selectPageCache } from '../state/selectors';
-import { PAGE_CONFIGS } from '../data/pageConfigs';
-import { fetchRowsFromConfigsProgressive } from '../data/vsmov';
-import { fetchUnifiedHomeContentProgressive } from '../data/movieService';
+import { fetchUnifiedPageContentProgressive } from '../data/movieService';
 
 export function usePageLoader() {
   const dispatch = useDispatch();
@@ -22,37 +20,21 @@ export function usePageLoader() {
     }
     if (pageId === 'myList' || pageId === 'settings') return;
 
-    if (pageId === 'home') {
-      try {
-        await fetchUnifiedHomeContentProgressive((fetchedRows) => {
-          if (fetchedRows.length > 0 && activePageRef.current === 'home') {
-            dispatch(setPageContent({ page: 'home', rows: fetchedRows }));
-            dispatch(setContent(fetchedRows));
-          }
-        });
-      } catch {
-        // Keep existing
-      }
-      return;
-    }
-
-    if (pageCache[pageId]) {
+    // Cache-first: if already loaded, switch instantly (0ms)
+    if (pageCache[pageId] && pageCache[pageId].length > 0) {
       dispatch(switchPage(pageId));
       return;
     }
 
-    const configs = PAGE_CONFIGS[pageId as keyof typeof PAGE_CONFIGS];
-    if (!configs) return;
-
     try {
-      await fetchRowsFromConfigsProgressive(pageId, configs, (fetchedRows) => {
+      await fetchUnifiedPageContentProgressive(pageId, (fetchedRows) => {
         if (fetchedRows.length > 0 && activePageRef.current === pageId) {
           dispatch(setPageContent({ page: pageId, rows: fetchedRows }));
           dispatch(setContent(fetchedRows));
         }
       });
-    } catch {
-      // Keep existing content on failure
+    } catch (err) {
+      console.warn(`Error loading content for ${pageId}`, err);
     }
   }, [dispatch, pageCache]);
 

@@ -26,8 +26,9 @@ export const KEYBOARD_ROWS = [
 ];
 
 const QUICK_TAGS = [
-  'Studio Ghibli', 'Hành Động', 'Hoạt Hình',
-  'Hàn Quốc', 'Kinh Dị', 'Tình Cảm', 'Cổ Trang'
+  'Studio Ghibli', 'Hành Động', 'Hoạt Hình', 'Hàn Quốc',
+  'Kinh Dị', 'Tình Cảm', 'Cổ Trang', 'Hài Hước',
+  'Viễn Tưởng', 'Võ Thuật', 'Âu Mỹ', 'Trung Quốc'
 ];
 
 export const SearchPage = memo(function SearchPage() {

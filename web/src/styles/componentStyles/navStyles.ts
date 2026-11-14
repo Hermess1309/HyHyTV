@@ -3,7 +3,7 @@ import { theme } from '../theme';
 import type { InteractionMode } from '../../state/slices/uiSlice';
 
 export const navStyles = createStyles({
-  container: (navFocused: boolean) => ({
+  container: (navFocused: boolean, isScrolled = false) => ({
     position: 'fixed' as const,
     top: 0,
     left: 0,
@@ -15,9 +15,14 @@ export const navStyles = createStyles({
     paddingLeft: theme.spacing.edgePadding,
     paddingRight: theme.spacing.edgePadding,
     background: navFocused
-      ? 'linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 80%, transparent 100%)'
-      : 'linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, transparent 100%)',
-    transition: 'background 300ms ease-out',
+      ? 'rgba(20, 20, 20, 0.98)'
+      : isScrolled
+      ? 'rgba(20, 20, 20, 0.97)'
+      : 'linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)',
+    boxShadow: isScrolled ? '0 4px 20px rgba(0,0,0,0.85)' : 'none',
+    backdropFilter: isScrolled ? 'blur(16px)' : 'none',
+    WebkitBackdropFilter: isScrolled ? 'blur(16px)' : 'none',
+    transition: 'background 350ms ease-out, box-shadow 350ms ease-out, backdrop-filter 350ms ease-out',
     fontFamily: theme.typography.fontFamily,
   }),
 

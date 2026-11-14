@@ -96,11 +96,24 @@ export function Shell() {
     }
   }, [targetOffset, isSearch, contentScroll, searchScroll, isTv]);
 
+  const [webScrolled, setWebScrolled] = useState(false);
+  useEffect(() => {
+    if (isTv) return;
+    const handleScroll = () => {
+      setWebScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isTv]);
+
+  const isScrolledTv = !navFocused && !heroFocused && (focus.rowIndex > 0 || Math.abs(contentScroll.value) > 20);
+  const isScrolled = isTv ? isScrolledTv : webScrolled;
+
   // --- Web mode: simple layout ---
   if (!isTv) {
     return (
       <div ref={shellRef} style={shellStyles.webShell} aria-label="Content browser">
-        {!isMobile && <NavBar />}
+        {!isMobile && <NavBar isScrolled={isScrolled} />}
         {isSearch ? (
           <div style={{ paddingTop: isMobile ? 0 : theme.spacing.headerHeight }}>
             <SearchPage />
@@ -139,7 +152,7 @@ export function Shell() {
   // --- TV mode: engine-driven layout ---
   return (
     <div ref={shellRef} style={shellStyles.shell} role="grid" aria-label="Content browser">
-      <NavBar />
+      <NavBar isScrolled={isScrolled} />
       {isSearch ? (
         <SearchPage />
       ) : isMyList ? (

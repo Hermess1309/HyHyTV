@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { TileData } from './contentSlice';
 
-export type PageId = 'home' | 'tvShows' | 'movies' | 'newPopular' | 'myList' | 'search' | 'settings';
+export type PageId = 'home' | 'tvShows' | 'movies' | 'genres' | 'countries' | 'topMovies' | 'newPopular' | 'myList' | 'search' | 'settings';
 export type InteractionMode = 'web' | 'tv';
 
 export interface PlayerEpisodeItem {
