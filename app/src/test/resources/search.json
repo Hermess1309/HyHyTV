@@ -1,0 +1,321 @@
+{
+    "status": "success",
+    "paginate": {
+        "current_page": 1,
+        "total_page": 143,
+        "total_items": 1426,
+        "items_per_page": 10
+    },
+    "items": [
+        {
+            "id": "eyJpdiI6InVncHlXV2JYMGdZbUFpbmFJZlNRSkE9PSIsInZhbHVlIjoicE12a25CdXRnbktDZmM0WXN3L3lXUT09IiwibWFjIjoiMWQxZmMyYzY0Yjg1ZGE4YWYzY2I1NzE0MTY4Y2Q5YTk3Yzc1NzBjZWY0ZWJiOWNkMWUwZDRmMGUxNWVhNmZlYSJ9",
+            "name": "Hoa Sen Đen",
+            "original_name": "Black Lotus",
+            "slug": "hoa-sen-den",
+            "year": 2023,
+            "description": "Một cựu đặc nhiệm thuê một người đàn ông chiến đấu trên đường phố Amsterdam để giải cứu con gái của bạn mình khỏi tổ chức tội phạm địa phương.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "93 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Todor Chapkanov",
+            "casts": "Rico Verhoeven, Frank Grillo, Peter Franzén",
+            "tmdb": {
+                "id": 996154,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/996154"
+            },
+            "imdb": {
+                "id": "tt15895490",
+                "url": "https://www.imdb.com/title/tt15895490/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-70534ece16afe6f89c53fe2aace7ac364824d04ce1bed7a5c183ee00f4bc25ee.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-fb052d0f6f4c0e7fcc0d7f910ff31687b2d1b3eb7f6e26487cd33e6fb53c52b6.webp",
+            "poster_url": "https://img.nguonc.com/images/img-2a9eb972735d82a7398206a951f94e399c2c368d275b518759af49f9cb7fced7.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-dc485592ab39aa53f52307f767da9967dc6e11c1822e5d60f205b5d0d22a7fa2.webp",
+            "created": "2023-06-24T17:00:21.000000Z",
+            "modified": "2025-07-01T15:20:29.000000Z"
+        },
+        {
+            "id": "eyJpdiI6IldzZTdHVGlXU2tRanBaMmxFZ2FOTVE9PSIsInZhbHVlIjoiNDNCbStaS0MyNThWZ1l1UlAyeEE1dz09IiwibWFjIjoiMTcyNTQxNjFiNTZmZjk0MGM2OWNhZWYzMjI1ODlmMjUwM2MyOTVhY2JlZGMwM2Q5ZDkxZmQxZmI3ZTI4YWMxNSJ9",
+            "name": "Hoàng Hà Dị Văn Lục",
+            "original_name": "Anecdotes Of The Yellow River",
+            "slug": "hoang-ha-di-van-luc",
+            "year": 2023,
+            "description": "Hoàng Hà Dị Văn Lục – Anecdotes Of The Yellow River  kể về câu chuyện của Thần Thiên Nhất và bạn cùng lớp của anh ấy Tân Viễn Hàng, đã gặp phải một sự cố kỳ lạ về “xác chết đi ngược dòng nước” khi họ đang giải quyết vấn đề lũ lụt của sông Hoàng Hà,và vô tình giải cứu đồng đội cũ của họ.\r\n\r\nHọ đã cùng nhau khám phá sự thật đằng sau những sự kiện dối trá ở sông Hoàng Hà.Thần Thiên Nhất và những người khác đã phân tích từng bí ẩn, dần dần tiết lộ sự thật và tìm ra một phương pháp khoa học để kiểm soát lũ lụt, giúp khôi phục hoàn toàn sự yên bình của dân làng.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "77 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Jimmy Liu",
+            "casts": "Jeam, Zhang Boyu, Wang Yi",
+            "tmdb": {
+                "id": 1112115,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1112115"
+            },
+            "imdb": {
+                "id": null,
+                "url": null
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-6e560f11ae6514c8ebd1ee16c6b9350b98dcb93e5a72a043bb2d66a14b037122.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-60689d897f66213623f6c7b50daf49d4861eb7f094ccee4689dae7d9e2f97942.webp",
+            "poster_url": "https://img.nguonc.com/images/img-12ecb5c77a99ce1c727be28609b1133dccb4b32aff51c36d952c0df4ce9db859.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-0163430ac6d8ed60e3c1e71aef3035daa25489321f23ca4da5ea1a0d83fe897e.webp",
+            "created": "2023-06-24T18:02:38.000000Z",
+            "modified": "2024-12-07T15:38:13.000000Z"
+        },
+        {
+            "id": "eyJpdiI6IllFWUhjOGd4L2xtR0ZGNnB6a3I1ZkE9PSIsInZhbHVlIjoiMEg0YXl1Z1RrNkVkZ1BRNVppQndGUT09IiwibWFjIjoiZjQ3ZDU5NjY4MGRmNDQ2YmFiOWYyYjdhZWQ3NmZjNTdhZTE1NTZkMzkzZjZkYTE5MGNhMGQ5NTNiYThjNWEyNiJ9",
+            "name": "Thầm Yêu: Quất Sinh Hoài Nam",
+            "original_name": "My Blue Summer",
+            "slug": "tham-yeu-quat-sinh-hoai-nam",
+            "year": 2022,
+            "description": "Thịnh Hoài Nam, cái tên này đã khắc sâu vào lòng Lạc Chỉ. Gặp lại ở trung học, Thịnh Hoài Nam như một đường ánh sáng, khiến Lạc Chỉ không thể không ngước mắt nhìn theo, cũng khiến cho tâm tư thiếu nữ của Lạc Chỉ không thể che giấu. Trên sân thượng khắc \"Lạc Chỉ yêu Thịnh Hoài Nam, không ai hay biết\" chính là tuyên ngôn yêu thầm của Lạc Chỉ không thể nói ra. Sau khi vào đại học, Lạc Chỉ tràn đầy mong đợi cuộc sống mới, lại phát hiện Thịnh Hoài Nam học cùng một trường, Hai người dần dần quen biết, càng ngày càng gần, nhưng cũng không dám bày tỏ nỗi lòng. Khi áp lực của trưởng thành và hiện thực cùng nhau kéo đến, mối tình yêu thầm lâu dài này, rốt cuộc phải làm sao mới yên ổn?",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "102 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Huỳnh Đức Bân",
+            "casts": "Trương Tuyết Nghênh, Tân Vân Lai, Lý Gia Kỳ",
+            "tmdb": {
+                "id": 983004,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/983004"
+            },
+            "imdb": {
+                "id": "tt18291400",
+                "url": "https://www.imdb.com/title/tt18291400/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-25b983015691a39a74ef4b2d1ccf60679511b0d7545002e3d5de0bb88cded83d.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-431185209d3bedfdac0a99f38dcd6b8b890be8a65b208228b9fee3620826ff47.webp",
+            "poster_url": "https://img.nguonc.com/images/img-cd6be2028219501806363edba641962edea1e6dfee7f0c967044960b0c4bf3e3.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-2dc35737084ccd6488a8fb13599848758c447ae73817b8e92fba52ed13ef3b50.webp",
+            "created": "2023-06-24T16:25:53.000000Z",
+            "modified": "2024-10-11T05:23:26.000000Z"
+        },
+        {
+            "id": "eyJpdiI6Ii81dktVVGZqWCtBQUkxNXhqSks0M0E9PSIsInZhbHVlIjoielJ5elBpYjd5NWJZZkdXTS81MTlNQT09IiwibWFjIjoiZTkxYzAwMDllZmYzZDkxMTE2YTM3YWYzODNkNjdjZDAwZjE3N2FmMWU4MDVjZWNjZDE5MzExNmM2YTlmYTMyZSJ9",
+            "name": "Đại Chiến Thế Giới: Cuộc Tấn Công Từ Sao Hỏa",
+            "original_name": "War of the Worlds: The Attack",
+            "slug": "dai-chien-the-gioi-cuoc-tan-cong-tu-sao-hoa",
+            "year": 2023,
+            "description": "Phim kể về một nhóm gồm ba nhà thiên văn học trẻ tuổi, trong khi theo dõi một thiên thạch rơi xuống Trái đất, nhận ra rằng chúng đang đi đầu trong một cuộc xâm lược của sao Hỏa. Cùng với sự trợ giúp của một người lính, bộ ba bắt đầu cuộc hành trình đầy nguy hiểm đến London, nơi họ phải đối đầu với những người ngoài hành tinh xâm lược và vạch ra một kế hoạch để cứu nhân loại.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "87 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Junaid Syed",
+            "casts": "Sam Gittins, Vincent Regan, Lara Lemon",
+            "tmdb": {
+                "id": 1103825,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1103825"
+            },
+            "imdb": {
+                "id": "tt12519802",
+                "url": "https://www.imdb.com/title/tt12519802/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-b3a4dc87f57f37d1043edfa2d1314381b8257556a4bc77ae911a65bb0f4475f1.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-dae03dc8e6f8999ff97ee50a7420ee90c12d9c18bce896c123aa649d7182d9f3.webp",
+            "poster_url": "https://img.nguonc.com/images/img-6adf0e92bbaf7bc00c498204a672998fb12c7d350206d7670d6e1feee4474be3.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-76224face846b4fd07a02769f21ae8e7be414c92b487ae458bc5a221d2480849.webp",
+            "created": "2023-06-24T17:27:38.000000Z",
+            "modified": "2023-07-05T06:46:30.000000Z"
+        },
+        {
+            "id": "eyJpdiI6IkMxZUdraHpwOVVPdTVtUm9XSXY5VEE9PSIsInZhbHVlIjoiRkpha1B4TVZQc05HK0gxeG9tNzBpUT09IiwibWFjIjoiZTU0Zjk0N2NmMGE3YzM3OGRhZWFiZTc4ZmY1MjM3ODRmNWQ1ZjlmYTFlMjg4ZGFkNzZjNzJjNGM3NTIwZTlkMyJ9",
+            "name": "Tuần Khủng Hoảng",
+            "original_name": "The Wonder Weeks",
+            "slug": "tuan-khung-hoang",
+            "year": 2023,
+            "description": "Ba cặp đôi hiện đại xoay xở trước các mối quan hệ và sự nghiệp đòi hỏi khắt khe trong khi đương đầu với hành trình làm cha mẹ đầy khó đoán.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "110 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Aram van de Rest",
+            "casts": "Sallie Harmsen, Yolanthe Cabau, Sarah Chronis",
+            "tmdb": {
+                "id": 1126844,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1126844"
+            },
+            "imdb": {
+                "id": "tt22506746",
+                "url": "https://www.imdb.com/title/tt22506746/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-a4afa167af8b3fb814d5c03c8fdc8642dec565f0845a741b86e590cd705f39ff.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-55afffc29b0f2620f37a6dc134c3aa997cc1b1caacca6daab94bf4df5dcdbb34.webp",
+            "poster_url": "https://img.nguonc.com/images/img-4468e653abe435d7df9ce000fd614a6da4527d1e1ccfa78154b2b0c7edc7a719.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-153cdb90e451f33d934a91c489954fc8408f2781fb8a4e8022d9d556ecb339d0.webp",
+            "created": "2023-06-24T17:56:48.000000Z",
+            "modified": "2025-06-10T11:02:31.000000Z"
+        },
+        {
+            "id": "eyJpdiI6Im9vMHpyTjluamlTVXFqN1NRdnFIL2c9PSIsInZhbHVlIjoiZk1uQW8rTGlpNS9JWjV4S044SEFkZz09IiwibWFjIjoiYjUxMzAwNTYzOGVjNTJiYjExODNmNjljYTVmOTM5OTVkNWE4MGY4ZWNmNzQ4OTBlYTIwYzkxMmZjZDk0ZjZlOSJ9",
+            "name": "Nayika Devi: Nữ Hoàng Chiến Binh",
+            "original_name": "Nayika Devi: The Warrior Queen",
+            "slug": "nayika-devi-nu-hoang-chien-binh",
+            "year": 2022,
+            "description": "Nayika Devi, Nữ hoàng chiến binh là một bộ phim lịch sử lấy bối cảnh thế kỷ 12. Phim kể về nữ chiến binh đầu tiên của Ấn Độ.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "2h 2m",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Nitin G.",
+            "casts": "Khushi Shah, Manoj Joshi, Chunky Pandey",
+            "tmdb": {
+                "id": 972123,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/972123"
+            },
+            "imdb": {
+                "id": "tt15100100",
+                "url": "https://www.imdb.com/title/tt15100100/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-8ff96238ec69f82aef28a689753448a8deddea01b3e6c220b00344c60d57d9c4.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-69bfcb7183a1c762f74662bdd95dc0823b92f365146aae6ba257a633c12818a3.webp",
+            "poster_url": "https://img.nguonc.com/images/img-a3927b0a9b6da3e09dbaafe552f91d2218182e9002929641291430bc681a6e01.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-a0ddace00eec5b5f4b75eee0455d6576abd7ce0d42103939ea569cc5c45cffbd.webp",
+            "created": "2023-06-24T19:50:25.000000Z",
+            "modified": "2023-07-05T08:13:10.000000Z"
+        },
+        {
+            "id": "eyJpdiI6ImNmM1lxQVorandmeGF2dG5NR0wrVWc9PSIsInZhbHVlIjoidnJnTVBSY2dmNGYxeDB6eXkydC9sQT09IiwibWFjIjoiNGRjYWZjZWNiZmRiMGZjMjQ1YWVjOGIwMDJjZDY4ZTVlODY0ZWE1NjI0ZWNjMzQ4MzY0OTQ0OTljY2EwZmQwNyJ9",
+            "name": "Nộ Hỏa Tảo Độc",
+            "original_name": "Raging Fire",
+            "slug": "no-hoa-tao-doc",
+            "year": 2023,
+            "description": "Nộ Hỏa Tảo Độc – Raging Fire kể về câu chuyện của đội trưởng Tề Vĩ Bân (do Hình Hãn Khanh thủ vai) và đội phó Trần Mẫn (do Lý Manh Manh thủ vai). Sau khi nhận được cuộc gọi báo cáo về vụ việc buôn bán ma túy, hai người họ dẫn theo các thành viên trong nhóm tiến hành một cuộc điều tra bí mật về mục tiêu bị nghi ngờ. và gặp gỡ các trùm ma túy Duẫn Khôn (do Cố Bân thủ vai) và Duẫn Dực (do Trữ Tiến thủ vai). Đây là một cuộc đấu trí và so gan trong công cuộc chống ma túy. Tề Vĩ Bân lẻn vào khoang chở hàng khi nghi phạm đang chất hàng lên xe, bám theo chiếc xe đến sào huyệt sản xuất ma túy, lợi dụng địa hình hiểm trở phối hợp với đồng đội chờ cơ hội đột kích triệt phá nhà xưởng. Anh cứ ngỡ mình đã phá được trọng án, nhưng anh nào biết rằng tất cả những điều này là một âm mưu của xã hội đen. Đối mặt với việc bắt hụt anh em nhà họ Duẫn, đồng đội thì thương tích đầy mình, anh rơi vào vòng xoáy tự trách. Càng không ngờ rằng, Nghiêm Khang, một mục tiêu dài hạn khác vốn bị giám sát trong một thời gian dài lại đột ngột qua đời, lúc này, nguồn manh mối về vụ án ma túy ngầm Tân Hải bất ngờ bị gián đoạn. Qua điều tra, đội chống ma túy cuối cùng đã tìm ra điểm đột phá của vụ án, kẻ môi giới mới – Cá Chạch rơi vào diện tình nghi. Cá Chạch là ai? Ai mới là kẻ thực sự đứng đằng sau vụ án ma túy Tân Hải?",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "74 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Wei Dong",
+            "casts": "Xing Hanqing, Cổ Bân, Li Mengmeng",
+            "tmdb": {
+                "id": 1105211,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1105211"
+            },
+            "imdb": {
+                "id": null,
+                "url": null
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-ae7c92152075990f515f447801306eb565eae75cdda73d7699b779e083ad0911.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-5ba332199e615bea32b77dbf589ece1c3f7083c2b9838ed8f3592fca16052974.webp",
+            "poster_url": "https://img.nguonc.com/images/img-a627afc3278421af9efdfde3694b34f9e59654afb9523aa404bbdd9825a8ec82.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-f6ccaf837fea4439dd6222ced1471bfc3c37a0ebaff6a2bde6985e04b036cf54.webp",
+            "created": "2023-06-25T01:59:11.000000Z",
+            "modified": "2025-07-03T15:22:46.000000Z"
+        },
+        {
+            "id": "eyJpdiI6Ik9mZ09sRGdwYUczRHBlUk43Z3BoL0E9PSIsInZhbHVlIjoiMGNSbEpZTWJBakxaV1JSd1c5WmtOUT09IiwibWFjIjoiNDkwM2E5OTIwOWQ0MTlhOWY3ZmMwMzUwOGE4ZDQ3MzAyZjc0MTU1YWFjOGYyMTkyMTViMTRiOTZlZmFlZTU1ZiJ9",
+            "name": "Lạt Cảnh Cuồng Hoa 1",
+            "original_name": "Spicy Police Flower 1",
+            "slug": "lat-canh-cuong-hoa-1",
+            "year": 2023,
+            "description": "Bộ phim kể rằng để bắt được trùm ma túy Triệu Văn Cửu cảnh sát đã sắp xếp cho Đường Thi Vũ, một thành viên cảnh sát đặc biệt, tiếp cận em gái của Triệu Văn Cửu, Nhã Nhã, vì vậy khi gia nhập băng đảng ma túy với tư cách là một đặc vụ chìm. Trong khoảng thời gian này, kẻ thù của Triệu Văn Cửu, trùm ma túy lớn Trần Gia Hoa , đã thâm nhập vào Trung Quốc để trả thù, Đường Thi Vũ xử lý cả hai bên, một mặt thu thập bằng chứng, một mặt liên lạc với Hoa Tửu, cấp dưới của Triệu Văn Cửu, sau khi trải qua hàng loạt khúc mắc và đến lượt, Hoa Tửu bắt đầu tin tưởng Đường Thi Vũ, với sự giúp đỡ của Hoa Tửu, đã khéo léo truyền đi mật tín và thành công quét sạch toàn bộ tội phạm. Câu chuyện thể hiện rằng, là người công an nhân dân, chúng ta không những phải phân biệt được thiện ác, trừng trị ác bá thiện mà còn phải dũng cảm xông pha cứu giúp nhân dân khi tính mạng của họ gặp nguy hiểm. Là một phụ nữ, Đường Thi Vũ cũng thể hiện trí thông minh phi thường và khả năng biến nguy thành món hời khi đối mặt với nguy hiểm, không thua kém gì các thành viên nam, cô cũng lãnh đạo đội cảnh sát đặc nhiệm nữ của riêng mình, hợp tác ăn ý với nhau , và xử lý chúng một cách nhanh chóng và chính xác, thể hiện được tinh thần thép và năng lực nghiệp vụ của mình!",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "92 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Wang Ke",
+            "casts": "Li Ran, Yan Jiaying, Jing Zhao",
+            "tmdb": {
+                "id": 1103307,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1103307"
+            },
+            "imdb": {
+                "id": null,
+                "url": null
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-f0164e59b911b3fb042e1af13393f0284f2bc2bdc01c4dcb0cbf43f9f13f03dc.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-24d23ce3fd11e34b98b7311f8822501b8abd3701254178877a127d05b940d1a0.webp",
+            "poster_url": "https://img.nguonc.com/images/img-9693cccb0d86d27facbcd1be282ba16d58a63e1929f01aa8d3521924bb08bb2d.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-10c8eabc988de952d75b7cfffa838df81058bf09297a317c56923ea546c36f64.webp",
+            "created": "2023-06-26T05:27:20.000000Z",
+            "modified": "2024-12-07T15:33:50.000000Z"
+        },
+        {
+            "id": "eyJpdiI6InJ2a3JQWWtzdUVUYTFBWHNqZms3elE9PSIsInZhbHVlIjoiSnVOQTErU3VEUUp0NnVnbStld1Rhdz09IiwibWFjIjoiODc2YzJkMGJjMTU4MGM5NTAzY2YyOTIwMTQ5NDFlMTJkYzBlODgyYWRkMDk4ZTYwOTQyMzI2MjY2ZDQ1OGVkZiJ9",
+            "name": "Thảm Họa Địa Tâm",
+            "original_name": "Geocentric Crisis",
+            "slug": "tham-hoa-dia-tam",
+            "year": 2023,
+            "description": "Thảm Họa Địa Tâm – Geocentric Crisis trong tương lai, hiệu ứng nhà kính tăng cạnh, môi trường xấu đi và con người buộc phải chuyển đến các thành phố dưới lòng đất. Năng lượng trong thành phố ngầm đang đối mặt với sự cạn kiệt, các nhà khoa học đã dày công phát triển một tác nhân cân bằng nhiệt độ, với hy vọng đưa mọi người trở lại cuộc sống trên bề mặt.\r\n\r\nTuy nhiên, vào ngày thí nghiệm phát thải khí, khí độc bị rò rỉ và những con thằn lằn Modor dưới lòng đất biến thành những con thú khổng lồ để tàn phá và thảm họa ập đến. . . . Mọi người phải đi chuyến tàu duy nhất dẫn lên mặt đất và bắt đầu hành trình trốn thoát tuyệt vọng.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "70 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Xia Banchang",
+            "casts": "Wang Ziyi, Liang Yuan, Lee Lichun",
+            "tmdb": {
+                "id": 1103729,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1103729"
+            },
+            "imdb": {
+                "id": "tt18255182",
+                "url": "https://www.imdb.com/title/tt18255182/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-c33e2b53741c038744c33548bcaa8a9c389ed9c23001d1527907c789f1e70336.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-6c84f51e6e7590dc3894bfbc828312c674af31c291ff0b685c22b7e904588c90.webp",
+            "poster_url": "https://img.nguonc.com/images/img-ae172cff5362ef764deb9843c13f7078c3399d2812b4c1a73e25592b38557f86.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-427b56c2113b9d9acdccb28a83658fcecf7b598c0303635911dd2203333ff774.webp",
+            "created": "2023-06-26T06:38:46.000000Z",
+            "modified": "2024-12-07T15:24:58.000000Z"
+        },
+        {
+            "id": "eyJpdiI6Img3WGsvVDVvV0g3djdYNE91N2Y2Mnc9PSIsInZhbHVlIjoiMkNYTUNlaTdLbXV0b1BDU2w4VlJ1QT09IiwibWFjIjoiY2YyMzAzM2E1NGQ3YmRmYzJjYmJiNWEzNTdjNWM4ZDlmOTE3MzAwZTdmZDJjYzI1NjFmYzFjZTk4Zjg2OWZhYiJ9",
+            "name": "Bàn Sơn Đạo Nhân: Lạc Thiên Hoang",
+            "original_name": "Taoist Priest In The Tomb",
+            "slug": "ban-son-dao-nhan-lac-thien-hoang",
+            "year": 2023,
+            "description": "Phim kể về đoàn người của Bàn Sơn đạo nhân Chu Khước bị đại soái quân phiệt uy hiếp, cùng nhau đi đến cổ mộ Lạc Thiên Hoang thăm dò tình hình. Bích hoạ Nữ Thần Phi Thiên trong cổ mộ, thực chất là mê cốt hương, nhiễu loạn tâm trí, thời khắc nguy nan gặp đệ tử Bàn Sơn Môn Gia Cát Huyền, mới có thể đánh bại quái vật, vì thế mà Chu Khước và Gia Cát Huyền mới nhận ra nhau. Không ngờ đường đến cổ mộ nguy hiểm đầy rẫy, đám người Chu Khước liên tục tháo chạy, đây là một cuộc so tài giữa thiện và ác, một sự lựa chọn giữa đạo nghĩa và phản bội.",
+            "total_episodes": 1,
+            "current_episode": "FULL",
+            "time": "82 phút",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Liu Chun",
+            "casts": "Eddy Ko, Guo Jianuo, Li Ruoxi",
+            "tmdb": {
+                "id": 1085533,
+                "type": "movie",
+                "season": null,
+                "url": "https://www.themoviedb.org/movie/1085533"
+            },
+            "imdb": {
+                "id": null,
+                "url": null
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-eeee89b319ef35b1b433e399549038d6b27e3603d317588943faf785e1e2b320.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-6b8f27c0231aa1b6fe1a40f74f8c569d6b54ab5260dcdaaefcd32c546496a1bc.webp",
+            "poster_url": "https://img.nguonc.com/images/img-769a6785470dd31dcd00aba164f1dc74cbe7833a36044fe0aab49bab6470a175.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-c7862d2c332a17ad05de63f15ad71c9335c5681734467855f18e3b1d3e73ab94.webp",
+            "created": "2023-06-26T07:37:19.000000Z",
+            "modified": "2024-12-07T15:42:35.000000Z"
+        }
+    ]
+}

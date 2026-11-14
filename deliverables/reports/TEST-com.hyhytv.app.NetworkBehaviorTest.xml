@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.hyhytv.app.NetworkBehaviorTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-14T04:27:11.588Z" hostname="DESKTOP-J7J59SB" time="1.767">
+  <properties/>
+  <testcase name="cancellingOneScreenDoesNotCancelSharedRequest" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.544"/>
+  <testcase name="expiredAndEvictedResponsesReload" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.014"/>
+  <testcase name="invalidPayloadIsNeverRetried" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.015"/>
+  <testcase name="cancellationIsNeverRetried" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.006"/>
+  <testcase name="retrofitEncodesVietnameseSearchAndUsesVerifiedPath" classname="com.hyhytv.app.NetworkBehaviorTest" time="1.138"/>
+  <testcase name="retriesAreBoundedToThreeAttempts" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.005"/>
+  <testcase name="concurrentRequestsShareOneOperation" classname="com.hyhytv.app.NetworkBehaviorTest" time="0.042"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,4 @@
+-keepattributes Signature,InnerClasses,EnclosingMethod
+-keep class com.hyhytv.app.data.remote.** { *; }
+-keep class com.hyhytv.app.domain.model.** { *; }
+-keepclassmembers,allowobfuscation class * { @com.google.gson.annotations.SerializedName <fields>; }

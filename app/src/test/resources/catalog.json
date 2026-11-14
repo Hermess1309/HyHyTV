@@ -1,0 +1,311 @@
+{
+    "status": "success",
+    "paginate": {
+        "current_page": 1,
+        "total_page": 3371,
+        "total_items": 33703,
+        "items_per_page": 10
+    },
+    "items": [
+        {
+            "name": "Lắng Nghe Thanh Âm",
+            "original_name": "Oops! Mysterious Sounds",
+            "slug": "lang-nghe-thanh-am",
+            "year": "2026",
+            "description": "Phodduang, sinh viên năm thứ ba khoa Khoa học Thể thao, bị ép phải hợp tác và giả vờ hẹn hò với đối thủ của mình là Jinna, sinh viên năm thứ ba khoa Kỹ thuật Ô tô. Cả hai đều có mối liên hệ với Anda, một diễn viên dòng phim BL đang lên. Mọi thứ thay đổi khi tin tức về cái chết bất thường của Anda trong những hoàn cảnh đáng ngờ được lan truyền. Phodduang nhận được một cặp tai nghe và bắt đầu nghe thấy giọng nói của Anda qua đó. Thôi thúc bởi mong muốn vạch trần sự thật, Phodduang và Jin ngày càng trở nên gần gũi hơn. Cuộc truy tìm công lý của họ ngày càng trở nên nguy hiểm. Thế nhưng Jin từ chối lùi bước, quyết tâm tóm gọn kẻ thủng tay sát nhân và bảo vệ người mình yêu. Giữa những cuộc gọi đầy bí ẩn từ chiếc tai nghe, có một âm thanh vang lên lớn hơn tất cả mọi thứ khác — tiếng đập rộn ràng từ trái tim của Phodduang.",
+            "total_episodes": 10,
+            "current_episode": "Tập 9",
+            "time": "50 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Ark Saroj Kunatanad",
+            "casts": "Namna Thanthai Boekprakhon, PK Patarachai Kimanonth, Paul Punyaphat Punyatham",
+            "tmdb": {
+                "id": 318239,
+                "type": "tv",
+                "season": null,
+                "url": "https://www.themoviedb.org/tv/318239"
+            },
+            "imdb": {
+                "id": "tt41359588",
+                "url": "https://www.imdb.com/title/tt41359588/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-b3de08fdfc1cc7b0cce3c66ea7252d53cf0f05a05ba2637bde0f146014a016ce.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-2a4a1d49d08f23d2781d31885e3c2086405f086c56ffa51bb8ff8473949a9bc6.webp",
+            "poster_url": "https://img.nguonc.com/images/img-bc805dc3eb76bc7d080a4200dfb4cd1604e9310fe016ec02aaadb9f26fe56ef1.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-7c57ccda036eea339f7ea303c39533b7838009357277a9c9f61c9f9bf50563f6.webp",
+            "created": "2026-09-18T16:36:08.000000Z",
+            "modified": "2026-11-13T17:11:35.000000Z"
+        },
+        {
+            "name": "Lời Nói Dối Hoàn Hảo",
+            "original_name": "The Perfect Lie",
+            "slug": "loi-noi-doi-hoan-hao-2026",
+            "year": "2026",
+            "description": "Joonho, một bác sĩ phẫu thuật tim với nụ cười hoàn hảo, và Jisun, một thủ thư kiêm giáo viên phóng khoáng, đã trải qua một đêm đặc biệt sau một buổi hẹn hò rung động trái tim. Ngày hôm sau, họ đối mặt với nhau tại đồn cảnh sát với những ký ức hoàn toàn khác nhau. Một trong số họ đang nói dối. Không có bằng chứng hay nhân chứng, ngay cả kết quả máy phát hiện nói dối cũng đi ngược lại mong đợi, và sự nghi ngờ lẫn nhau đã đẩy cuộc sống của họ vào hỗn loạn. Những câu hỏi về người vợ quá cố của Joonho tiết lộ rằng vụ án vượt ra ngoài tầm kiểm soát của hai người. Khi những lời khai mâu thuẫn và các mối quan hệ ẩn giấu lộ diện, sự thật càng trở nên mờ mịt, và một lời nói dối châm ngòi cho trò chơi nguy hiểm mà không ai có thể tin tưởng.",
+            "total_episodes": 12,
+            "current_episode": "Tập 5",
+            "time": "60 Phút/Tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Cho Young-min",
+            "casts": "Yoo Yeon-seok, Seo Hyun-jin, Ok Ja-yeon, Kim Ji-hyun",
+            "tmdb": {
+                "id": 307478,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/307478/season/1"
+            },
+            "imdb": {
+                "id": "tt47657141",
+                "url": "https://www.imdb.com/title/tt47657141/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-50d32acbbcca9a9297fad388f4443e3d0cc90cbfa497e108467c8e8170a7d7fe.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-79b085c66170c5782237e928140864098a52af254488af55d4e5710a4070fa05.webp",
+            "poster_url": "https://img.nguonc.com/images/img-26e2ec43f3b2196eea9ada96cddb4f601451d84a121c54e2e8f251497aa0d64b.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-a44340b5eb60bfd57a67dd0f4b2f41cea10b940f8f1790412839529ebbf4d96b.webp",
+            "created": "2026-10-30T17:35:21.000000Z",
+            "modified": "2026-11-13T17:08:04.000000Z"
+        },
+        {
+            "name": "Hội Quạ Đen",
+            "original_name": "The Crow Club",
+            "slug": "hoi-qua-den",
+            "year": "2026",
+            "description": "Bốn cặp đôi cùng tham gia Hội quạ đen bí ẩn, nơi những vụ việc siêu nhiên và nhiệm vụ nguy hiểm dẫn đến những mối quan hệ lãng mạn không ngờ tới.",
+            "total_episodes": 16,
+            "current_episode": "Tập 9",
+            "time": "50 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": null,
+            "casts": "Hemmawich Kwanamphaiphan, Thanapon Aiemkumchai, Nawapat Thanamongkolsawat",
+            "tmdb": {
+                "id": 312585,
+                "type": "tv",
+                "season": null,
+                "url": "https://www.themoviedb.org/tv/312585"
+            },
+            "imdb": {
+                "id": "tt39443739",
+                "url": "https://www.imdb.com/title/tt39443739/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-a2106094bdde34e622364ccb465809f9978b96ac1bcf395b05a0b07917ee371a.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-e299d18bf52d032a6a25f3a9132bf2a416e8ddd83f9aa384b491a42ba82a9b71.webp",
+            "poster_url": "https://img.nguonc.com/images/img-e9bf4fa969bbb5b5ae0ca040ab368a770bce0d404f5dbdfe0abf28c1034f896e.jpg",
+            "poster_url_webp": "https://img.nguonc.com/images/img-644f291ad7bc50fd240d5643f928328623a8b9bd7164ef081d46bcaf14a40cd2.webp",
+            "created": "2026-09-18T16:34:29.000000Z",
+            "modified": "2026-11-13T16:43:43.000000Z"
+        },
+        {
+            "name": "Dược Sư Tự Sự (Phần 3)",
+            "original_name": "The Apothecary Diaries (Season 3)",
+            "slug": "duoc-su-tu-su-phan-3",
+            "year": "2023",
+            "description": "Trong triều đình phong kiến Trung Quốc, một vài tháng đã trôi qua kể từ khi bé gái 17 tuổi có tên Miêu Miêu bị bắt cóc và bị buộc làm người hầu cấp thấp trong cung điện hoàng gia. Tuy nhiên, cô bé vẫn giữ tinh thần tích cực và cứ làm việc cho đến mãn hạn. Một ngày nọ, cô đã nghe tin hai đứa con của hoàng đế bị mắc bệnh nặng. Tại đây, cô đã quyết định hành động bí mật dựa vào những kinh nghiệm có sẵn từ phố đèn đỏ nghèo để cứu chữa.\r\n\r\nMặc dù đã cố gắng ở ẩn nhưng Miêu Miêu lại nhanh chóng gây sự chú ý với Jinshi, một người có quyền lực nhận ra tài năng của cô. Từ đây, thân phận thực sự của Miêu Miêu được tiết lộ với những bí ẩn về y học đa dạng.",
+            "total_episodes": 24,
+            "current_episode": "Tập 7",
+            "time": "23 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Akinori Fudesaka, Jun Owada, Wataru Nakagawa",
+            "casts": "Aoi Yuuki, Takeo Otsuka, Katsuyuki Konishi, Atsumi Tanezaki",
+            "tmdb": {
+                "id": 220542,
+                "type": "tv",
+                "season": null,
+                "url": "https://www.themoviedb.org/tv/220542"
+            },
+            "imdb": {
+                "id": "tt26743760",
+                "url": "https://www.imdb.com/title/tt26743760/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-6fd4a6445bac51e2c4281f74bd9f7f3be41c4fd61c967a6ca0d89186d722d9b9.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-d3cc9cb01cdf7aebaab89c22f704e34df15f484eac66edffab36f2389aef5195.webp",
+            "poster_url": "https://img.nguonc.com/images/img-552c083a9348bccbc9ba68d208fbbccbc68b79155cf399b69cd6b0eb2565ecc2.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-4f71cb14e857113a46c390962b338ac045124d73ef921043b826b992c9173abe.webp",
+            "created": "2026-10-02T16:56:27.000000Z",
+            "modified": "2026-11-13T16:42:47.000000Z"
+        },
+        {
+            "name": "Huyết Quỷ Hỗn Chiến (Phần 2)",
+            "original_name": "Tougen Anki (Season 2)",
+            "slug": "huyet-quy-hon-chien-phan-2",
+            "year": "2026",
+            "description": "Phần tiếp theo của Tougen Anki.",
+            "total_episodes": 12,
+            "current_episode": "Tập 7",
+            "time": "23 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": null,
+            "casts": "Kazuki Ura, Hiroshi Kamiya, Koutaro Nishiyama, Manaka Iwami",
+            "tmdb": {
+                "id": 253811,
+                "type": "tv",
+                "season": 2,
+                "url": "https://www.themoviedb.org/tv/253811/season/2"
+            },
+            "imdb": {
+                "id": "tt32344704",
+                "url": "https://www.imdb.com/title/tt32344704/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-f8eb1b588adb0c9de20951c8451feea912c391afe0c7707d562c89d1394ccc0f.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-7a15d1736aec4f0df1cb3325fa6cbe225337cf478663e891f029489496e905b2.webp",
+            "poster_url": "https://img.nguonc.com/images/img-550ff42dddb040dad16d8cd135d6980a337168632fe4edec57b2214488eff6b8.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-42c78617edc99417f8a1f110c8504d0f554729a52f8edb3f5b262b5394d967a6.webp",
+            "created": "2026-10-02T16:52:20.000000Z",
+            "modified": "2026-11-13T16:27:26.000000Z"
+        },
+        {
+            "name": "Những Cô Gái Cộng Sinh Ở Thế Giới Ngầm",
+            "original_name": "Toaru Anbu No Item / A Certain Dark Item",
+            "slug": "nhung-co-gai-cong-sinh-o-the-gioi-ngam",
+            "year": "2026",
+            "description": "Tại Thành phố Học viện, năng lực ngoại cảm hứa hẹn một tương lai tươi sáng hơn. Nhưng ẩn dưới bề mặt yên bình của thành phố là một mặt tối tàn nhẫn. ITEM, đội ngũ ưu tú gồm bốn cô gái sở hữu năng lực chết người, thực hiện các nhiệm vụ nguy hiểm không bao giờ được phép nhìn thấy ánh sáng ban ngày. Khi một cô gái thứ năm bước vào cuộc đời họ, ITEM càng bị kéo sâu hơn vào một thế giới bạo lực, tàn nhẫn và suy đồi đạo đức.",
+            "total_episodes": 12,
+            "current_episode": "Tập 6",
+            "time": "23 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": null,
+            "casts": "Ami Koshimizu, Maaya Uchida, Chinatsu Akasaki, Aya Suzaki",
+            "tmdb": {
+                "id": 284580,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/284580/season/1"
+            },
+            "imdb": {
+                "id": "tt41295083",
+                "url": "https://www.imdb.com/title/tt41295083/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-7a6d10c1a11ed658061faa07f261984408c899d84b7970818c04848982899c0d.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-4707e671266268e0f970c4ca3ee518d54f2cdab572e8db011e31764c26a8a94f.webp",
+            "poster_url": "https://img.nguonc.com/images/img-e681255ea85bc511793a044047942e65baf530206904f1f75d5ef9da75afebc9.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-85e2a429c521c7e7944b66963e9a468652afaddd9b90a1c90dbebef0bb58cdc2.webp",
+            "created": "2026-10-09T15:59:55.000000Z",
+            "modified": "2026-11-13T16:20:32.000000Z"
+        },
+        {
+            "name": "Đám Cưới Đom Đóm",
+            "original_name": "Firefly Wedding / Hotaru no Yomeiri",
+            "slug": "dam-cuoi-dom-dom",
+            "year": "2026",
+            "description": "Satoko Kirigaya có mọi thứ mà một tiểu thư quý tộc có thể mong muốn—trừ thời gian. Khi cuộc đời sắp cạn kiệt, cô quyết tâm kết hôn thật tốt để làm cha tự hào. Nhưng khi một sát thủ tàn nhẫn bắt cóc cô, cô đưa ra một lời đề nghị liều lĩnh: \"Hãy kết hôn với tôi, chúng ta sẽ có tất cả.\" Shinpei Goto chấp nhận, để rồi trở nên ám ảnh đến mức nguy hiểm. Giờ đây, Satoko phải lựa chọn giữa bổn phận và một tình yêu có thể thiêu rụi cả hai.",
+            "total_episodes": 12,
+            "current_episode": "Tập 6",
+            "time": "23 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": null,
+            "casts": "Lynn, Koki Uchiyama, Kent Ito, Kenjiro Tsuda",
+            "tmdb": {
+                "id": 320909,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/320909/season/1"
+            },
+            "imdb": {
+                "id": "tt39394153",
+                "url": "https://www.imdb.com/title/tt39394153/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-9eb75b6f160b8ff7159ecac5f682c21066dc59855a4519fa346fd51b569e0362.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-7401a17fc52d1ed04b3959b3590b96bd18c9925eb826fcb955552c7aa30a71ae.webp",
+            "poster_url": "https://img.nguonc.com/images/img-2a7ab50cdc416e0021d47bf10a60d408b8ff4d416c8b34fd2680007522a08332.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-b8fca5f87b7c837584083ee8c0e2f80a47d99489a96a57243777add37a4b35ce.webp",
+            "created": "2026-10-09T16:20:25.000000Z",
+            "modified": "2026-11-13T16:19:59.000000Z"
+        },
+        {
+            "name": "Bác Sĩ X",
+            "original_name": "Doctor X: Mafia in White",
+            "slug": "bac-si-x",
+            "year": "2026",
+            "description": "Trong một bệnh viện bị chi phối bởi lòng ích kỷ và tham nhũng, một bác sĩ phẫu thuật đầy bí ẩn nhưng tài xuất chúng xuất hiện — tiếp nhận những ca bệnh tưởng chừng như vô vọng giữa sự chống đối quyết liệt.",
+            "total_episodes": 12,
+            "current_episode": "Tập 11",
+            "time": "65 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub + Thuyết Minh",
+            "director": "Lee Jeong-lim",
+            "casts": "Kim Ji-won, Lee Jung-eun, Son Hyun-joo, Kim Woo-seok",
+            "tmdb": {
+                "id": 293610,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/293610/season/1"
+            },
+            "imdb": {
+                "id": "tt39328047",
+                "url": "https://www.imdb.com/title/tt39328047/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-51c7ef015eae5869ad0bcdd2665b06d94a0e37893b90f17369ecb1095e18f35b.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-bdda1ba3f2fdb90438580e2e79ffacf878d2247a94b3fc237312c7a9c046b3e1.webp",
+            "poster_url": "https://img.nguonc.com/images/img-6469792bc53b11484e4fcb70e4881234a45e3a177ae4cbcbf0cfb16a3fa3e735.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-168d8a76fcd12fb30e99294e0e809e54ba73b05834a577cccd6dd8500a7b2a58.webp",
+            "created": "2026-10-09T15:30:26.000000Z",
+            "modified": "2026-11-13T14:58:24.000000Z"
+        },
+        {
+            "name": "Sở Thích Khó Cưỡng Của Sếp",
+            "original_name": "What a Boss Wants",
+            "slug": "so-thich-kho-cuong-cua-sep",
+            "year": "2026",
+            "description": "Kwon Do Hyuk là một nhà tiên phong công nghệ xuất chúng và là CEO giàu có tưởng chừng như đã có tất cả trong tay, nhưng anh lại mắc chứng mất ngủ kinh niên và một khoảng trống cảm xúc sâu sắc. Sau khi bị đối tác kinh doanh phản bội và được cha giao trọng trách vực dậy một công ty giải trí đang thua lỗ, Do Hyuk quyết định phát triển một nghệ sĩ ứng dụng trí tuệ nhân tạo (AI). Hành trình tìm kiếm nàng thơ hoàn hảo dẫn anh đến với nữ ca sĩ indie bí ẩn \"Soo\", người có ngoại hình giống hệt tác phẩm AI mới nhất của anh. Trên thực tế, \"Soo\" chính là Eun Chae, một người phụ nữ phải xoay sở với công việc nhân viên tổng đài vào ban ngày và một cá tính đầy năng động trên sân khấu về đêm. Sau vài lần chạm mặt đầy gượng gạo, Do Hyuk đã dùng những bí mật của cô làm đòn bẩy, ép cô ký hợp đồng ba tháng làm thư ký cho mình. Nhưng không ai trong số họ ngờ rằng ranh giới giữa nghĩa vụ công việc và sức hút cá nhân lại bắt đầu phai mờ.",
+            "total_episodes": 12,
+            "current_episode": "Tập 2",
+            "time": "57 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub + Thuyết Minh",
+            "director": "Kang Sol",
+            "casts": "Sung Hoon, Oh Se-young, Lee Jung-shin, Park Jeong-hak",
+            "tmdb": {
+                "id": 326975,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/326975/season/1"
+            },
+            "imdb": {
+                "id": "tt50828583",
+                "url": "https://www.imdb.com/title/tt50828583/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-45038b25c8de7877237961c5ca4c858faf4f88edca70b6a7e149b23816f7270b.png",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-2cc0ce703f115656479f92c2febc26f66c05667e5326c101b4e627ea0ddc92cb.webp",
+            "poster_url": "https://img.nguonc.com/images/img-8ef1e171575f6b321e9ccf6a4f9dcb4fb6b168e503c8ba2b7c322e82cedeea6e.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-c3a8182543a57b67fd50164c4eecb145b2289bec859920f16c8a93ba82a8ef55.webp",
+            "created": "2026-11-13T13:12:11.000000Z",
+            "modified": "2026-11-13T14:49:48.000000Z"
+        },
+        {
+            "name": "Đấu La Đại Lục 2: Tuyệt Thế Đường Môn",
+            "original_name": "Douluo Dalu II: Jueshi Tangmen, Soul Land 2, Combat Continent 2, Peerless Tang Sect",
+            "slug": "dau-la-dai-luc-2-tuyet-the-duong-mon",
+            "year": "2022",
+            "description": "Nơi này không có ma pháp, không có đấu khí, không có võ thuật, lại có võ hồn. Sau khi Đường Môn được sáng lập hơn vạn năm trên đại lục Đấu La, Đường Môn suy thoái. Một thế hệ anh tài trời sinh xuất thế, Sử Lai Khắc Thất Quái đời mới liệu có thể trọng chấn Đường Môn, viết nên một khúc nhạc về Tuyệt Thế Đường Môn?",
+            "total_episodes": 182,
+            "current_episode": "Tập 179",
+            "time": "20 phút/tập",
+            "quality": "HD",
+            "language": "Vietsub",
+            "director": "Hongning Tang",
+            "casts": "Wei Zhai, Đào Điển, Lương Đạt Vĩ, Đường Nhã Tinh",
+            "tmdb": {
+                "id": 228429,
+                "type": "tv",
+                "season": 1,
+                "url": "https://www.themoviedb.org/tv/228429/season/1"
+            },
+            "imdb": {
+                "id": "tt28022382",
+                "url": "https://www.imdb.com/title/tt28022382/"
+            },
+            "thumb_url": "https://img.nguonc.com/images/img-2d89b16a8632d54b306aa9a5c78079f1e85ba23b982442e0278879ae623bf282.jpg",
+            "thumb_url_webp": "https://img.nguonc.com/images/img-2f032d62ac5e659672bbcde99949798050297a7a40713cc4202c69db604bc6a1.webp",
+            "poster_url": "https://img.nguonc.com/images/img-a7c2056c584c05526c6336781c9fb83de73b04ad071566ed15c21b300868fa86.png",
+            "poster_url_webp": "https://img.nguonc.com/images/img-9d8c1e409897255a0a6cbc70d997a9b37299050c8338616245aba83b6e994b0d.webp",
+            "created": "2023-07-18T14:39:55.000000Z",
+            "modified": "2026-11-13T14:41:34.000000Z"
+        }
+    ]
+}

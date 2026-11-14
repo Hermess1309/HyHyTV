@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.hyhytv.app.ApiContractTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-11-14T04:27:11.097Z" hostname="DESKTOP-J7J59SB" time="0.481">
+  <properties/>
+  <testcase name="rejectsEmbedCleartextMalformedAndCredentials" classname="com.hyhytv.app.ApiContractTest" time="0.222"/>
+  <testcase name="descriptionsAreReadable" classname="com.hyhytv.app.ApiContractTest" time="0.009"/>
+  <testcase name="realSearchResponseUsesSameContract" classname="com.hyhytv.app.ApiContractTest" time="0.154"/>
+  <testcase name="realDetailMapsNumericYearCategoriesAndEpisodeServers" classname="com.hyhytv.app.ApiContractTest" time="0.043"/>
+  <testcase name="realCatalogResponseMapsAndPaginates" classname="com.hyhytv.app.ApiContractTest" time="0.016"/>
+  <testcase name="missingIdentityIsDroppedRatherThanInvented" classname="com.hyhytv.app.ApiContractTest" time="0.013"/>
+  <testcase name="completedFilmsRestartWhileUnfinishedResume" classname="com.hyhytv.app.ApiContractTest" time="0.002"/>
+  <testcase name="nullOptionalFieldsAreSafe" classname="com.hyhytv.app.ApiContractTest" time="0.016"/>
+  <testcase name="httpsMediaUrlsMayIncludeSignedQuery" classname="com.hyhytv.app.ApiContractTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

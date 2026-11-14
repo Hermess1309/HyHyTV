@@ -1,0 +1,17 @@
+.gradle/
+.kotlin/
+.tools/
+**/build/
+local.properties
+*.jks
+*.keystore
+.idea/
+captures/
+*.png
+direct_apk_url.txt
+node_modules/
+docs/reference-*.txt
+docs/*tree.json
+docs/*.html
+docs/api-*.json
+docs/detail-*.json
