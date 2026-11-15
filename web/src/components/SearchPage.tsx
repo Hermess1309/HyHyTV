@@ -322,18 +322,18 @@ export const SearchPage = memo(function SearchPage() {
   // Main Container Styles
   const pageContainerStyle: CSSProperties = {
     display: 'flex',
-    paddingTop: theme.spacing.headerHeight + 10,
-    paddingLeft: 36,
-    paddingRight: 36,
+    paddingTop: 'calc(var(--hyhy-header-height, 68px) + 12px)',
+    paddingLeft: 'var(--hyhy-edge-padding, 48px)',
+    paddingRight: 'var(--hyhy-edge-padding, 48px)',
     paddingBottom: 60,
     minHeight: '100vh',
     boxSizing: 'border-box',
-    gap: 32,
+    gap: 'clamp(20px, 2.5vw, 36px)',
     background: '#141414',
   };
 
   const leftPaneStyle: CSSProperties = {
-    width: 320,
+    width: 'clamp(280px, 24vw, 340px)',
     flexShrink: 0,
     display: 'flex',
     flexDirection: 'column',

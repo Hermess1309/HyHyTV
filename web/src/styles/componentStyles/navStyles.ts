@@ -9,11 +9,11 @@ export const navStyles = createStyles({
     left: 0,
     right: 0,
     zIndex: 50,
-    height: theme.spacing.headerHeight,
+    height: 'var(--hyhy-header-height, 68px)',
     display: 'flex' as const,
     alignItems: 'center' as const,
-    paddingLeft: theme.spacing.edgePadding,
-    paddingRight: theme.spacing.edgePadding,
+    paddingLeft: 'var(--hyhy-edge-padding, 52px)',
+    paddingRight: 'var(--hyhy-edge-padding, 52px)',
     background: navFocused
       ? '#141414'
       : isScrolled

@@ -14,6 +14,7 @@ import { SettingsPage } from './settings/SettingsPage';
 import { PerformanceHUD } from './PerformanceHUD';
 import { WelcomeModal } from './WelcomeModal';
 import { useResponsive } from '../hooks/useResponsive';
+import { useScreenAdaptive } from '../hooks/useScreenAdaptive';
 import { ROW_BUFFER } from '../utils/constants';
 import { useIsTvMode } from '../hooks/useMode';
 import { useSettings } from '../hooks/useSettings';
@@ -45,8 +46,12 @@ export function Shell() {
     }
   }, [isMyList, settings.disableMyList, dispatch]);
 
+  // Dynamic resolution adaptive scaling
+  const { tileHeight, scale } = useScreenAdaptive();
+  const effectiveTileHeight = tileHeight || theme.tile.height;
+  const rowHeight = effectiveTileHeight + Math.round(38 * scale) + Math.round(theme.spacing.rowGap * scale);
+
   // Vertical scroll offset (TV mode only)
-  const rowHeight = theme.tile.height + 40 + theme.spacing.rowGap;
   const targetOffset = (isTv && !isSearch && !isMyList && !heroFocused && focus.rowIndex >= 0)
     ? Math.max(0, focus.rowIndex) * rowHeight
     : 0;

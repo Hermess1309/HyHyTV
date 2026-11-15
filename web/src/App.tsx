@@ -11,6 +11,7 @@ import { checkForAppUpdate } from './data/versionCheck';
 import { useInputNavigation } from './hooks/useInputNavigation';
 import { useIsTvMode } from './hooks/useMode';
 import { useCursorHide } from './hooks/useCursorHide';
+import { useScreenAdaptive } from './hooks/useScreenAdaptive';
 import { useIsAuthenticated } from './hooks/useAuth';
 import { useCurrentProfile } from './hooks/useProfile';
 import { setContent, setPageContent } from './state/slices/contentSlice';
@@ -31,6 +32,7 @@ export default function App() {
   const variantPickerOpen = useSelector((s: RootState) => s.ui.variantPickerOpen);
   const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
   useCursorHide();
+  useScreenAdaptive();
 
   // Check for new version on app launch
   useEffect(() => {

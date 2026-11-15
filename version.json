@@ -1,7 +1,7 @@
 {
-  "versionCode": 9,
-  "versionName": "1.3.5",
+  "versionCode": 10,
+  "versionName": "1.3.6",
   "apkUrl": "https://raw.githubusercontent.com/Hermess1309/HyHyTV/main/deliverables/HyHyTv-1.0.0-release.apk",
-  "changelog": "Nâng cấp giao diện trình phát HUD chuẩn Netflix Smart TV 100%: Nút bấm dạng bo tròn viền sáng (pill buttons) với hiệu ứng Focus rực rỡ; Thay thế icon vector sắc nét 4K; Thanh tua mượt mà với hiệu ứng phát sáng; Hiển thị nhãn thời gian chuyên nghiệp và hướng dẫn phím điều khiển từ xa; Bỏ văn bản lặp thừa, tối ưu phần cứng 60 FPS.",
+  "changelog": "Thêm chế độ cân chỉnh màn hình A×B (Screen Adaptive Fit): Tự động đo và tối ưu tỉ lệ mọi loại TV (720p, 1080p, 4K UHD); Thêm nút đổi tỉ lệ khung hình ngay trong Hub trình phát (Toàn màn hình Stretch A×B, Cắt viền Zoom Crop, Tự động 16:9, Tỉ lệ 4:3, Tỉ lệ 21:9) kèm phím tắt [A]; Tối ưu hóa GPU compositing mượt mà 60 FPS cho trang chủ, thanh điều hướng và danh sách phim.",
   "forceUpdate": false
 }

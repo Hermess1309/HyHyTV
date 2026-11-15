@@ -42,7 +42,7 @@ export const NavBar = memo(function NavBar({ isScrolled = false }: NavBarProps) 
 
   return (
     <nav style={navStyles.container(isTv && navFocused, isScrolled)} role="navigation" aria-label="Main navigation">
-      <div style={navStyles.logo}>J</div>
+      <div style={navStyles.logo} title="HyHyTV">H</div>
       <ul style={navStyles.navList}>
         {NAV_ITEMS.filter((item) => !(item.id === 'myList' && settings.disableMyList)).map((item, i) => {
           const isActive = activePage === item.id;

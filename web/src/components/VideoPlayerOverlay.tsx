@@ -100,6 +100,16 @@ const SvgRestart = () => (
   </svg>
 );
 
+const SvgAspectRatio = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="15" rx="2" />
+    <polyline points="7 9 4 12 7 15" />
+    <polyline points="17 9 20 12 17 15" />
+  </svg>
+);
+
+export type AspectRatioMode = 'contain' | 'fill' | 'cover' | '4:3' | '21:9';
+
 export interface SubtitleTrack {
   name: string;
   url: string;
@@ -200,6 +210,43 @@ export function VideoPlayerOverlay() {
   // Subtitle management
   const [subtitles, setSubtitles] = useState<SubtitleTrack[]>([]);
   const [activeSubtitleIndex, setActiveSubtitleIndex] = useState<number>(0); // 0 = Vietsub
+
+  // Screen Aspect Ratio Fit Mode (Fix tỉ lệ màn hình A×B)
+  const [aspectRatioMode, setAspectRatioMode] = useState<AspectRatioMode>(() => {
+    try {
+      const saved = localStorage.getItem('hyhy_player_aspect_ratio') as AspectRatioMode | null;
+      if (saved && ['contain', 'fill', 'cover', '4:3', '21:9'].includes(saved)) return saved;
+    } catch {}
+    return 'contain';
+  });
+  const [aspectRatioToast, setAspectRatioToast] = useState<string | null>(null);
+  const aspectToastTimerRef = useRef<number | null>(null);
+
+  const cycleAspectRatio = useCallback(() => {
+    setAspectRatioMode((prev) => {
+      const options: { id: AspectRatioMode; name: string }[] = [
+        { id: 'contain', name: 'Tự động (16:9 Gốc)' },
+        { id: 'fill', name: 'Toàn màn hình (Stretch A×B)' },
+        { id: 'cover', name: 'Cắt viền (Zoom Crop)' },
+        { id: '4:3', name: 'Tỉ lệ 4:3 (Cổ điển)' },
+        { id: '21:9', name: 'Tỉ lệ 21:9 (Rạp chiếu)' },
+      ];
+      const curIdx = options.findIndex((o) => o.id === prev);
+      const next = options[(curIdx + 1) % options.length];
+
+      try {
+        localStorage.setItem('hyhy_player_aspect_ratio', next.id);
+      } catch {}
+
+      setAspectRatioToast(`📺 Chế độ màn hình: ${next.name}`);
+      if (aspectToastTimerRef.current) clearTimeout(aspectToastTimerRef.current);
+      aspectToastTimerRef.current = window.setTimeout(() => {
+        setAspectRatioToast(null);
+      }, 2000);
+
+      return next.id;
+    });
+  }, []);
 
   const [episodesList, setEpisodesList] = useState<{ name: string; linkEmbed: string }[]>(player.episodes || []);
   const currentIndex = player.currentEpisodeIndex ?? 0;
@@ -791,18 +838,23 @@ export function VideoPlayerOverlay() {
         setFocusZone('subtitle');
         return;
       }
+      if (e.key === 'a' || e.key === 'A' || e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        cycleAspectRatio();
+        return;
+      }
 
       // 6. MAIN CONTROLS SPATIAL NAVIGATION (Authentic Netflix TV)
       if (focusZone === 'controls') {
-        // Left / Right moves focus across bottom action buttons (0..3 with wrap-around)
+        // Left / Right moves focus across bottom action buttons (0..4 with wrap-around)
         if (e.key === 'ArrowLeft' || e.keyCode === 37) {
           e.preventDefault();
-          setFocusedControlIndex((prev) => (prev > 0 ? prev - 1 : 3));
+          setFocusedControlIndex((prev) => (prev > 0 ? prev - 1 : 4));
           return;
         }
         if (e.key === 'ArrowRight' || e.keyCode === 39) {
           e.preventDefault();
-          setFocusedControlIndex((prev) => (prev < 3 ? prev + 1 : 0));
+          setFocusedControlIndex((prev) => (prev < 4 ? prev + 1 : 0));
           return;
         }
         // Up moves focus back up to scrubber progress bar
@@ -839,6 +891,9 @@ export function VideoPlayerOverlay() {
             case 3:
               updateScrub(0);
               commitScrub();
+              break;
+            case 4:
+              cycleAspectRatio();
               break;
           }
           return;
@@ -921,6 +976,7 @@ export function VideoPlayerOverlay() {
     playEpisodeAt,
     handleClosePlayer,
     resetHideTimer,
+    cycleAspectRatio,
   ]);
 
   if (!player.open || !player.embedUrl) return null;
@@ -945,12 +1001,12 @@ export function VideoPlayerOverlay() {
     top: 0,
     left: 0,
     right: 0,
-    height: 110,
+    height: 'clamp(80px, 9vh, 110px)',
     zIndex: 10001,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 48px',
+    padding: '0 var(--hyhy-edge-padding, 48px)',
     background: 'linear-gradient(180deg, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.6) 55%, transparent 100%)',
     transition: 'opacity 0.25s ease, transform 0.25s ease',
     opacity: controlsVisible || drawerOpen || subtitleModalOpen ? 1 : 0,
@@ -964,7 +1020,7 @@ export function VideoPlayerOverlay() {
     left: 0,
     right: 0,
     zIndex: 10001,
-    padding: '0 48px 36px',
+    padding: '0 var(--hyhy-edge-padding, 48px) clamp(18px, 3.2vh, 36px)',
     background: 'linear-gradient(0deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.78) 45%, rgba(0,0,0,0.2) 80%, transparent 100%)',
     display: 'flex',
     flexDirection: 'column',
@@ -1067,14 +1123,18 @@ export function VideoPlayerOverlay() {
         }
       `}</style>
 
-      {/* 1. Main Native Video Player (Direct HLS Stream with Hardware Acceleration) */}
+      {/* 1. Main Native Video Player (Direct HLS Stream with Hardware Acceleration & Screen Fit Mode) */}
       <video
         ref={videoRef}
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'contain',
+          objectFit: aspectRatioMode === 'fill' ? 'fill' : aspectRatioMode === 'cover' ? 'cover' : 'contain',
+          maxWidth: aspectRatioMode === '4:3' ? 'calc(100vh * (4 / 3))' : '100%',
+          maxHeight: aspectRatioMode === '21:9' ? 'calc(100vw * (9 / 21))' : '100%',
+          margin: aspectRatioMode === '4:3' ? '0 auto' : aspectRatioMode === '21:9' ? 'auto 0' : '0',
           backgroundColor: '#000',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
         playsInline
         autoPlay
@@ -1101,6 +1161,31 @@ export function VideoPlayerOverlay() {
           />
         ))}
       </video>
+
+      {/* Screen Aspect Ratio Change Notification Toast */}
+      {aspectRatioToast && (
+        <div style={{
+          position: 'absolute',
+          top: 80,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: 'rgba(18, 18, 18, 0.92)',
+          border: '1.5px solid rgba(229, 9, 20, 0.85)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.92), 0 0 24px rgba(229,9,20,0.5)',
+          padding: '12px 28px',
+          borderRadius: 28,
+          color: '#ffffff',
+          fontSize: 16,
+          fontWeight: 700,
+          fontFamily: theme.typography.fontFamily,
+          zIndex: 10010,
+          pointerEvents: 'none',
+          backdropFilter: 'blur(16px)',
+          animation: 'fadeIn 0.2s ease',
+        }}>
+          {aspectRatioToast}
+        </div>
+      )}
 
       {/* 2. Buffering Spinner (Authentic Netflix Red) */}
       {isBuffering && (
@@ -1540,10 +1625,44 @@ export function VideoPlayerOverlay() {
               <SvgRestart />
               <span>Xem từ đầu</span>
             </button>
+
+            {/* 4: Screen Aspect Ratio / Fit Mode (Fix tỉ lệ màn hình A×B) */}
+            <button
+              tabIndex={-1}
+              onFocus={(e) => e.currentTarget.blur()}
+              style={getBtnStyle(4)}
+              onClick={cycleAspectRatio}
+              title="Chế độ màn hình A×B (Phím A)"
+            >
+              <SvgAspectRatio />
+              <span>
+                {aspectRatioMode === 'fill'
+                  ? 'Toàn màn hình'
+                  : aspectRatioMode === 'cover'
+                  ? 'Cắt viền (Zoom)'
+                  : aspectRatioMode === '4:3'
+                  ? 'Tỉ lệ 4:3'
+                  : aspectRatioMode === '21:9'
+                  ? 'Tỉ lệ 21:9'
+                  : 'Tỉ lệ: Gốc'}
+              </span>
+            </button>
           </div>
 
           {/* Right Info: TV Remote quick navigation guide */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255, 255, 255, 0.55)', fontSize: 13, fontWeight: 600 }}>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: 'rgba(255, 255, 255, 0.08)',
+              padding: '5px 12px',
+              borderRadius: 20,
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(8px)',
+            }}>
+              <span style={{ color: '#ffffff', fontWeight: 800 }}>A</span> Tỉ lệ A×B
+            </span>
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',

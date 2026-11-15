@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { settingsStyles } from '../../styles/componentStyles/settingsStyles';
 import { SettingsToggle } from './SettingsToggle';
 import { useResponsive } from '../../hooks/useResponsive';
+import { useScreenAdaptive, type ScreenFitMode } from '../../hooks/useScreenAdaptive';
 import { useCurrentProfile } from '../../hooks/useProfile';
 import { useCurrentUser } from '../../hooks/useAuth';
 import { useSettings } from '../../hooks/useSettings';
@@ -39,6 +40,7 @@ export function SettingsPage() {
   const allWatchlists = useSelector(selectAllWatchlists);
   const profiles = useSelector(selectProfilesForCurrentUser);
 
+  const { width, height, resolutionName, aspectRatio, screenFitMode, setScreenFitMode } = useScreenAdaptive();
   const [activeSection, setActiveSection] = useState<Section>('profile');
   const [editingUsername, setEditingUsername] = useState(false);
   const [usernameDraft, setUsernameDraft] = useState(user?.username ?? '');
@@ -136,7 +138,31 @@ export function SettingsPage() {
 
     playback: (
       <div style={settingsStyles.section}>
-        <h2 style={settingsStyles.sectionHeader}>Playback</h2>
+        <h2 style={settingsStyles.sectionHeader}>Phát video & Hiển thị màn hình A×B</h2>
+        <div style={settingsStyles.row(false)}>
+          <div>
+            <div style={settingsStyles.rowLabel}>Chế độ cân chỉnh màn hình A×B</div>
+            <div style={settingsStyles.rowDescription}>
+              Màn hình hiện tại: {width} × {height} ({resolutionName}, Tỉ lệ {aspectRatio.toFixed(2)}:1) • Chế độ: {
+                screenFitMode === 'fit' ? 'Lọt lòng TV Safe Area (Chống tràn viền)' :
+                screenFitMode === 'compact' ? 'Thu nhỏ gọn (Nhiều phim hơn)' :
+                screenFitMode === 'large' ? 'Phóng to (TV lớn 55"-85")' : 'Tự động thích ứng tốt nhất'
+              }
+            </div>
+          </div>
+          <button
+            type="button"
+            style={settingsStyles.rowButton('secondary')}
+            onClick={() => {
+              const modes: ScreenFitMode[] = ['auto', 'fit', 'large', 'compact'];
+              const curIdx = modes.indexOf(screenFitMode);
+              const next = modes[(curIdx + 1) % modes.length];
+              setScreenFitMode(next);
+            }}
+          >
+            Đổi chế độ
+          </button>
+        </div>
         <SettingsToggle
           label="Disable autoplay trailers"
           description="Skip auto-playing trailers on tile focus, hero, and detail view."

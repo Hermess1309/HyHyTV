@@ -13,6 +13,7 @@ import { openDetail } from '../state/slices/uiSlice';
 import { setTrailerPaused } from '../state/slices/trailerSlice';
 import { useIsTvMode } from '../hooks/useMode';
 import { useResponsive } from '../hooks/useResponsive';
+import { useScreenAdaptive } from '../hooks/useScreenAdaptive';
 import { useSettings } from '../hooks/useSettings';
 import { useTvHint } from '../hooks/useTvHint';
 import { getTmdbPosterUrl } from '../data/tmdb';
@@ -164,22 +165,27 @@ export const ContentTile = memo(function ContentTile({
     dispatch(setTrailerPaused(true));
   }, [dispatch, tile, isTv, showTvHint]);
 
+  const { tileWidth: adaptiveW, tileHeight: adaptiveH } = useScreenAdaptive();
+  const baseW = adaptiveW || theme.tile.width;
+  const baseH = adaptiveH || theme.tile.height;
+
   const isTrailerActive = showTrailer && !!trailerKey;
-  const trailerWidth = isTrailerActive ? theme.tile.width * 1.15 : theme.tile.width;
-  const trailerHeight = isTrailerActive ? Math.round(trailerWidth * 9 / 16) : theme.tile.height;
+  const trailerWidth = isTrailerActive ? Math.round(baseW * 1.15) : baseW;
+  const trailerHeight = isTrailerActive ? Math.round(trailerWidth * 9 / 16) : baseH;
 
   // Determine visual state
   const isHighlighted = isTv ? isFocused : hovered;
   const brightness = isHighlighted ? 1.1 : (isTv && isRowFocused) ? 0.7 : isTv ? 0.45 : 0.75;
 
   const containerStyle: CSSProperties = {
-    width: theme.tile.width,
-    height: theme.tile.height,
+    width: baseW,
+    height: baseH,
     flexShrink: 0,
     cursor: isTv ? 'default' : 'pointer',
     userSelect: 'none',
     overflow: 'visible',
     scrollSnapAlign: isTv ? undefined : 'start',
+    contain: 'layout style',
   };
 
   const imgStyle: CSSProperties = {

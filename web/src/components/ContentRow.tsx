@@ -5,9 +5,10 @@ import { rowStyles } from '../styles/componentStyles/rowStyles';
 import { ContentTile } from './ContentTile';
 import { RowTitle } from './RowTitle';
 import type { RootState } from '../state/store';
-import { TILE_BUFFER, VISIBLE_TILES, TILE_STEP } from '../utils/constants';
+import { TILE_BUFFER, VISIBLE_TILES } from '../utils/constants';
 import { useIsTvMode } from '../hooks/useMode';
 import { useResponsive } from '../hooks/useResponsive';
+import { useScreenAdaptive } from '../hooks/useScreenAdaptive';
 import type { RowData } from '../state/slices/contentSlice';
 
 interface ContentRowProps {
@@ -119,9 +120,13 @@ export const ContentRow = memo(function ContentRow({
     );
   }
 
-  // TV mode: GPU-accelerated horizontal scroll with CSS transform
+  // TV mode: GPU-accelerated horizontal scroll with CSS transform and screen adaptive scale
+  const { tileWidth, edgePadding } = useScreenAdaptive();
+  const effectiveTileWidth = tileWidth || theme.tile.width;
+  const tileStep = effectiveTileWidth + theme.spacing.tileGap;
+
   const currTile = isRowFocused && activeTileIndex >= 0 ? activeTileIndex : 0;
-  const targetOffset = Math.max(0, currTile - 1) * (theme.tile.width + theme.spacing.tileGap);
+  const targetOffset = Math.max(0, currTile - 1) * tileStep;
   const tileCount = row.tiles.length;
   const minTilesForVirtualization = VISIBLE_TILES + TILE_BUFFER * 2 + 2;
   const shouldVirtualize = tileCount > minTilesForVirtualization;
@@ -130,22 +135,26 @@ export const ContentRow = memo(function ContentRow({
   let endTile = tileCount - 1;
 
   if (shouldVirtualize) {
-    startTile = Math.max(0, Math.floor(targetOffset / TILE_STEP) - TILE_BUFFER);
-    endTile = Math.min(tileCount - 1, Math.ceil((targetOffset + window.innerWidth) / TILE_STEP) + TILE_BUFFER);
+    startTile = Math.max(0, Math.floor(targetOffset / tileStep) - TILE_BUFFER);
+    endTile = Math.min(tileCount - 1, Math.ceil((targetOffset + window.innerWidth) / tileStep) + TILE_BUFFER);
     if (isRowFocused && activeTileIndex >= 0) {
       startTile = Math.min(startTile, activeTileIndex);
       endTile = Math.max(endTile, activeTileIndex);
     }
   }
 
-  const leftSpacer = startTile * TILE_STEP;
+  const leftSpacer = startTile * tileStep;
   const visibleTiles = row.tiles.slice(startTile, endTile + 1);
 
   return (
     <div style={rowStyles.container} role="row" aria-label={row.title}>
       <RowTitle title={row.title} isRowFocused={isRowFocused} />
       <div style={rowStyles.overflowWrapper}>
-        <div style={rowStyles.tilesWrapper(targetOffset)}>
+        <div style={{
+          ...rowStyles.tilesWrapper(targetOffset),
+          paddingLeft: edgePadding,
+          paddingRight: edgePadding,
+        }}>
           {leftSpacer > 0 && <div style={rowStyles.leftSpacer(leftSpacer)} />}
           {visibleTiles.map((tile, i) => {
             const tileIndex = startTile + i;

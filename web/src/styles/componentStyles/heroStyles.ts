@@ -47,8 +47,8 @@ export const heroStyles = createStyles({
   textContainer: (hidden: boolean) => ({
     position: 'absolute' as const,
     bottom: 30,
-    left: theme.spacing.edgePadding,
-    maxWidth: 580,
+    left: 'var(--hyhy-edge-padding, 52px)',
+    maxWidth: 'min(580px, 48vw)',
     zIndex: 3,
     opacity: hidden ? 0 : 1,
     pointerEvents: (hidden ? 'none' : 'auto') as 'none' | 'auto',
@@ -57,7 +57,7 @@ export const heroStyles = createStyles({
 
   title: {
     color: theme.colors.text,
-    fontSize: theme.typography.heroTitle.fontSize,
+    fontSize: 'clamp(24px, 2.6vw, 36px)',
     fontWeight: theme.typography.heroTitle.fontWeight,
     marginBottom: 10,
     textShadow: '0 2px 10px rgba(0,0,0,0.85)',
