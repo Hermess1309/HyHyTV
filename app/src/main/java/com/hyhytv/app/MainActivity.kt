@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
             WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED
         )
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         // Fullscreen immersive TV mode
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -65,6 +66,9 @@ class MainActivity : ComponentActivity() {
             )
             setBackgroundColor(Color.parseColor("#141414"))
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            overScrollMode = View.OVER_SCROLL_NEVER
+            isVerticalScrollBarEnabled = false
+            isHorizontalScrollBarEnabled = false
             isFocusable = true
             isFocusableInTouchMode = true
 
@@ -80,6 +84,9 @@ class MainActivity : ComponentActivity() {
                 cacheMode = WebSettings.LOAD_DEFAULT
                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
                 userAgentString = "Mozilla/5.0 (Linux; Android 11; Android TV) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 HyHyTv"
+                offscreenPreRaster = true
+                @Suppress("DEPRECATION")
+                setRenderPriority(WebSettings.RenderPriority.HIGH)
             }
 
             // Expose native bridge for Subtitles, Version, and Auto-Update

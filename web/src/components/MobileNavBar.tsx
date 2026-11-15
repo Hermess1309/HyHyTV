@@ -45,10 +45,9 @@ export const MobileNavBar = memo(function MobileNavBar() {
     alignItems: 'center',
     justifyContent: 'space-around',
     height: 56,
-    background: 'rgba(20,20,20,0.95)',
+    background: 'rgba(20,20,20,0.98)',
     borderTop: '1px solid rgba(255,255,255,0.08)',
     fontFamily: theme.typography.fontFamily,
-    backdropFilter: 'blur(12px)',
   };
 
   return (

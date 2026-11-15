@@ -219,32 +219,18 @@ export function VideoPlayerOverlay() {
     } catch {}
     return 'contain';
   });
-  const [aspectRatioToast, setAspectRatioToast] = useState<string | null>(null);
-  const aspectToastTimerRef = useRef<number | null>(null);
 
   const cycleAspectRatio = useCallback(() => {
     setAspectRatioMode((prev) => {
-      const options: { id: AspectRatioMode; name: string }[] = [
-        { id: 'contain', name: 'Tự động (16:9 Gốc)' },
-        { id: 'fill', name: 'Toàn màn hình (Stretch A×B)' },
-        { id: 'cover', name: 'Cắt viền (Zoom Crop)' },
-        { id: '4:3', name: 'Tỉ lệ 4:3 (Cổ điển)' },
-        { id: '21:9', name: 'Tỉ lệ 21:9 (Rạp chiếu)' },
-      ];
-      const curIdx = options.findIndex((o) => o.id === prev);
-      const next = options[(curIdx + 1) % options.length];
+      const options: AspectRatioMode[] = ['contain', 'fill', 'cover', '4:3', '21:9'];
+      const curIdx = options.indexOf(prev);
+      const nextId = options[(curIdx + 1) % options.length];
 
       try {
-        localStorage.setItem('hyhy_player_aspect_ratio', next.id);
+        localStorage.setItem('hyhy_player_aspect_ratio', nextId);
       } catch {}
 
-      setAspectRatioToast(`📺 Chế độ màn hình: ${next.name}`);
-      if (aspectToastTimerRef.current) clearTimeout(aspectToastTimerRef.current);
-      aspectToastTimerRef.current = window.setTimeout(() => {
-        setAspectRatioToast(null);
-      }, 2000);
-
-      return next.id;
+      return nextId;
     });
   }, []);
 
@@ -1062,7 +1048,6 @@ export function VideoPlayerOverlay() {
         : 'none',
       transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
       willChange: 'transform, box-shadow',
-      backdropFilter: 'blur(10px)',
     };
   };
 
@@ -1162,31 +1147,6 @@ export function VideoPlayerOverlay() {
         ))}
       </video>
 
-      {/* Screen Aspect Ratio Change Notification Toast */}
-      {aspectRatioToast && (
-        <div style={{
-          position: 'absolute',
-          top: 80,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: 'rgba(18, 18, 18, 0.92)',
-          border: '1.5px solid rgba(229, 9, 20, 0.85)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.92), 0 0 24px rgba(229,9,20,0.5)',
-          padding: '12px 28px',
-          borderRadius: 28,
-          color: '#ffffff',
-          fontSize: 16,
-          fontWeight: 700,
-          fontFamily: theme.typography.fontFamily,
-          zIndex: 10010,
-          pointerEvents: 'none',
-          backdropFilter: 'blur(16px)',
-          animation: 'fadeIn 0.2s ease',
-        }}>
-          {aspectRatioToast}
-        </div>
-      )}
-
       {/* 2. Buffering Spinner (Authentic Netflix Red) */}
       {isBuffering && (
         <div style={{
@@ -1218,8 +1178,7 @@ export function VideoPlayerOverlay() {
           width: 84,
           height: 84,
           borderRadius: '50%',
-          background: 'rgba(12, 12, 12, 0.8)',
-          backdropFilter: 'blur(16px)',
+          background: 'rgba(14, 14, 14, 0.94)',
           border: '1.5px solid rgba(255, 255, 255, 0.25)',
           display: 'flex',
           flexDirection: 'column',
@@ -1254,7 +1213,7 @@ export function VideoPlayerOverlay() {
             tabIndex={-1}
             onFocus={(e) => e.currentTarget.blur()}
             style={{
-              background: focusZone === 'back' ? '#ffffff' : 'rgba(255,255,255,0.14)',
+              background: focusZone === 'back' ? '#ffffff' : 'rgba(35,35,35,0.85)',
               border: focusZone === 'back' ? '2px solid #ffffff' : '1px solid rgba(255,255,255,0.18)',
               color: focusZone === 'back' ? '#000000' : '#ffffff',
               width: 48,
@@ -1267,7 +1226,6 @@ export function VideoPlayerOverlay() {
               transform: focusZone === 'back' ? 'scale(1.12)' : 'scale(1)',
               boxShadow: focusZone === 'back' ? '0 0 20px rgba(255,255,255,0.85), 0 4px 16px rgba(0,0,0,0.8)' : 'none',
               transition: 'all 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-              backdropFilter: 'blur(10px)',
               flexShrink: 0,
             }}
             onClick={handleClosePlayer}
@@ -1334,14 +1292,13 @@ export function VideoPlayerOverlay() {
             NETFLIX
           </div>
           <div style={{
-            background: 'rgba(255, 255, 255, 0.12)',
+            background: 'rgba(32, 32, 32, 0.85)',
             border: '1px solid rgba(255,255,255,0.18)',
             padding: '5px 12px',
             borderRadius: 6,
             color: 'rgba(255,255,255,0.9)',
             fontSize: 12,
             fontWeight: 700,
-            backdropFilter: 'blur(8px)',
           }}>
             1080p FHD
           </div>
@@ -1460,8 +1417,7 @@ export function VideoPlayerOverlay() {
                       bottom: 6,
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      background: 'rgba(0, 0, 0, 0.88)',
-                      backdropFilter: 'blur(8px)',
+                      background: 'rgba(10, 10, 10, 0.95)',
                       border: '1px solid rgba(255,255,255,0.2)',
                       color: '#ffffff',
                       padding: '2px 10px',
@@ -1484,8 +1440,7 @@ export function VideoPlayerOverlay() {
                     fontSize: 11,
                     fontWeight: 700,
                     color: '#ffffff',
-                    background: 'rgba(15, 15, 15, 0.92)',
-                    backdropFilter: 'blur(10px)',
+                    background: 'rgba(18, 18, 18, 0.96)',
                     border: '1px solid rgba(255, 255, 255, 0.25)',
                     padding: '4px 14px',
                     borderRadius: 16,
@@ -1655,11 +1610,10 @@ export function VideoPlayerOverlay() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'rgba(28, 28, 28, 0.85)',
               padding: '5px 12px',
               borderRadius: 20,
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(8px)',
             }}>
               <span style={{ color: '#ffffff', fontWeight: 800 }}>A</span> Tỉ lệ A×B
             </span>
@@ -1667,11 +1621,10 @@ export function VideoPlayerOverlay() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'rgba(28, 28, 28, 0.85)',
               padding: '5px 12px',
               borderRadius: 20,
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(8px)',
             }}>
               <span style={{ color: '#ffffff', fontWeight: 800 }}>◄ / ►</span> Tua
             </span>
@@ -1679,11 +1632,10 @@ export function VideoPlayerOverlay() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'rgba(28, 28, 28, 0.85)',
               padding: '5px 12px',
               borderRadius: 20,
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(8px)',
             }}>
               <span style={{ color: '#ffffff', fontWeight: 800 }}>▲</span> Lên thanh tua
             </span>
@@ -1691,11 +1643,10 @@ export function VideoPlayerOverlay() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 6,
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'rgba(28, 28, 28, 0.85)',
               padding: '5px 12px',
               borderRadius: 20,
               border: '1px solid rgba(255, 255, 255, 0.12)',
-              backdropFilter: 'blur(8px)',
             }}>
               <span style={{ color: '#ffffff', fontWeight: 800 }}>▼</span> Ẩn
             </span>
